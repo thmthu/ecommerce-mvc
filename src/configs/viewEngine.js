@@ -16,6 +16,10 @@ const configViewEngine = (app) => {
       `/products-list-by-key/${staticPath}`,
       express.static(path.join(__dirname, `../views/${staticPath}`))
     );
+    app.use(
+      `/detail/${staticPath}`,
+      express.static(path.join(__dirname, `../views/${staticPath}`))
+    );
   });
 };
 
