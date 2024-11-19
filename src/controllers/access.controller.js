@@ -4,10 +4,10 @@ const AccessService = require("../services/access.service");
 const { OK, CREATED, SuccessResponse } = require("../core/success.response");
 class AccessController {
   logout = async (req, res, next) => {
-    console.log("logout controller")
-    console.log(req.keyStore)
+    console.log("logout controller");
+    console.log(req.keyStore);
     new SuccessResponse({
-      message: 'logout success',
+      message: "logout success",
       metadata: await AccessService.logout({ keyStore: req.keyStore }), // Truyền đối tượng keyStore đúng cách
     }).send(res);
   };
@@ -22,6 +22,5 @@ class AccessController {
       metadata: await AccessService.signUp(req.body),
     }).send(res);
   };
-
 }
 module.exports = new AccessController();
