@@ -10,7 +10,11 @@ router.get(
   "/search/:keyword",
   asyncHandler(ProductController.getProductByNameOrDescription)
 );
-router.get('/create-page', ProductController.getCreateRestaurant);
+router.get('/cart', ProductController.getCart);
+router.get('/home', ProductController.getHome);
+router.get('/contact', ProductController.getContact);
+router.get('/checkout', ProductController.getCheckOut);
+router.get('/shop', ProductController.getShop);
 
 
 module.exports = router;

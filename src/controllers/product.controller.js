@@ -31,8 +31,20 @@ class ProductController {
       metadata: await ProductService.findProductByNameOrDescript(keyword),
     }).send(res);
   };
-  getCreateRestaurant = (req, res) => {
-    return res.render("users-profile.ejs");
+  getCart = (req, res) => {
+    return res.render("cart.ejs", {page: "cart"});
   };
+  getHome = (req, res) => {
+    return res.render("index.ejs", {page: "home"});
+  };
+  getContact = (req, res) => {
+    return res.render("contact.ejs", {page: "contact"});
+  };
+  getCheckOut = (req, res) => {
+    return res.render("checkout.ejs", {page: "checkout"});
+  }
+  getShop = (req, res) => {
+    return res.render("shop.ejs", {page: "shop"});
+  }
 }
 module.exports = new ProductController();
