@@ -32,7 +32,7 @@ class ProductController {
     }).send(res);
   };
   getCreateRestaurant = (req, res) => {
-    return res.render('create.ejs');
+    return res.render('index.ejs');
   }
 }
 module.exports = new ProductController();
