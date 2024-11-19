@@ -3,7 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const compression = require("compression");
 const cors = require("cors");
-
+const configViewEngine = require('./configs/viewEngine');
 
 const { default: helmet } = require("helmet");
 const app = express();
@@ -24,7 +24,7 @@ app.use(
 );
 
 require("./dbs/init.mongodb");
-
+configViewEngine(app);
 app.use("/", require("./routes"));
 app.use((req, res, next) => {
   const error = new Error("Not found");

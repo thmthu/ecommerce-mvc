@@ -22,5 +22,6 @@ class AccessController {
       metadata: await AccessService.signUp(req.body),
     }).send(res);
   };
+
 }
 module.exports = new AccessController();

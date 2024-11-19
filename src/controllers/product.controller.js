@@ -31,5 +31,8 @@ class ProductController {
       metadata: await ProductService.findProductByNameOrDescript(keyword),
     }).send(res);
   };
+  getCreateRestaurant = (req, res) => {
+    return res.render('create.ejs');
+  }
 }
 module.exports = new ProductController();
