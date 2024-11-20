@@ -116,7 +116,7 @@
                     </div>
 
                     <form
-                      action="./register"
+                      action="/register"
                       method="POST"
                       id="registerForm"
                       class="row g-3 needs-validation"
@@ -124,13 +124,9 @@
                     >
                       <!-- Form fields -->
                       <div class="col-12">
-                        <label for="yourUsername" class="form-label"
-                          >Username</label
-                        >
+                        <label for="yourUsername" class="form-label">Username</label>
                         <div class="input-group has-validation">
-                          <span class="input-group-text" id="inputGroupPrepend"
-                            >@</span
-                          >
+                          <span class="input-group-text" id="inputGroupPrepend">@</span>
                           <input
                             type="text"
                             name="username"
@@ -138,16 +134,12 @@
                             id="yourUsername"
                             required
                           />
-                          <div class="invalid-feedback">
-                            Please choose a username.
-                          </div>
+                          <div class="invalid-feedback">Please choose a username.</div>
                         </div>
                       </div>
 
                       <div class="col-12">
-                        <label for="yourEmail" class="form-label"
-                          >Your Email</label
-                        >
+                        <label for="yourEmail" class="form-label">Your Email</label>
                         <input
                           type="email"
                           name="email"
@@ -155,15 +147,11 @@
                           id="yourEmail"
                           required
                         />
-                        <div class="invalid-feedback">
-                          Please enter a valid Email address!
-                        </div>
+                        <div class="invalid-feedback">Please enter a valid Email address!</div>
                       </div>
 
                       <div class="col-12">
-                        <label for="yourPassword" class="form-label"
-                          >Password</label
-                        >
+                        <label for="yourPassword" class="form-label">Password</label>
                         <input
                           type="password"
                           name="password"
@@ -171,9 +159,7 @@
                           id="yourPassword"
                           required
                         />
-                        <div class="invalid-feedback">
-                          Please enter your password!
-                        </div>
+                        <div class="invalid-feedback">Please enter your password!</div>
                       </div>
 
                       <div class="col-12">
@@ -186,20 +172,20 @@
                             id="acceptTerms"
                             required
                           />
-                          <label class="form-check-label" for="acceptTerms"
-                            >I agree and accept the
-                            <a href="#">terms and conditions</a></label
-                          >
-                          <div class="invalid-feedback">
-                            You must agree before submitting.
-                          </div>
+                          <label class="form-check-label" for="acceptTerms">
+                            I agree and accept the <a href="#">terms and conditions</a>
+                          </label>
+                          <div class="invalid-feedback">You must agree before submitting.</div>
                         </div>
                       </div>
                       <div class="col-12">
-                        <button type="submit" class="btn btn-primary w-100">
-                          Create Account
-                        </button>
+                        <button type="submit" class="btn btn-primary w-100">Create Account</button>
                       </div>
+                      <% if (typeof error !== 'undefined') { %>
+                        <div class="col-12">
+                          <div class="alert alert-danger mt-2"><%= error %></div>
+                        </div>
+                      <% } %>
                     </form>
                   </div>
                 </div>
@@ -220,4 +206,53 @@
     </main>
     <!-- End #main -->
 
-<%- include('./partials/footer') %>
+    <a
+      href="#"
+      class="back-to-top d-flex align-items-center justify-content-center"
+      ><i class="bi bi-arrow-up-short"></i
+    ></a>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+
+    <!-- Custom JS for handling form validation -->
+    <script>
+      document.getElementById('registerForm').addEventListener('submit', function(event) {
+        const form = event.target;
+        const password = form.password.value;
+        const email = form.email.value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Remove existing error messages
+        const existingErrors = form.querySelectorAll('.alert-danger');
+        existingErrors.forEach(error => error.remove());
+
+        if (password.length < 8) {
+          event.preventDefault();
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'alert alert-danger mt-2';
+          errorDiv.innerText = 'Password must be at least 8 characters long';
+          form.appendChild(errorDiv);
+        }
+
+        if (!emailRegex.test(email)) {
+          event.preventDefault();
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'alert alert-danger mt-2';
+          errorDiv.innerText = 'Invalid email format';
+          form.appendChild(errorDiv);
+        }
+      });
+    </script>
+  </body>
+</html>

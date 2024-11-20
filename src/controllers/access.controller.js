@@ -1,8 +1,8 @@
 "use strict";
 
 const AccessService = require("../services/access.service");
-const bcrypt = require('bcrypt');
-const Customer = require('../models/customer.model');
+const bcrypt = require("bcrypt");
+const Customer = require("../models/customer.model");
 const { OK, CREATED, SuccessResponse } = require("../core/success.response");
 class AccessController {
   logout = async (req, res, next) => {
@@ -19,49 +19,78 @@ class AccessController {
 
       // Validate the input
       if (!email || !password) {
-        return res.status(400).render('login', { error: 'All fields are required' });
+        return res
+          .status(400)
+          .render("login", { error: "All fields are required" });
       }
 
       // Find the user by email
       const user = await Customer.findOne({ email });
       if (!user) {
-        return res.status(400).render('login', { error: 'Invalid email or password' });
+        return res
+          .status(400)
+          .render("login", { error: "Invalid email or password" });
       }
 
       // Compare the password
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).render('login', { error: 'Invalid email or password' });
+        return res
+          .status(400)
+          .render("login", { error: "Invalid email or password" });
       }
 
-      res.redirect('./home');
+      res.redirect("./home");
     } catch (error) {
       console.error(error);
-      res.status(500).render('login', { error: 'Server error. Please try again later.' });
+      res
+        .status(500)
+        .render("login", { error: "Server error. Please try again later." });
     }
   };
   signUp = async (req, res, next) => {
     try {
       const { username, email, password } = req.body;
 
-      const passwordHash = await bcrypt.hash(password, 10);
-  
-      // Validate the input (you can add more validation as needed)
+      // Validate the input
       if (!username || !email || !password) {
-        res.status(400).render('register', { error: 'All field required' });
+        return res
+          .status(400)
+          .render("register", { error: "All fields are required" });
       }
-  
-      // Create a new user
-      const newUser = new Customer({ name: username, email, password: passwordHash });
-  
-      // Save the user to the database
-      await newUser.save();
-  
-      // Redirect to a success page or login page
-      res.redirect('./login');
+
+      if (password.length < 8) {
+        return res
+          .status(400)
+          .render("register", {
+            error: "Password must be at least 8 characters long",
+          });
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res
+          .status(400)
+          .render("register", { error: "Invalid email format" });
+      }
+
+      // Call the signUp service
+      const result = await AccessService.signUp({
+        name: username,
+        email,
+        password,
+      });
+
+      if (result.code === 201) {
+        return res.status(201).redirect("/login");
+      } else {
+        return res
+          .status(result.code)
+          .render("register", { error: result.message });
+      }
     } catch (error) {
-      console.error(error);
-      res.status(500).render('register', { error: 'Server error. Please try again later.' });
+      console.error("===", error);
+      return res.status(500).render("register", { error: error });
     }
   };
 }
