@@ -5,11 +5,18 @@ const compression = require("compression");
 const cors = require("cors");
 const configViewEngine = require('./configs/viewEngine');
 
-const { default: helmet } = require("helmet");
+const {default : helmet} = require("helmet");
 const app = express();
 
 app.use(morgan("dev"));
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"], // Restrict everything else to self
+      imgSrc: ["*"],          // Allow images from all sources
+    },
+  })
+);
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,11 +45,6 @@ app.use((error, req, res, next) => {
     code: statusCode,
     message: `${error.message}` || "Internal server error",
   });
-});
-app.use((req, res, next) => {
-  // Allow images from 'pexels.com'
-  res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' https://images.pexels.com;");
-  next();
 });
 
 module.exports = app;
