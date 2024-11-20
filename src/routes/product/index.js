@@ -18,6 +18,7 @@ router.get('/contact', ProductController.getContact);
 router.get('/checkout', ProductController.getCheckOut);
 router.get('/shop', ProductController.getShop);
 router.get('/detail/:id', ProductController.getDetail);
+router.get('/filter', ProductController.getFilter);
 
 
 module.exports = router;

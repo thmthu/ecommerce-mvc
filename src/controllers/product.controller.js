@@ -11,8 +11,17 @@ class ProductController {
   getCart = (req, res) => {
     return res.render("cart.ejs", { page: "cart" });
   };
-  getHome = (req, res) => {
-    return res.render("index.ejs", { page: "home" });
+  getHome = async (req, res) => {
+    try {
+      const products = await Product.aggregate([{ $sample: { size: 4 } }]);
+      const latestProducts = await Product.find().sort({ createdAt: -1 }).limit(4);
+
+      // Render the index page with the random products
+      res.render('index.ejs', { page: 'home', featuredProducts: products, latestProducts: latestProducts });
+    } catch (error) {
+      console.error(error);
+      res.redirect('./home');
+    }
   };
   getContact = (req, res) => {
     return res.render("contact.ejs", { page: "contact" });
@@ -38,11 +47,9 @@ class ProductController {
     try {
       const { query } = req.query;
 
-      console.log(req);
-
       // Validate the input
       if (!query) {
-        return res.status(400).render('index.ejs', { error: 'Search query is required', page: 'home'});
+        res.redirect('./home');
       }
 
       // Find products by name or description
@@ -57,7 +64,44 @@ class ProductController {
       res.render('shop.ejs', { products: products, page: 'shop'});
     } catch (error) {
       console.error(error);
-      res.status(500).render('index.ejs', { error: 'Server error. Please try again later.', page: 'home' });
+      res.redirect('./home');
+    }
+  };
+
+  getFilter = async (req, res) => {
+    try {
+      const { price, color, size, gender} = req.query;
+
+      let filter = {};
+
+      if (price) {
+        const priceRanges = Array.isArray(price) ? price : [price];
+        filter.$or = priceRanges.map(range => {
+          const [min, max] = range.split('-').map(Number);
+          return { product_price: { $gte: min, $lte: max } };
+        });
+      }
+
+      if (color) {
+        filter.product_color = { $in: Array.isArray(color) ? color : [color] };
+      }
+
+      if (size) {
+        filter.product_size = { $in: Array.isArray(size) ? size : [size] };
+      }
+
+      if (gender) {
+        filter.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
+      }
+
+      // Find products with the selected filters
+      const products = await Product.find(filter);
+
+      // Render the shop page with the filtered products
+      res.render('shop.ejs', { products: products, page: 'shop' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).render('shop.ejs', { error: 'Server error. Please try again later.' });
     }
   };
   
