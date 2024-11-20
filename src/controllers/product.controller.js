@@ -36,8 +36,11 @@ class ProductController {
   };
   getDetail = async (req, res) => {
     const product = await ProductService.getProductById(req.params.id);
-    console.log(product);
-    return res.render("detail.ejs", { product: product, page: "detail" });
+    const relatedProducts = await Product.find({
+      product_type: product.product_type,
+      _id: { $ne: product._id } // Exclude the current product
+    }).limit(4); // Limit to 4 related products
+    return res.render("detail.ejs", { product: product, relatedProducts: relatedProducts ,page: "detail" });
   };
   getAllProduct = async (req, res) => {
     const products = await ProductService.getAllProducts();
