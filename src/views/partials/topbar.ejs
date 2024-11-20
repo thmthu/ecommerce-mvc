@@ -40,11 +40,12 @@
       </a>
     </div>
     <div class="col-lg-6 col-6 text-left">
-      <form id="search-form">
+      <form action="/search" method="GET" id="search-form">
         <div class="input-group">
           <input
             type="text"
             id="search-input"
+            name="query"
             class="form-control"
             placeholder="Search for products"
             required
@@ -62,27 +63,6 @@
         </div>
       </form>
     </div>
-
-    <script>
-      document
-        .getElementById("search-form")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // Ngăn chặn reload trang mặc định
-
-          const searchKey = document
-            .getElementById("search-input")
-            .value.trim(); // Lấy từ khóa từ ô input
-          console.log(searchKey);
-          if (searchKey) {
-            // Điều hướng đến URL với từ khóa tìm kiếm
-            window.location.href = `/products-list-by-key/${encodeURIComponent(
-              searchKey
-            )}`;
-          } else {
-            alert("Please enter a keyword to search."); // Nếu không có từ khóa thì cảnh báo
-          }
-        });
-    </script>
 
     <div class="col-lg-3 col-6 text-right">
       <a href="" class="btn border">

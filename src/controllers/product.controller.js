@@ -1,5 +1,6 @@
 "use strict";
 const ProductService = require("../services/product.service");
+const Product = require('../models/product.model')['product'];
 class ProductController {
   getRegister = (req, res) => {
     return res.render("register.ejs");
@@ -33,11 +34,31 @@ class ProductController {
     const products = await ProductService.getAllProducts();
     return res.render("shop.ejs", { products: products });
   };
-  getProductByKey = async (req, res) => {
-    const key = req.params.key;
-    const products = await ProductService.findProductByNameOrDescript(key);
-    console.log(products);
-    return res.render("shop.ejs", { products: products });
+  getProductByNameOrDescription = async (req, res) => {
+    try {
+      const { query } = req.query;
+
+      console.log(req);
+
+      // Validate the input
+      if (!query) {
+        return res.status(400).render('index.ejs', { error: 'Search query is required', page: 'home'});
+      }
+
+      // Find products by name or description
+      const products = await Product.find({
+        $or: [
+          { product_name: { $regex: query, $options: 'i' } },
+          { product_description: { $regex: query, $options: 'i' } },
+        ],
+      });
+
+      // Render the results
+      res.render('shop.ejs', { products: products, page: 'shop'});
+    } catch (error) {
+      console.error(error);
+      res.status(500).render('index.ejs', { error: 'Server error. Please try again later.', page: 'home' });
+    }
   };
   
 }
