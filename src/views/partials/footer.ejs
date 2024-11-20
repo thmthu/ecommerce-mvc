@@ -76,6 +76,23 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="lib/easing/easing.min.js"></script>
 <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("search-form").addEventListener("submit", (event) => {
+        event.preventDefault(); // Ngăn chặn reload trang mặc định
+  
+        // Lấy từ khóa từ ô input
+        const searchKey = document.getElementById("search-input").value.trim();
+        console.log(searchKey); // Kiểm tra xem key có xuất hiện ở console không
+  
+        if (searchKey) {
+          window.location.href = `/products-list-by-key/${encodeURIComponent(searchKey)}`;
+        } else {
+          alert("Please enter a keyword to search.");
+        }
+      });
+    });
+  </script> -->
 
 <!-- Contact Javascript File -->
 <script src="mail/jqBootstrapValidation.min.js"></script>

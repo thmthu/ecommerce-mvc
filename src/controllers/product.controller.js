@@ -39,5 +39,6 @@ class ProductController {
     console.log(products);
     return res.render("shop.ejs", { products: products });
   };
+  
 }
 module.exports = new ProductController();
