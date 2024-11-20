@@ -39,4 +39,5 @@ const customerSchema = new Schema(
     collection: COLLECTION_NAME,
   }
 );
-module.exports = model(DOCUMENT_NAME, customerSchema);
+const Customer = model(DOCUMENT_NAME, customerSchema);
+module.exports = Customer;

@@ -39,5 +39,10 @@ app.use((error, req, res, next) => {
     message: `${error.message}` || "Internal server error",
   });
 });
+app.use((req, res, next) => {
+  // Allow images from 'pexels.com'
+  res.setHeader("Content-Security-Policy", "default-src 'self'; img-src 'self' https://images.pexels.com;");
+  next();
+});
 
 module.exports = app;
