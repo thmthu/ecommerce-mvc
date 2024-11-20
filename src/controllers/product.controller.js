@@ -73,16 +73,30 @@ class ProductController {
 
   getFilter = async (req, res) => {
     try {
-      const { price, color, size, gender} = req.query;
+      const { query, price, color, size, gender} = req.query;
 
       let filter = {};
 
+      if (query) {
+        filter.$or = [
+          { product_name: { $regex: query, $options: 'i' } },
+          { product_description: { $regex: query, $options: 'i' } },
+        ];
+      }
+
       if (price) {
         const priceRanges = Array.isArray(price) ? price : [price];
-        filter.$or = priceRanges.map(range => {
+        const priceFilter = priceRanges.map(range => {
           const [min, max] = range.split('-').map(Number);
           return { product_price: { $gte: min, $lte: max } };
         });
+
+        if (filter.$or) {
+          filter.$and = [{ $or: filter.$or }, { $or: priceFilter }];
+          delete filter.$or;
+        } else {
+          filter.$or = priceFilter;
+        }
       }
 
       if (color) {
