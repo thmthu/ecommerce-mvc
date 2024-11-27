@@ -4,10 +4,12 @@ const crypto = require("crypto");
 const { getInforData } = require("../utils/index");
 const customerModel = require("../models/customer.model");
 const KeyTokenService = require("./key.service");
+const SessionService = require("./session.service");
 const { findByEmail } = require("../services/customer.service");
 const {
   ConflictRequestError,
   BadRequestError,
+  AuthFailureError,
 } = require("../core/error.response");
 const { createTokenPair } = require("../auth/authUtils");
 const RoleShop = {
@@ -18,40 +20,27 @@ const RoleShop = {
 };
 class AccessService {
   static logout = async ({ keyStore }) => {
-    console.log("logout ", keyStore)
+    console.log("logout ", keyStore);
     const delKey = await KeyTokenService.removeByUserid(keyStore.userId);
     console.log(delKey);
     return delKey;
   };
-  static signIn = async ({ email, password, refreshToken = null }) => {
+  static signIn = async ({ email, password }) => {
     const foundCustomer = await findByEmail({ email });
-
     if (!foundCustomer) throw new BadRequestError("Customer is not registered");
     const match = await bcrypt.compare(password, foundCustomer.password);
     if (!match) throw new BadRequestError("Wrong password");
-    const privateKey = crypto.randomBytes(64).toString("hex");
-    const publicKey = crypto.randomBytes(64).toString("hex");
-    const { _id: userId } = foundCustomer;
-    const tokens = await createTokenPair(
-      { userId, email },
-      publicKey,
-      privateKey
-    );
-    console.log("create ok!");
-    await KeyTokenService.createKeyToken({
-      userId,
-      publicKey,
-      privateKey,
-      refreshToken: tokens.refreshToken,
-    });
+    const sessionId = await SessionService.createSessionId(foundCustomer._id);
+    if (!sessionId) throw AuthFailureError("Error when create seesion id");
     return {
+      code: 200,
       metadata: {
         customer: getInforData({
           fields: ["id", "name", "email"],
           object: foundCustomer,
         }),
-        tokens,
       },
+      sessionId,
     };
   };
   static signUp = async ({ name, email, password }) => {
@@ -71,35 +60,21 @@ class AccessService {
     if (!newCustomer) {
       throw new Error("Failed to create new shop");
     }
-    if (newCustomer) {
-      const publicKey = crypto.randomBytes(64).toString("hex");
-      const privateKey = crypto.randomBytes(64).toString("hex");
-      const tokens = await createTokenPair(
-        { userId: newCustomer._id, email },
-        publicKey,
-        privateKey
-      );
-      console.log("Creating key token for user:", newCustomer._id);
-      const keyStore = await KeyTokenService.createKeyToken({
-        userId: newCustomer._id,
-        publicKey,
-        privateKey,
-        refreshToken: tokens.refreshToken, // Đảm bảo truyền refreshToken
-      });
-      if (!keyStore) {
-        throw new ConflictRequestError("keyStore error", 500);
-      }
-      return {
-        code: 201,
-        metadata: {
-          shop: getInforData({
-            fields: ["id", "name", "email"],
-            object: newCustomer,
-          }),
-          tokens,
-        },
-      };
-    }
+    const sessionId = await SessionService.createSessionId(newCustomer._id);
+    console.log("access service", sessionId);
+    if (!sessionId) throw AuthFailureError("Error when create seesion id");
+
+    console;
+    return {
+      code: 201,
+      metadata: {
+        shop: getInforData({
+          fields: ["id", "name", "email"],
+          object: newCustomer,
+        }),
+      },
+      sessionId,
+    };
   };
 }
 module.exports = AccessService;
