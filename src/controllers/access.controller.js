@@ -5,9 +5,9 @@ const bcrypt = require("bcrypt");
 const Customer = require("../models/customer.model");
 const { OK, CREATED, SuccessResponse } = require("../core/success.response");
 class AccessController {
-  logout = async (req, res, next) => {
-    const sessionId = getCookie('sessionId');
-    await AccessService.lo
+  logout = (req, res, next) => {
+    res.clearCookie('sessionId'); // Clear the session cookie
+    return res.redirect('/home'); // Redirect to the login page
   };
   signIn = async (req, res, next) => {
     try {
@@ -34,7 +34,7 @@ class AccessController {
       console.error(error);
       res
         .status(500)
-        .render("login", { error: "Server error. Please try again later." });
+        .render("login", { error: error });
     }
   };
   signUp = async (req, res, next) => {

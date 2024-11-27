@@ -12,14 +12,17 @@ const signUpValidationSchema = Joi.object({
     "string.empty": "Password is required",
     "string.min": "Password must be at least 8 characters long",
   }),
+  terms: Joi.boolean().valid(true).required().messages({
+    "any.only": "You must accept the terms and conditions",
+  }),
 });
 
 const validateSignUp = (req, res, next) => {
-  delete req.body.terms;
+  req.body.terms = req.body.terms === 'true' || req.body.terms === 'on';
   const { error } = signUpValidationSchema.validate(req.body, { abortEarly: false });
   if (error) {
     const errorMessages = error.details.map((detail) => detail.message);
-    return res.status(400).render("register", { error: errorMessages.join(", ") });
+    return res.status(400).render("register", { error: errorMessages });
   }
   next();
 };
@@ -32,6 +35,7 @@ const signInValidationSchema = Joi.object({
     "string.empty": "Password is required",
     "string.min": "Password must be at least 8 characters long",
   }),
+  remember: Joi.boolean().optional(),
 });
 
 const validateSignIn = (req, res, next) => {
@@ -39,7 +43,7 @@ const validateSignIn = (req, res, next) => {
   const { error } = signInValidationSchema.validate(req.body, { abortEarly: false });
   if (error) {
     const errorMessages = error.details.map((detail) => detail.message);
-    return res.status(400).render("login", { error: errorMessages.join(", ") });
+    return res.status(400).render("login", { error: errorMessages});
   }
   next();
 };

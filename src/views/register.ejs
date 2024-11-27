@@ -84,8 +84,20 @@
                 <a href="./contact" class="nav-item nav-link">Contact</a>
               </div>
               <div class="navbar-nav ml-auto py-0">
-                <a href="./login" class="nav-item nav-link">Login</a>
-                <a href="./register" class="nav-item nav-link active">Register</a>
+                <% if (typeof isAuthenticated !== 'undefined') { %>
+                  <% if (isAuthenticated) { %>
+                  <form id="logout-form" action="/logout" method="POST" style="display: inline;">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Include CSRF token if needed -->
+                    <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; border: none; background: none;">Logout</button>
+                  </form>
+                  <% } else { %>
+                    <a href="./login" class="nav-item nav-link">Login</a>
+                    <a href="./register" class="nav-item nav-link">Register</a>
+                  <% } %>
+                <% } else { %>
+                  <a href="./login" class="nav-item nav-link">Login</a>
+                  <a href="./register" class="nav-item nav-link">Register</a>
+                <% } %>
               </div>
             </div>
           </nav>
@@ -119,22 +131,21 @@
                       action="/register"
                       method="POST"
                       id="registerForm"
-                      class="row g-3 needs-validation"
+                      class="row g-3"
                       novalidate
                     >
                       <!-- Form fields -->
                       <div class="col-12">
                         <label for="yourUsername" class="form-label">Username</label>
-                        <div class="input-group has-validation">
+                        <div class="input-group">
                           <span class="input-group-text" id="inputGroupPrepend">@</span>
                           <input
-                            type="text"
+                            type="text" 
                             name="username"
                             class="form-control"
                             id="yourUsername"
                             required
                           />
-                          <div class="invalid-feedback">Please choose a username.</div>
                         </div>
                       </div>
 
@@ -147,7 +158,6 @@
                           id="yourEmail"
                           required
                         />
-                        <div class="invalid-feedback">Please enter a valid Email address!</div>
                       </div>
 
                       <div class="col-12">
@@ -159,7 +169,6 @@
                           id="yourPassword"
                           required
                         />
-                        <div class="invalid-feedback">Please enter your password!</div>
                       </div>
 
                       <div class="col-12">
@@ -168,14 +177,13 @@
                             class="form-check-input"
                             name="terms"
                             type="checkbox"
-                            value=""
+                            value="true"
                             id="acceptTerms"
                             required
                           />
                           <label class="form-check-label" for="acceptTerms">
                             I agree and accept the <a href="#">terms and conditions</a>
                           </label>
-                          <div class="invalid-feedback">You must agree before submitting.</div>
                         </div>
                       </div>
                       <div class="col-12">
@@ -183,7 +191,17 @@
                       </div>
                       <% if (typeof error !== 'undefined') { %>
                         <div class="col-12">
-                          <div class="alert alert-danger mt-2"><%= error %></div>
+                          <div class="alert alert-danger mt-2">
+                            <% if (Array.isArray(error)) { %>
+                              <ul>
+                                <% error.forEach(error1 => { %>
+                                  <li><%= error1 %></li>
+                                <% }) %>
+                              </ul>
+                            <% } else { %>
+                              <p><%= error %></p>
+                            <% } %>
+                          </div>
                         </div>
                       <% } %>
                     </form>

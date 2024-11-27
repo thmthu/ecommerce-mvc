@@ -1,9 +1,11 @@
 require("dotenv").config();
 const express = require("express");
+const session = require('express-session');
 const morgan = require("morgan");
 const compression = require("compression");
 const cors = require("cors");
 const configViewEngine = require('./configs/viewEngine');
+const authMiddleware = require('./middleware/authMiddleware'); // Import the auth middleware
 
 const {default : helmet} = require("helmet");
 const app = express();
@@ -46,5 +48,13 @@ app.use((error, req, res, next) => {
     message: `${error.message}` || "Internal server error",
   });
 });
+app.use(session({
+  secret: "secret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+app.use(authMiddleware);
 
 module.exports = app;

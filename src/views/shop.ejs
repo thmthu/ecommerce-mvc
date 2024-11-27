@@ -84,8 +84,20 @@
             <a href="./contact" class="nav-item nav-link">Contact</a>
           </div>
           <div class="navbar-nav ml-auto py-0">
-            <a href="./login" class="nav-item nav-link">Login</a>
-            <a href="./register" class="nav-item nav-link">Register</a>
+            <% if (typeof isAuthenticated !== 'undefined') { %>
+              <% if (isAuthenticated) { %>
+              <form id="logout-form" action="/logout" method="POST" style="display: inline;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Include CSRF token if needed -->
+                <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; border: none; background: none;">Logout</button>
+              </form>
+              <% } else { %>
+                <a href="./login" class="nav-item nav-link">Login</a>
+                <a href="./register" class="nav-item nav-link">Register</a>
+              <% } %>
+            <% } else { %>
+              <a href="./login" class="nav-item nav-link">Login</a>
+              <a href="./register" class="nav-item nav-link">Register</a>
+            <% } %>
           </div>
         </div>
       </nav>

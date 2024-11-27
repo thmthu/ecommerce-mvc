@@ -6,10 +6,10 @@ const { validateSignUp, validateSignIn } = require("../../middleware/validate");
 const router = express.Router();
 const { authentication } = require("../../auth/authUtils");
 
-router.post("/register", AccessController.signUp);
-router.post("/login", asyncHandler(AccessController.signIn));
+router.post("/register", validateSignUp, AccessController.signUp);
+router.post("/login", authMiddleware, validateSignIn, asyncHandler(AccessController.signIn));
 
 // router.use(authentication)
-router.post("/logout", asyncHandler(AccessController.logout));
+router.post("/logout", AccessController.logout);
 
 module.exports = router;
