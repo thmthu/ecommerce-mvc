@@ -9582,3 +9582,8 @@ a.text-dark:hover, a.text-dark:focus {
     transform: translateY(-15px);
   }
 }
+
+.img-product {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
