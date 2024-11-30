@@ -2,6 +2,7 @@
 const ProductController = require("../../controllers/product.controller");
 const express = require("express");
 const { asyncHandler } = require("../../auth/checkAuth");
+const ensureAuthenticated = require("../../middleware/authMiddleware");
 const router = express.Router();
 router.post("/", asyncHandler(ProductController.createProduct));
 router.get("/get-all", asyncHandler(ProductController.getAllProducts));
@@ -13,7 +14,7 @@ router.get(
 router.get("/register", ProductController.getRegister);
 router.get("/login", ProductController.getLogin);
 router.get('/cart', ProductController.getCart);
-router.get('/home', ProductController.getHome);
+router.get('/home', ensureAuthenticated, ProductController.getHome);
 router.get('/contact', ProductController.getContact);
 router.get('/checkout', ProductController.getCheckOut);
 router.get('/shop', ProductController.getShop);

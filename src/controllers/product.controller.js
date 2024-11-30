@@ -17,22 +17,22 @@ class ProductController {
       const latestProducts = await Product.find().sort({ createdAt: -1 }).limit(4);
 
       // Render the index page with the random products
-      res.render('index.ejs', { page: 'home', featuredProducts: products, latestProducts: latestProducts });
+      res.render('index.ejs', { page: 'home', featuredProducts: products, latestProducts: latestProducts, isAuthenticated: req.isAuthenticated() });
     } catch (error) {
       console.error(error);
       res.redirect('./home');
     }
   };
   getContact = (req, res) => {
-    return res.render("contact.ejs", { page: "contact" });
+    return res.render("contact.ejs", { page: "contact", isAuthenticated: req.isAuthenticated() });
   };
   getCheckOut = (req, res) => {
-    return res.render("checkout.ejs", { page: "checkout" });
+    return res.render("checkout.ejs", { page: "checkout", isAuthenticated: req.isAuthenticated()});
   };
   getShop = async (req, res) => {
     const products = await ProductService.getAllProducts();
     console.log(products);
-    return res.render("shop.ejs", { products: products, page: "shop" });
+    return res.render("shop.ejs", { products: products, page: "shop", isAuthenticated: req.isAuthenticated()});
   };
   getDetail = async (req, res) => {
     const product = await ProductService.getProductById(req.params.id);
@@ -40,11 +40,11 @@ class ProductController {
       product_type: product.product_type,
       _id: { $ne: product._id } // Exclude the current product
     }).limit(4); // Limit to 4 related products
-    return res.render("detail.ejs", { product: product, relatedProducts: relatedProducts ,page: "detail" });
+    return res.render("detail.ejs", { product: product, relatedProducts: relatedProducts ,page: "detail", isAuthenticated: req.isAuthenticated()});
   };
   getAllProduct = async (req, res) => {
     const products = await ProductService.getAllProducts();
-    return res.render("shop.ejs", { products: products });
+    return res.render("shop.ejs", { products: products, isAuthenticated: req.isAuthenticated()});
   };
   getProductByNameOrDescription = async (req, res) => {
     try {
@@ -64,7 +64,7 @@ class ProductController {
       });
 
       // Render the results
-      res.render('shop.ejs', { products: products, page: 'shop'});
+      res.render('shop.ejs', { products: products, page: 'shop', isAuthenticated: req.isAuthenticated()});
     } catch (error) {
       console.error(error);
       res.redirect('./home');
@@ -115,10 +115,10 @@ class ProductController {
       const products = await Product.find(filter);
 
       // Render the shop page with the filtered products
-      res.render('shop.ejs', { products: products, page: 'shop' });
+      res.render('shop.ejs', { products: products, page: 'shop', isAuthenticated: req.isAuthenticated()});
     } catch (error) {
       console.error(error);
-      res.status(500).render('shop.ejs', { error: 'Server error. Please try again later.' });
+      res.status(500).render('shop.ejs', { error: 'Server error. Please try again later.', isAuthenticated: req.isAuthenticated()});
     }
   };
   

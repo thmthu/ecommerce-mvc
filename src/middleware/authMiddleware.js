@@ -1,7 +1,8 @@
-const authMiddleware = (req, res, next) => {
-    res.locals.isAuthenticated = req.session && req.session.userId;
-    console.log("res.locals.isAuthenticated", res.locals.isAuthenticated);
-    next();
-};
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/login');
+  }
   
-module.exports = authMiddleware;
+module.exports = ensureAuthenticated;
