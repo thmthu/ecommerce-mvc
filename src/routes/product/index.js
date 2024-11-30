@@ -13,10 +13,10 @@ router.get(
 );
 router.get("/register", ProductController.getRegister);
 router.get("/login", ProductController.getLogin);
-router.get('/cart', ProductController.getCart);
-router.get('/home', ensureAuthenticated, ProductController.getHome);
+router.get('/cart', ensureAuthenticated, ProductController.getCart);
+router.get('/home', ProductController.getHome);
 router.get('/contact', ProductController.getContact);
-router.get('/checkout', ProductController.getCheckOut);
+router.get('/checkout', ensureAuthenticated, ProductController.getCheckOut);
 router.get('/shop', ProductController.getShop);
 router.get('/detail/:id', ProductController.getDetail);
 router.get('/filter', ProductController.getFilter);

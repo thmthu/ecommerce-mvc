@@ -9,7 +9,7 @@ class ProductController {
     return res.render("login.ejs");
   };
   getCart = (req, res) => {
-    return res.render("cart.ejs", { page: "cart" });
+    return res.render("cart.ejs", { page: "cart", isAuthenticated: req.isAuthenticated() });
   };
   getHome = async (req, res) => {
     try {
