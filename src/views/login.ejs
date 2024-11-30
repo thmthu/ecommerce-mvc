@@ -83,19 +83,30 @@
             <a href="./contact" class="nav-item nav-link">Contact</a>
           </div>
           <div class="navbar-nav ml-auto py-0">
-            <% if (typeof isAuthenticated !== 'undefined') { %>
-              <% if (isAuthenticated) { %>
-              <form id="logout-form" action="/logout" method="POST" style="display: inline;">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>"> <!-- Include CSRF token if needed -->
-                <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; border: none; background: none;">Logout</button>
-              </form>
-              <% } else { %>
-                <a href="./login" class="nav-item nav-link">Login</a>
-                <a href="./register" class="nav-item nav-link">Register</a>
-              <% } %>
+            <% if (typeof isAuthenticated !== 'undefined') { %> <% if
+            (isAuthenticated) { %>
+            <form
+              id="logout-form"
+              action="/logout"
+              method="POST"
+              style="display: inline"
+            >
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <!-- Include CSRF token if needed -->
+              <button
+                type="submit"
+                class="nav-item nav-link btn btn-link"
+                style="padding: 0; border: none; background: none"
+              >
+                Logout
+              </button>
+            </form>
             <% } else { %>
-              <a href="./login" class="nav-item nav-link">Login</a>
-              <a href="./register" class="nav-item nav-link">Register</a>
+            <a href="./login" class="nav-item nav-link">Login</a>
+            <a href="./register" class="nav-item nav-link">Register</a>
+            <% } %> <% } else { %>
+            <a href="./login" class="nav-item nav-link">Login</a>
+            <a href="./register" class="nav-item nav-link">Register</a>
             <% } %>
           </div>
         </div>
@@ -127,28 +138,26 @@
                 </div>
 
                 <form
-                  action="/login"
+                  action="/login/password"
                   method="POST"
                   class="row g-3 needs-validation"
                   novalidate
                 >
                   <div class="col-12">
-                    <label for="yourUsername" class="form-label">Email</label>
+                    <label for="email" class="form-label">Email</label>
                     <div class="input-group">
                       <input
                         type="text"
                         name="email"
                         class="form-control"
-                        id="yourEmail"
+                        id="email"
                         required
                       />
                     </div>
                   </div>
 
                   <div class="col-12">
-                    <label for="yourPassword" class="form-label"
-                      >Password</label
-                    >
+                    <label for="password" class="form-label">Password</label>
                     <input
                       type="password"
                       name="password"
@@ -178,19 +187,19 @@
                     </button>
                   </div>
                   <% if (typeof error !== 'undefined') { %>
-                    <div class="col-12">
-                      <div class="alert alert-danger mt-2">
-                        <% if (Array.isArray(error)) { %>
-                          <ul>
-                            <% error.forEach(error1 => { %>
-                              <li><%= error1 %></li>
-                            <% }) %>
-                          </ul>
-                        <% } else { %>
-                          <p><%= error %></p>
-                        <% } %>
-                      </div> 
+                  <div class="col-12">
+                    <div class="alert alert-danger mt-2">
+                      <% if (Array.isArray(error)) { %>
+                      <ul>
+                        <% error.forEach(error1 => { %>
+                        <li><%= error1 %></li>
+                        <% }) %>
+                      </ul>
+                      <% } else { %>
+                      <p><%= error %></p>
+                      <% } %>
                     </div>
+                  </div>
                   <% } %>
                   <div class="col-12">
                     <p class="small mb-0">

@@ -1,21 +1,26 @@
 require("dotenv").config();
 const express = require("express");
-const session = require('express-session');
 const morgan = require("morgan");
 const compression = require("compression");
 const cors = require("cors");
-const configViewEngine = require('./configs/viewEngine');
-const authMiddleware = require('./middleware/authMiddleware'); // Import the auth middleware
+const configViewEngine = require("./configs/viewEngine");
+const authMiddleware = require("./middleware/authMiddleware"); // Import the auth middleware
+const session = require("express-session");
+const MongoStore = require("connect-mongo"); // Import MongoStore
+const passport = require("passport");
+const flash = require("connect-flash");
+const config = require("./configs/config.mongo"); // Adjust the path as necessary
 
-const {default : helmet} = require("helmet");
+const { default: helmet } = require("helmet");
 const app = express();
+const dbUrl = config.db.url;
 
 app.use(morgan("dev"));
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"], // Restrict everything else to self
-      imgSrc: ["*"],          // Allow images from all sources
+      imgSrc: ["*"], // Allow images from all sources
     },
   })
 );
@@ -28,10 +33,26 @@ app.use(
     methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "x-api-key", "Authorization"],
     credentials: true,
-
   })
 );
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 14 * 24 * 60 * 60 * 1000, httpOnly: true }, // Match TTL in milliseconds
+    store: MongoStore.create({
+      mongoUrl: dbUrl,
+      collectionName: "sessions", // The name of the collection where sessions will be stored
+      ttl: 14 * 24 * 60 * 60, // Optional: Session expiration time in seconds (default is 14 days)
+    }),
+  })
+);
+app.use(flash()); // Use connect-flash
 
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.authenticate("session"));
 require("./dbs/init.mongodb");
 configViewEngine(app);
 app.use("/", require("./routes"));
@@ -48,13 +69,7 @@ app.use((error, req, res, next) => {
     message: `${error.message}` || "Internal server error",
   });
 });
-app.use(session({
-  secret: "secret",
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // Set to true if using HTTPS
-}));
 
-app.use(authMiddleware);
+// app.use(authMiddleware);
 
 module.exports = app;

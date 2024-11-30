@@ -1,58 +1,33 @@
 "use strict";
-const {
-  BadRequestError,
-  NotFoundError,
-  AuthFailureError,
-} = require("../core/error.response");
-const { asyncHandler } = require("../helpers/asyncHandler");
-const JWT = require("jsonwebtoken");
-const { findById } = require("../services/key.service");
-const HEADER = {
-  // API_KEY: "x-api-key",
-  CLIENT_ID: "x-client-id",
-  AUTHORIZATION: "authorization",
-};
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");
+const { findByEmail } = require("../services/customer.service"); // Adjust the path as needed
 
-const createTokenPair = async (payload, publicKey, privateKey) => {
-  try {
-    const accessToken = JWT.sign(payload, publicKey, {
-      expiresIn: "2 days",
-    });
-    const refreshToken = JWT.sign(payload, privateKey, {
-      expiresIn: "7 days",
-    });
-    JWT.verify(accessToken, publicKey, (err, decode) => {
-      if (err) {
-        console.log("err verify: ", err);
-      } else {
-        console.log("data verify: ", decode);
+const customerStrategy = new LocalStrategy(
+  { usernameField: "email" },
+  async function verify(email, password, cb) {
+    try {
+      const foundCustomer = await findByEmail({ email });
+      if (!foundCustomer) {
+        console.log("Customer not registered.");
+        return cb(null, false, { message: "Customer is not registered." });
       }
-    });
 
-    return { accessToken, refreshToken };
-  } catch (e) {
-    console.error("Error in createTokenPair: ", e);
-    throw new BadRequestError("Token generation failed", 500); // Or throw the original error `throw e;`
+      const match = await bcrypt.compare(password, foundCustomer.password);
+      if (!match) {
+        console.log("Incorrect email or password.");
+        return cb(null, false, { message: "Incorrect email or password." });
+      }
+
+      console.log("Customer authenticated successfully.");
+      return cb(null, foundCustomer);
+    } catch (err) {
+      return cb(err);
+    }
   }
-};
+);
 
-const authentication = asyncHandler(async (req, res, next) => {
-  const userId = req.headers[HEADER.CLIENT_ID];
-  if (!userId) throw new AuthFailureError("Invalid request");
 
-  const keyStore = await findById(userId);
-  if (!keyStore) throw new NotFoundError("Not found keyStore");
 
-  const accessToken = req.header(HEADER.AUTHORIZATION);
-  if (!accessToken) throw new AuthFailureError("Invalid Request");
-  try {
-    const decodeUser = JWT.verify(accessToken, keyStore.publicKey);
-    if (userId !== decodeUser.userId)
-      throw new AuthFailureError("Invalid userId");
-    req.keyStore = keyStore;
-    return next();
-  } catch (e) {
-    throw e;
-  }
-});
-module.exports = { createTokenPair, authentication };
+module.exports = { customerStrategy };

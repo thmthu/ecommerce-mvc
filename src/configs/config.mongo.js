@@ -8,6 +8,7 @@ const dev = {
     host: process.env.DEV_APP_HOST || "localhost",
     port: process.env.DEV_APP_PORT || 27017,
     name: process.env.DEV_APP_NAME || "mitu",
+    url: process.env.DEV_DB_URL || "mitu_dev",
   },
 };
 const pro = {

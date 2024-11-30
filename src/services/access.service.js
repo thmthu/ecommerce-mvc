@@ -1,17 +1,12 @@
 "use strict";
 const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const { getInforData } = require("../utils/index");
 const customerModel = require("../models/customer.model");
-const KeyTokenService = require("./key.service");
-const SessionService = require("./session.service");
-const { findByEmail } = require("../services/customer.service");
 const {
   ConflictRequestError,
   BadRequestError,
   AuthFailureError,
 } = require("../core/error.response");
-const { createTokenPair } = require("../auth/authUtils");
 const RoleShop = {
   SHOP: "SHOP",
   WRITER: "WRITER",
@@ -19,30 +14,7 @@ const RoleShop = {
   ADMIN: "ADMIN",
 };
 class AccessService {
-  static logout = async ({ keyStore }) => {
-    console.log("logout ", keyStore);
-    const delKey = await KeyTokenService.removeByUserid(keyStore.userId);
-    console.log(delKey);
-    return delKey;
-  };
-  static signIn = async ({ email, password }) => {
-    const foundCustomer = await findByEmail({ email });
-    if (!foundCustomer) throw new BadRequestError("Customer is not registered");
-    const match = await bcrypt.compare(password, foundCustomer.password);
-    if (!match) throw new BadRequestError("Wrong password");
-    const sessionId = await SessionService.createSessionId(foundCustomer._id);
-    if (!sessionId) throw AuthFailureError("Error when create seesion id");
-    return {
-      code: 200,
-      metadata: {
-        customer: getInforData({
-          fields: ["id", "name", "email"],
-          object: foundCustomer,
-        }),
-      },
-      sessionId,
-    };
-  };
+  
   static signUp = async ({ name, email, password }) => {
     const hoderCustomer = await customerModel.findOne({ email }).lean();
 
@@ -62,7 +34,7 @@ class AccessService {
     }
     const sessionId = await SessionService.createSessionId(newCustomer._id);
     console.log("access service", sessionId);
-    if (!sessionId) throw AuthFailureError("Error when create seesion id");
+    // if (!sessionId) throw AuthFailureError("Error when create seesion id");
 
     console;
     return {
@@ -73,7 +45,7 @@ class AccessService {
           object: newCustomer,
         }),
       },
-      sessionId,
+      // sessionId,
     };
   };
 }
