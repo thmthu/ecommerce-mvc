@@ -32,9 +32,6 @@ class AccessService {
     if (!newCustomer) {
       throw new Error("Failed to create new shop");
     }
-    const sessionId = await SessionService.createSessionId(newCustomer._id);
-    console.log("access service", sessionId);
-    // if (!sessionId) throw AuthFailureError("Error when create seesion id");
 
     console;
     return {
@@ -45,7 +42,6 @@ class AccessService {
           object: newCustomer,
         }),
       },
-      // sessionId,
     };
   };
 }

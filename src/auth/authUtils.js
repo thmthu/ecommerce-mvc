@@ -3,7 +3,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { findByEmail } = require("../services/customer.service"); // Adjust the path as needed
-
+///Looi
 const customerStrategy = new LocalStrategy(
   { usernameField: "email" },
   async function verify(email, password, cb) {
