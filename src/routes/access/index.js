@@ -27,14 +27,11 @@ router.post(
     failureRedirect: "/login",
     failureFlash: true, // Enable flash messages for better debugging
   }),
-  (err, req, res, next) => {
-    if (err) {
-      console.error("Authentication error:", err);
-      return res.status(500).send("An error occurred during login.");
-    }
-    next();
-  }
 );
+
+router.get('/login', (req, res) => {
+  res.render('login.ejs', { error: req.flash('error') });
+});
 
 router.post("/logout", function (req, res, next) {
   req.logout(function (err) {
