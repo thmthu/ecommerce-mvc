@@ -3480,7 +3480,7 @@ input[type="button"].btn-block {
 
 .custom-control {
   position: relative;
-  z-index: 1;
+  z-index: 0;
   display: block;
   min-height: 1.5rem;
   padding-left: 1.5rem;
