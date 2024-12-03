@@ -30,6 +30,63 @@ class ProductFactory {
       ],
     });
   }
+  static async getRandomProducts(limit) {
+    return await product.aggregate([{ $sample: { size: limit } }]);
+  }
+  static async getLatestProducts(limit) {
+    return await product.find().sort({ createdAt: -1 }).limit(limit);
+  }
+  static async getRelatedProducts(type, id, limit) {
+    return await product
+      .find({ product_type: type, _id: { $ne: id } })
+      .limit(limit);
+  }
+  static async findProductByNameOrDescription(query) {
+    return await product.find({
+      $or: [
+        { product_name: { $regex: query, $options: "i" } },
+        { product_description: { $regex: query, $options: "i" } },
+      ],
+    });
+  }
+  static async findProductByFilter(query, price, color, size, gender) {
+      let filter = {};
+
+      if (query) {
+        filter.$or = [
+          { product_name: { $regex: query, $options: 'i' } },
+          { product_description: { $regex: query, $options: 'i' } },
+        ];
+      }
+
+      if (price) {
+        const priceRanges = Array.isArray(price) ? price : [price];
+        const priceFilter = priceRanges.map(range => {
+          const [min, max] = range.split('-').map(Number);
+          return { product_price: { $gte: min, $lte: max } };
+        });
+
+        if (filter.$or) {
+          filter.$and = [{ $or: filter.$or }, { $or: priceFilter }];
+          delete filter.$or;
+        } else {
+          filter.$or = priceFilter;
+        }
+      }
+
+      if (color) {
+        filter.product_color = { $in: Array.isArray(color) ? color : [color] };
+      }
+
+      if (size) {
+        filter.product_size = { $in: Array.isArray(size) ? size : [size] };
+      }
+
+      if (gender) {
+        filter.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
+      }
+      return await product.find(filter);
+    }
 }
 
 class Product {

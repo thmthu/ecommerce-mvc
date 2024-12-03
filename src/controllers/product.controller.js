@@ -1,6 +1,5 @@
 "use strict";
 const ProductService = require("../services/product.service");
-const Product = require('../models/product.model')['product'];
 class ProductController {
   getRegister = (req, res) => {
     return res.render("register.ejs");
@@ -13,8 +12,8 @@ class ProductController {
   };
   getHome = async (req, res) => {
     try {
-      const products = await Product.aggregate([{ $sample: { size: 4 } }]);
-      const latestProducts = await Product.find().sort({ createdAt: -1 }).limit(4);
+      const products = await ProductService.getRandomProducts(4);
+      const latestProducts = await ProductService.getLatestProducts(4);
 
       // Render the index page with the random products
       res.render('index.ejs', { page: 'home', featuredProducts: products, latestProducts: latestProducts, isAuthenticated: req.isAuthenticated() });
@@ -36,10 +35,7 @@ class ProductController {
   };
   getDetail = async (req, res) => {
     const product = await ProductService.getProductById(req.params.id);
-    const relatedProducts = await Product.find({
-      product_type: product.product_type,
-      _id: { $ne: product._id } // Exclude the current product
-    }).limit(4); // Limit to 4 related products
+    const relatedProducts = await ProductService.getRelatedProducts(product.type, product._id, 4);
     return res.render("detail.ejs", { product: product, relatedProducts: relatedProducts ,page: "detail", isAuthenticated: req.isAuthenticated()});
   };
   getAllProduct = async (req, res) => {
@@ -55,13 +51,7 @@ class ProductController {
         res.redirect('./home');
       }
 
-      // Find products by name or description
-      const products = await Product.find({
-        $or: [
-          { product_name: { $regex: query, $options: 'i' } },
-          { product_description: { $regex: query, $options: 'i' } },
-        ],
-      });
+      const products = await ProductService.findProductByNameOrDescript(query);
 
       // Render the results
       res.render('shop.ejs', { products: products, page: 'shop', isAuthenticated: req.isAuthenticated()});
@@ -75,44 +65,7 @@ class ProductController {
     try {
       const { query, price, color, size, gender} = req.query;
 
-      let filter = {};
-
-      if (query) {
-        filter.$or = [
-          { product_name: { $regex: query, $options: 'i' } },
-          { product_description: { $regex: query, $options: 'i' } },
-        ];
-      }
-
-      if (price) {
-        const priceRanges = Array.isArray(price) ? price : [price];
-        const priceFilter = priceRanges.map(range => {
-          const [min, max] = range.split('-').map(Number);
-          return { product_price: { $gte: min, $lte: max } };
-        });
-
-        if (filter.$or) {
-          filter.$and = [{ $or: filter.$or }, { $or: priceFilter }];
-          delete filter.$or;
-        } else {
-          filter.$or = priceFilter;
-        }
-      }
-
-      if (color) {
-        filter.product_color = { $in: Array.isArray(color) ? color : [color] };
-      }
-
-      if (size) {
-        filter.product_size = { $in: Array.isArray(size) ? size : [size] };
-      }
-
-      if (gender) {
-        filter.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
-      }
-
-      // Find products with the selected filters
-      const products = await Product.find(filter);
+      const products = await ProductService.findProductByFilter(query, price, color, size, gender);
 
       // Render the shop page with the filtered products
       res.render('shop.ejs', { products: products, page: 'shop', isAuthenticated: req.isAuthenticated()});
