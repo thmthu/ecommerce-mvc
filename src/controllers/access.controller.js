@@ -13,20 +13,12 @@ class AccessController {
         email,
         password,
       });
-      if (result.code === 201) {
-        res.cookie("sessionId", result.sessionId, {
-          httpOnly: true, // Bảo vệ cookie khỏi JavaScript trên client
-          secure: true, // Chỉ truyền qua HTTPS
-          maxAge: 24 * 60 * 60 * 1000, // Cookie hết hạn sau 1 ngày
-        });
+      if (result.success) {
         return res.status(201).redirect("/login");
       } else {
-        return res
-          .status(result.code)
-          .render("register", { error: result.message });
+        return res.status(400).render("register", { error: result.message });
       }
     } catch (error) {
-      console.error("===", error);
       return res.status(500).render("register", { error: error });
     }
   };

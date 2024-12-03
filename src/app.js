@@ -10,11 +10,16 @@ const MongoStore = require("connect-mongo"); // Import MongoStore
 const passport = require("passport");
 const flash = require("connect-flash");
 const config = require("./configs/config.mongo"); // Adjust the path as necessary
+const cookieParser = require("cookie-parser");
 
+// Sử dụng cookie-parser
 const { default: helmet } = require("helmet");
 const app = express();
 const dbUrl = config.db.url;
-
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-cache");
+  next();
+});
 app.use(morgan("dev"));
 app.use(
   helmet.contentSecurityPolicy({
@@ -25,6 +30,7 @@ app.use(
     },
   })
 );
+app.use(cookieParser());
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -3,9 +3,7 @@ const bcrypt = require("bcrypt");
 const { getInforData } = require("../utils/index");
 const customerModel = require("../models/customer.model");
 const {
-  ConflictRequestError,
-  BadRequestError,
-  AuthFailureError,
+  ConflictRequestError
 } = require("../core/error.response");
 const RoleShop = {
   SHOP: "SHOP",
@@ -14,7 +12,6 @@ const RoleShop = {
   ADMIN: "ADMIN",
 };
 class AccessService {
-  
   static signUp = async ({ name, email, password }) => {
     const hoderCustomer = await customerModel.findOne({ email }).lean();
 
@@ -35,7 +32,7 @@ class AccessService {
 
     console;
     return {
-      code: 201,
+      success: true,
       metadata: {
         shop: getInforData({
           fields: ["id", "name", "email"],
