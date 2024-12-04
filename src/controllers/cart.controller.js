@@ -19,8 +19,9 @@ class CartController {
   updateCart = async (req, res, next) => {
     const userId = req.session.userId;
     const product = req.body;
+    console.log(product);
 
-    const result = await CartService.modifyQuantity({ userId, product});
+    const result = await CartService.updateUserCartQuantity(userId, product);
     return res.json({
       message: "ok",
       metadata: result,

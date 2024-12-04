@@ -47,4 +47,5 @@ module.exports = {
   product: model(DOCUMENT_NAME, productSchema),
   femaleClothe: model("FemaleClothe", femaleClotheSchema),
   maleClothe: model("MaleClothe", maleClotheSchema),
+  product1: model(DOCUMENT_NAME, productSchema),
 };

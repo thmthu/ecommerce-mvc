@@ -1,7 +1,7 @@
 "use strict";
 const { cart } = require("../models/cart.model");
 const { model, Schema, Types } = require("mongoose"); // Ensure Types is imported
-const { product } = require("../models/product.model")
+const { product1 } = require("../models/product.model")
 
 class CartService {
   static async createUserCart(userId, product) {
@@ -17,8 +17,8 @@ class CartService {
   }
   static async updateUserCartQuantity(userId, product) {
     console.log("updateUserCartQuantity: =========", product);
-    const { product_id, quantity, price } = product;
-    console.log(product_id, quantity )
+    const { product_id, quantity, price } = product.product;
+    console.log(product_id, quantity, price);
     const query = {
       cart_userId: userId,
       "cart_products.product_id": product_id,
@@ -28,7 +28,7 @@ class CartService {
 
     if (existingCart) {
       const updateSet = {
-        $inc: {
+        $set: {
           "cart_products.$.quantity": quantity,
         },
       };
@@ -59,13 +59,6 @@ class CartService {
     }
     return await CartService.updateUserCartQuantity(userId, product);
   }
-  static async modifyQuantity(userId, product ) {
-    const { productId, quantity } = product;
-    if (quantity == 0) {
-      return await CartService.removeProduct(userId, product);
-    }
-    return await CartService.updateUserCartQuantity(userId, product);
-  }
   static async removeProduct(userId, productId ) {
     console.log("remove product", userId, productId);
     const query = { cart_userId: userId },
@@ -81,7 +74,7 @@ class CartService {
     console.log("get user cart", userId);
     const userCart = await cart.findOne({ cart_userId: userId }).lean();
     const productIds = userCart.cart_products.map(item => item.product_id);
-    const products = await product.find({ _id: { $in: productIds } }).lean();
+    const products = await product1.find({ _id: { $in: productIds } }).lean();
 
     // Merge product details with cart items
     userCart.cart_products = userCart.cart_products.map(cartItem => {

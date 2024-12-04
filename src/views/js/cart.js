@@ -30,7 +30,7 @@ $(document).ready(function() {
     });
   });
 
-  $('.btn-minus').onclick(function() {
+  $('.btn-minus').off('click').on('click', function() {
     const productId = $(this).data('product-id');
     const productPrice = $(this).data('product-price');
     const input = $(this).closest('.quantity').find('input');
@@ -59,7 +59,7 @@ $(document).ready(function() {
     }
   }); // 300ms delay
 
-  $('.btn-plus').onclick(function() {
+  $('.btn-plus').off('click').on('click', function() {
     const productId = $(this).data('product-id');
     const productPrice = $(this).data('product-price');
     const input = $(this).closest('.quantity').find('input');
