@@ -17,7 +17,7 @@ class CartService {
   }
   static async updateUserCartQuantity(userId, product) {
     console.log("updateUserCartQuantity: =========", product);
-    const { product_id, quantity, price } = product.product;
+    const { product_id, quantity, price } = product.product === undefined ? product : product.product;
     console.log(product_id, quantity, price);
     const query = {
       cart_userId: userId,

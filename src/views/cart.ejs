@@ -155,7 +155,7 @@
                     </button>
                   </div>
                 </td>
-                <td class="align-middle total">$<%= item.price * item.quantity %></td>
+                <td class="align-middle total">$<%= (item.price * item.quantity).toFixed(2) %></td>
                 <td class="align-middle">
                   <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="<%= item.product_id %>">
                     <i class="fas fa-times"></i>
