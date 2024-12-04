@@ -25,7 +25,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"], // Restrict everything else to self
-      scriptSrc: ["*"], // Allow scripts from self and code.jquery.com
+      scriptSrc: ["*", "'unsafe-inline'"], // Allow scripts from self and code.jquery.com
       imgSrc: ["*"], // Allow images from all sources
     },
   })

@@ -1,6 +1,7 @@
 "use strict";
 const { cart } = require("../models/cart.model");
 const { model, Schema, Types } = require("mongoose"); // Ensure Types is imported
+const { product } = require("../models/product.model")
 
 class CartService {
   static async createUserCart(userId, product) {
@@ -47,7 +48,7 @@ class CartService {
       );
     }
   }
-  static async addToCart({ userId, product = {} }) {
+  static async addToCart(userId, product ) {
     console.log("add to cart", userId, product);
     //Nếu cart chưa có thì tạo và chèn product đó vào
     const userCart = await cart.findOne({ cart_userId: userId });
@@ -58,27 +59,41 @@ class CartService {
     }
     return await CartService.updateUserCartQuantity(userId, product);
   }
-  static async modifyQuantity({ userId, product }) {
+  static async modifyQuantity(userId, product ) {
     const { productId, quantity } = product;
     if (quantity == 0) {
       return await CartService.removeProduct(userId, product);
     }
     return await CartService.updateUserCartQuantity(userId, product);
   }
-  static async removeProduct({ userId, productId }) {
+  static async removeProduct(userId, productId ) {
     console.log("remove product", userId, productId);
     const query = { cart_userId: userId },
       updateSet = {
         $pull: {
-          cart_products: { productId },
+          cart_products: { product_id: productId },
         },
       };
     const deleteProduct = await cart.updateOne(query, updateSet);
     return deleteProduct;
   }
-  static async getUserCart({ userId }) {
+  static async getUserCart(userId ) {
     console.log("get user cart", userId);
-    return await cart.findOne({ cart_userId: userId }).lean();
+    const userCart = await cart.findOne({ cart_userId: userId }).lean();
+    const productIds = userCart.cart_products.map(item => item.product_id);
+    const products = await product.find({ _id: { $in: productIds } }).lean();
+
+    // Merge product details with cart items
+    userCart.cart_products = userCart.cart_products.map(cartItem => {
+      const productDetails = products.find(p => p._id.toString() === cartItem.product_id.toString());
+      console.log(productDetails);
+      return {
+        ...cartItem,
+        name: productDetails.product_name,
+        image: productDetails.product_thumb
+      };
+    });
+    return userCart.cart_products;
   }
 }
 module.exports = CartService;

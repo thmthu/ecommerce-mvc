@@ -5,6 +5,13 @@ const bcrypt = require("bcrypt");
 const Customer = require("../models/customer.model");
 const { OK, CREATED, SuccessResponse } = require("../core/success.response");
 class AccessController {
+  getRegister = (req, res) => {
+    return res.render("register.ejs");
+  };
+  getLogin = (req, res) => {
+    return res.render("login.ejs");
+  };
+
   signUp = async (req, res, next) => {
     try {
       const { username, email, password } = req.body;

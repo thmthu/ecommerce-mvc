@@ -11,9 +11,6 @@ router.get(
   "/search",
   ProductController.getProductByNameOrDescription
 );
-router.get("/register", ProductController.getRegister);
-router.get("/login", ProductController.getLogin);
-router.get('/cart', ensureAuthenticated, ProductController.getCart);
 router.get('/home', ProductController.getHome);
 router.get('/contact', ProductController.getContact);
 router.get('/checkout', ensureAuthenticated, ProductController.getCheckOut);

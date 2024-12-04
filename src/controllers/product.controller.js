@@ -1,12 +1,6 @@
 "use strict";
 const ProductService = require("../services/product.service");
 class ProductController {
-  getRegister = (req, res) => {
-    return res.render("register.ejs");
-  };
-  getLogin = (req, res) => {
-    return res.render("login.ejs");
-  };
   getCart = (req, res) => {
     return res.render("cart.ejs", {
       page: "cart",

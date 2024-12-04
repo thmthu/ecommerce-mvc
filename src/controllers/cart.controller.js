@@ -3,33 +3,35 @@
 const CartService = require("../services/cart.service");
 class CartController {
   getUserCart = async (req, res, next) => {
-    const result = await CartService.getUserCart(req.body);
-    return res.json({
-      message: "ok",
-      metadata: result,
-    });
+    const result = await CartService.getUserCart(req.session.userId);
+    return res.render("cart.ejs", { cart: result , page: "cart", 
+      isAuthenticated: req.isAuthenticated()});
   };
   addToCart = async (req, res, next) => {
     console.log(req.body);
-    const result = await CartService.addToCart(req.body);
-    return res.json({
-      message: "ok",
-      metadata: result,
-    });
+    const userId = req.session.userId;
+    const product = req.body.product;
+    product.price = parseFloat(product.price);
+    product.quantity = parseInt(product.quantity);
+    const result = await CartService.addToCart(userId, product);
+    return res.redirect("/shop");
   };
   updateCart = async (req, res, next) => {
-    const result = await CartService.modifyQuantity(req.body);
+    const userId = req.session.userId;
+    const product = req.body;
+
+    const result = await CartService.modifyQuantity({ userId, product});
     return res.json({
       message: "ok",
       metadata: result,
     });
   };
   removeFromCart = async (req, res, next) => {
-    const result = await CartService.removeProduct(req.body);
-    return res.json({
-      message: "ok",
-      metadata: result,
-    });
+    const userId = req.session.userId;
+    const productId = req.body.productId;
+
+    const result = await CartService.removeProduct(userId, productId);
+    return res.json({ message: 'Product removed from cart', result });;
   };
 }
 module.exports = new CartController();

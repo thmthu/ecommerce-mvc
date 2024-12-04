@@ -28,10 +28,20 @@ router.post("/login/password", (req, res, next) => {
       return next(err);
     }
 
-    passport.authenticate("local", {
-      successRedirect: "/home",
-      failureRedirect: "/login",
-      failureFlash: true,
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.redirect('/login');
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        req.session.userId = user._id; // Store user ID in session
+        return res.redirect('/home');
+      });
     })(req, res, next);
   });
 });
@@ -39,6 +49,8 @@ router.post("/login/password", (req, res, next) => {
 router.get("/login", (req, res) => {
   res.render("login.ejs", { error: req.flash("error") });
 });
+
+router.get("/register", AccessController.getRegister);
 
 router.post("/logout", function (req, res, next) {
   console.log("Session ID (req.sessionID):", req.sessionID);

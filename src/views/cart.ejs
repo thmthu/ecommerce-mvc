@@ -136,39 +136,42 @@
           </tr>
         </thead>
         <tbody class="align-middle">
-          <tr>
-            <td class="align-middle">
-              <img src="img/product-1.jpg" alt="" style="width: 50px" />
-              Colorful Stylish Shirt
-            </td>
-            <td class="align-middle">$150</td>
-            <td class="align-middle">
-              <div class="input-group quantity mx-auto" style="width: 100px">
-                <div class="input-group-btn">
-                  <button class="btn btn-sm btn-primary btn-minus">
-                    <i class="fa fa-minus"></i>
+          <% if (cart && cart.length > 0) { %>
+            <% cart.forEach(item => { %>
+              <tr>
+                <td class="align-middle">
+                  <img src="<%= item.image %>" alt="" style="width: 50px" />
+                  <%= item.name %>
+                </td>
+                <td class="align-middle">$<%= item.price %></td>
+                <td class="align-middle">
+                  <div class="input-group quantity">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="<%= item.product_id %>">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                    <input type="text" class="form-control text-center" value="<%= item.quantity %>" readonly>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="<%= item.product_id %>">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td class="align-middle total">$<%= item.price * item.quantity %></td>
+                <td class="align-middle">
+                  <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="<%= item.product_id %>">
+                    <i class="fas fa-times"></i>
                   </button>
-                </div>
-                <input
-                  type="text"
-                  class="form-control form-control-sm bg-secondary text-center"
-                  value="1"
-                />
-                <div class="input-group-btn">
-                  <button class="btn btn-sm btn-primary btn-plus">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </div>
-              </div>
-            </td>
-            <td class="align-middle">$150</td>
-            <td class="align-middle">
-              <button class="btn btn-sm btn-primary">
-                <i class="fa fa-times"></i>
-              </button>
-            </td>
-          </tr>
-         
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="5">Your cart is empty.</td>
+            </tr>
+          <% } %>
         </tbody>
       </table>
     </div>
@@ -191,18 +194,18 @@
         </div>
         <div class="card-body">
           <div class="d-flex justify-content-between mb-3 pt-1">
-            <h6 class="font-weight-medium">Subtotal</h6>
-            <h6 class="font-weight-medium">$150</h6>
+            <h6 class="font-weight-medium text-muted">Subtotal</h6>
+            <h6 class="font-weight-medium total-value">$0.00</h6>
           </div>
           <div class="d-flex justify-content-between">
-            <h6 class="font-weight-medium">Shipping</h6>
-            <h6 class="font-weight-medium">$10</h6>
+            <h6 class="font-weight-medium text-muted">Shipping</h6>
+            <h6 class="font-weight-medium">$0.00</h6>
           </div>
         </div>
         <div class="card-footer border-secondary bg-transparent">
           <div class="d-flex justify-content-between mt-2">
-            <h5 class="font-weight-bold">Total</h5>
-            <h5 class="font-weight-bold">$160</h5>
+            <h5 class="font-weight-bold text-muted">Total</h5>
+            <h5 class="font-weight-bold total-value">$0.00</h5>
           </div>
           <button class="btn btn-block btn-primary my-3 py-3">
             Proceed To Checkout
@@ -212,6 +215,39 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+
+  function updateTotal() {
+    let total = 0;
+    $('.total').each(function() {
+      total += parseFloat($(this).text().replace('$', ''));
+    });
+    $('.total-value').text('$' + total.toFixed(2));
+  }
+
+  updateTotal();
+
+  $('.remove-from-cart').click(function() {
+    const productId = $(this).data('product-id');
+    const row = $(this).closest('tr');
+
+    $.ajax({
+      url: '/cart-remove-product',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ productId: productId }),
+      success: function(response) {
+        row.remove();
+        updateTotal();
+      },
+      error: function(error) {
+        alert('Error removing product from cart.');
+      }
+    });
+  });
+});
+</script>
 <!-- Cart End -->
 
 <%- include('./partials/footer') %>
