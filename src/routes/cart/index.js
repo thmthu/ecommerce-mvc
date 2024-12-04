@@ -23,7 +23,7 @@ router.get("/cart", ensureAuthenticated, CartController.getUserCart);
     }
 }
  */
-router.post("/cart-add", CartController.addToCart);
+router.post("/cart-add", ensureAuthenticated, CartController.addToCart);
 //Up and dow quantity ở trang product detail hoặc ở cart, 
 router.post("/cart-update", CartController.updateCart);
 router.post("/cart-remove-product", CartController.removeFromCart);

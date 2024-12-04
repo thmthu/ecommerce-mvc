@@ -29,4 +29,61 @@ $(document).ready(function() {
       }
     });
   });
+
+  $('.btn-minus').onclick(function() {
+    const productId = $(this).data('product-id');
+    const productPrice = $(this).data('product-price');
+    const input = $(this).closest('.quantity').find('input');
+    let quantity = parseInt(input.val());
+    console.log(productId);
+
+    if (quantity > 1) {
+      quantity--;
+      input.val(quantity);
+
+      $.ajax({
+        url: '/cart-update',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({product: { product_id: productId, quantity: quantity, price: productPrice }}),
+        success: function(response) {
+          const row = input.closest('tr');
+          const price = parseFloat(row.find('td:nth-child(2)').text().replace('$', ''));
+          row.find('.total').text('$' + (price * quantity).toFixed(2));
+          updateTotal();
+        },
+        error: function(error) {
+          alert('Error updating cart.');
+        }
+      });
+    }
+  }); // 300ms delay
+
+  $('.btn-plus').onclick(function() {
+    const productId = $(this).data('product-id');
+    const productPrice = $(this).data('product-price');
+    const input = $(this).closest('.quantity').find('input');
+    let quantity = parseInt(input.val());
+    
+    console.log(productId);
+
+    quantity++;
+    input.val(quantity);
+
+    $.ajax({
+      url: '/cart-update',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({product: { product_id: productId, quantity: quantity, price: productPrice }}),
+      success: function(response) {
+        const row = input.closest('tr');
+        const price = parseFloat(row.find('td:nth-child(2)').text().replace('$', ''));
+        row.find('.total').text('$' + (price * quantity).toFixed(2));
+        updateTotal();
+      },
+      error: function(error) {
+        alert('Error updating cart.');
+      }
+    });
+  }); // 300ms delay
 });
