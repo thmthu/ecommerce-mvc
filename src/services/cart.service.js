@@ -70,6 +70,17 @@ class CartService {
     const deleteProduct = await cart.updateOne(query, updateSet);
     return deleteProduct;
   }
+  static async clearUserCart(userId) {
+    console.log("clear user cart", userId);
+    const query = { cart_userId: userId };
+    const updateSet = {
+      $set: {
+        cart_products: [],
+      },
+    };
+    return await cart.updateOne(query, updateSet);
+  }
+
   static async getUserCart(userId ) {
     console.log("get user cart", userId);
     const userCart = await cart.findOne({ cart_userId: userId }).lean();
