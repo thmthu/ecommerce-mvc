@@ -5,7 +5,7 @@ const { asyncHandler } = require("../../auth/checkAuth");
 const {ensureAuthenticated} = require("../../middleware/authMiddleware");
 const router = express.Router();
 router.post("/", asyncHandler(ProductController.createProduct));
-router.get("/get-all", asyncHandler(ProductController.getAllProducts));
+router.get("/get-all", asyncHandler(ProductController.getAllProduct));
 router.get("/get-by-id/:id", asyncHandler(ProductController.getProductById));
 router.get(
   "/search",

@@ -8,5 +8,7 @@ const router = express.Router();
 
 router.use("", require("./access"));
 router.use("", require("./product"));
+router.use("", require("./cart"));
+
 
 module.exports = router;
