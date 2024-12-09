@@ -1,9 +1,6 @@
 "use strict";
 
 const AccessService = require("../services/access.service");
-const bcrypt = require("bcrypt");
-const Customer = require("../models/customer.model");
-const { OK, CREATED, SuccessResponse } = require("../core/success.response");
 class AccessController {
   getRegister = (req, res) => {
     return res.render("register.ejs");

@@ -38,7 +38,6 @@ class ProductController {
   };
   getShop = async (req, res) => {
     const products = await ProductService.getAllProducts();
-    console.log(products);
     return res.render("shop.ejs", {
       products: products,
       page: "shop",

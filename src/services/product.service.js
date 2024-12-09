@@ -86,6 +86,13 @@ class ProductFactory {
         filter.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
       }
       return await product.find(filter);
+     
+    }
+    //Limit: số product cho từng trang
+    //skip: index của trang - 1, skip nghĩa là bỏ qua bao nhiêu index đầu tiên
+    // ví dụ  trang 1, => skip (1-1)*50, trang 2 => skip (2,1)*50, trang 3 => skip (2-1)*50
+    static async productForPage({limit: limit,skip: skip}){
+      return await product.find().skip(skip*limit).limit(limit).lean();
     }
 }
 
