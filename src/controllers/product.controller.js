@@ -53,8 +53,8 @@ class ProductController {
 
       if (searchQuery) {
         query.$or = [
-          { name: { $regex: searchQuery, $options: "i" } },
-          { description: { $regex: searchQuery, $options: "i" } },
+          { product_name: { $regex: searchQuery, $options: "i" } },
+          { product_description: { $regex: searchQuery, $options: "i" } },
         ];
       }
       

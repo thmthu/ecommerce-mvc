@@ -1,5 +1,6 @@
 function loadPage(page) {
-  const searchQuery = document.querySelector('input[name="search"]').value;
+  const searchQuery = document.getElementById('search').value;
+  console.log(searchQuery);
   const price = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(checkbox => checkbox.value);
   const color = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(checkbox => checkbox.value);
   const size = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(checkbox => checkbox.value);
