@@ -15,7 +15,7 @@ const productSchema = new Schema(
     product_type: {
       type: String,
       required: true,
-      enum: ["MaleClothe", "FemaleClothe"],
+      enum: ["MaleClothe", "FemaleClothe", "KidClothe"],
     },
     // product_shop: { type: Schema.Types.ObjectId, ref: "Shop" },
     product_attributes: { type: Schema.Types.Mixed, required: true },
@@ -43,9 +43,20 @@ const femaleClotheSchema = new Schema(
     collection: "female_clothes",
   }
 );
+const kidClotheSchema = new Schema(
+  {
+    brand: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+    collection: "kid_clothes",
+  }
+);
 module.exports = {
   product: model(DOCUMENT_NAME, productSchema),
   femaleClothe: model("FemaleClothe", femaleClotheSchema),
   maleClothe: model("MaleClothe", maleClotheSchema),
+  kidClothe: model("KidClothe", kidClotheSchema),
+
   product1: model(DOCUMENT_NAME, productSchema),
 };

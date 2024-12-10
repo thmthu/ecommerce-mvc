@@ -3,6 +3,7 @@ const {
   product,
   femaleClothe,
   maleClothe,
+  kidClothe,
 } = require("../models/product.model");
 const { BadRequestError, Forbiden } = require("../core/error.response");
 class ProductFactory {
@@ -12,6 +13,8 @@ class ProductFactory {
         return new MaleClothe(payload).createProduct();
       case "FemaleClothe":
         return new FemaleClothe(payload).createProduct();
+      case "KidClothe":
+        return new KidClothe(payload).createProduct();
       default:
         throw new BadRequestError(`Invalid Product Types  ${type}`);
     }
@@ -50,50 +53,53 @@ class ProductFactory {
     });
   }
   static async findProductByFilter(query, price, color, size, gender) {
-      let filter = {};
+    let filter = {};
 
-      if (query) {
-        filter.$or = [
-          { product_name: { $regex: query, $options: 'i' } },
-          { product_description: { $regex: query, $options: 'i' } },
-        ];
-      }
-
-      if (price) {
-        const priceRanges = Array.isArray(price) ? price : [price];
-        const priceFilter = priceRanges.map(range => {
-          const [min, max] = range.split('-').map(Number);
-          return { product_price: { $gte: min, $lte: max } };
-        });
-
-        if (filter.$or) {
-          filter.$and = [{ $or: filter.$or }, { $or: priceFilter }];
-          delete filter.$or;
-        } else {
-          filter.$or = priceFilter;
-        }
-      }
-
-      if (color) {
-        filter.product_color = { $in: Array.isArray(color) ? color : [color] };
-      }
-
-      if (size) {
-        filter.product_size = { $in: Array.isArray(size) ? size : [size] };
-      }
-
-      if (gender) {
-        filter.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
-      }
-      return await product.find(filter);
-     
+    if (query) {
+      filter.$or = [
+        { product_name: { $regex: query, $options: "i" } },
+        { product_description: { $regex: query, $options: "i" } },
+      ];
     }
-    //Limit: số product cho từng trang
-    //skip: index của trang - 1, skip nghĩa là bỏ qua bao nhiêu index đầu tiên
-    // ví dụ  trang 1, => skip (1-1)*50, trang 2 => skip (2,1)*50, trang 3 => skip (2-1)*50
-    static async productForPage({limit: limit,skip: skip}){
-      return await product.find().skip(skip*limit).limit(limit).lean();
+
+    if (price) {
+      const priceRanges = Array.isArray(price) ? price : [price];
+      const priceFilter = priceRanges.map((range) => {
+        const [min, max] = range.split("-").map(Number);
+        return { product_price: { $gte: min, $lte: max } };
+      });
+
+      if (filter.$or) {
+        filter.$and = [{ $or: filter.$or }, { $or: priceFilter }];
+        delete filter.$or;
+      } else {
+        filter.$or = priceFilter;
+      }
     }
+
+    if (color) {
+      filter.product_color = { $in: Array.isArray(color) ? color : [color] };
+    }
+
+    if (size) {
+      filter.product_size = { $in: Array.isArray(size) ? size : [size] };
+    }
+
+    if (gender) {
+      filter.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
+    }
+    return await product.find(filter);
+  }
+  //Limit: số product cho từng trang
+  //skip: index của trang - 1, skip nghĩa là bỏ qua bao nhiêu index đầu tiên
+  // ví dụ  trang 1, => skip (1-1)*50, trang 2 => skip (2,1)*50, trang 3 => skip (2-1)*50
+  static async productForPage({ limit: limit, skip: skip }) {
+    return await product
+      .find()
+      .skip(skip * limit)
+      .limit(limit)
+      .lean();
+  }
 }
 
 class Product {
@@ -141,6 +147,16 @@ class MaleClothe extends Product {
     const newElectronic = await maleClothe.create(this.product_attributes);
     if (!newElectronic)
       throw new BadRequestError("create new MaleClothe error");
+    const newProduct = await super.createProduct();
+    if (!newProduct) throw new BadRequestError("create new Product error");
+    return newProduct;
+  }
+}
+class KidClothe extends Product {
+  async createProduct() {
+    const newClothing = await kidClothe.create(this.product_attributes);
+    if (!newClothing)
+      throw new BadRequestError("create new FemaleClothe error");
     const newProduct = await super.createProduct();
     if (!newProduct) throw new BadRequestError("create new Product error");
     return newProduct;

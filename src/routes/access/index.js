@@ -5,7 +5,6 @@ const AccessController = require("../../controllers/access.controller");
 const { validateSignUp, validateSignIn } = require("../../middleware/validate");
 const { customerStrategy } = require("../../auth/authUtils");
 const router = express.Router();
-
 router.post("/register", validateSignUp, AccessController.signUp);
 passport.use(customerStrategy);
 

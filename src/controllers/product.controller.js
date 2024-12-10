@@ -1,5 +1,6 @@
 "use strict";
 const ProductService = require("../services/product.service");
+
 class ProductController {
   getCart = (req, res) => {
     return res.render("cart.ejs", {
@@ -116,5 +117,6 @@ class ProductController {
       });
     }
   };
+ 
 }
 module.exports = new ProductController();
