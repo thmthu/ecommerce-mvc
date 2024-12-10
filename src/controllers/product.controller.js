@@ -1,7 +1,25 @@
 "use strict";
 const ProductService = require("../services/product.service");
-
+const { product } = require("../models/product.model");
 class ProductController {
+  getProductPage = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const skip = (page - 1) * limit;
+
+    try {
+      const [products, total] = await Promise.all([
+        product.find().skip(skip).limit(limit), // Fetch products for the current page
+        product.countDocuments(), // Get the total count of products
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+      res.json({ products, totalPages, currentPage: page });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch products" });
+    }
+  };
+
   getCart = (req, res) => {
     return res.render("cart.ejs", {
       page: "cart",
@@ -40,7 +58,6 @@ class ProductController {
   getShop = async (req, res) => {
     const products = await ProductService.getAllProducts();
     return res.render("shop.ejs", {
-      products: products,
       page: "shop",
       isAuthenticated: req.isAuthenticated(),
     });
@@ -117,6 +134,5 @@ class ProductController {
       });
     }
   };
- 
 }
 module.exports = new ProductController();
