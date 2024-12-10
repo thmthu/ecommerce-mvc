@@ -4,6 +4,7 @@ function loadPage(page) {
   const color = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(checkbox => checkbox.value);
   const size = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(checkbox => checkbox.value);
   const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(checkbox => checkbox.value);
+  console.log(page);
 
     $.ajax({
       url: '/shop',
@@ -75,9 +76,6 @@ function loadPage(page) {
             </li>
           `);
         }
-
-        // Attach event listeners to the new pagination links
-        attachPaginationEventListeners();
       },
       error: function(err) {
         console.error('Failed to load page:', err);
