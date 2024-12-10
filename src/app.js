@@ -27,6 +27,7 @@ app.use(
       defaultSrc: ["'self'"], // Restrict everything else to self
       scriptSrc: ["*", "'unsafe-inline'"], // Allow scripts from self and code.jquery.com
       imgSrc: ["*"], // Allow images from all sources
+      scriptSrcAttr: ["*", "'unsafe-inline'"],
     },
   })
 );

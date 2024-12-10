@@ -2,24 +2,6 @@
 const ProductService = require("../services/product.service");
 const { product } = require("../models/product.model");
 class ProductController {
-  getProductPage = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 9;
-    const skip = (page - 1) * limit;
-
-    try {
-      const [products, total] = await Promise.all([
-        product.find().skip(skip).limit(limit), // Fetch products for the current page
-        product.countDocuments(), // Get the total count of products
-      ]);
-
-      const totalPages = Math.ceil(total / limit);
-      res.json({ products, totalPages, currentPage: page });
-    } catch (err) {
-      res.status(500).json({ error: "Failed to fetch products" });
-    }
-  };
-
   getCart = (req, res) => {
     return res.render("cart.ejs", {
       page: "cart",
@@ -56,11 +38,81 @@ class ProductController {
     });
   };
   getShop = async (req, res) => {
-    const products = await ProductService.getAllProducts();
-    return res.render("shop.ejs", {
-      page: "shop",
-      isAuthenticated: req.isAuthenticated(),
-    });
+    const currentPage = parseInt(req.query.currentPage) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const skip = (currentPage - 1) * limit;
+    const searchQuery = req.query.search || "";
+    const price = req.query.price || "";
+    const color = req.query.color || "";
+    const size = req.query.size || "";
+    const gender = req.query.gender || "";
+
+    try {
+      // Build the query object
+      let query = {};
+
+      if (searchQuery) {
+        query.$or = [
+          { name: { $regex: searchQuery, $options: "i" } },
+          { description: { $regex: searchQuery, $options: "i" } },
+        ];
+      }
+      
+      if (price) {
+        const priceRanges = Array.isArray(price) ? price : [price];
+        const priceFilter = priceRanges.map((range) => {
+          const [min, max] = range.split("-").map(Number);
+          return { product_price: { $gte: min, $lte: max } };
+        });
+  
+        if (query.$or) {
+          query.$and = [{ $or: query.$or }, { $or: priceFilter }];
+          delete query.$or;
+        } else {
+          query.$or = priceFilter;
+        }
+      }
+  
+      if (color) {
+        query.product_color = { $in: Array.isArray(color) ? color : [color] };
+      }
+  
+      if (size) {
+        query.product_size = { $in: Array.isArray(size) ? size : [size] };
+      }
+  
+      if (gender) {
+        query.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
+      }
+
+      const [products, total] = await Promise.all([
+        product.find(query).skip(skip).limit(limit), // Fetch products for the current page
+        product.countDocuments(query), // Get the total count of products
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+        // If the request is an AJAX request, return JSON data
+        return res.json({ products, totalPages, currentPage });
+      } else {
+        // Otherwise, render the shop view
+        res.render("shop.ejs", {
+          page: "shop",
+          isAuthenticated: req.isAuthenticated(),
+          products,
+          totalPages,
+          currentPage,
+          searchQuery,
+          price,
+          color,
+          size,
+          gender,
+        });
+      }
+    } catch (err) {
+      res.status(500).json({ error: "Failed to fetch products" });
+    }
   };
   getDetail = async (req, res) => {
     const product = await ProductService.getProductById(req.params.id);
@@ -84,55 +136,6 @@ class ProductController {
     //   isAuthenticated: req.isAuthenticated(),
     // });
     return res.json({ products: products });
-  };
-  getProductByNameOrDescription = async (req, res) => {
-    try {
-      const { query } = req.query;
-
-      // Validate the input
-      if (!query) {
-        res.redirect("./home");
-      }
-
-      const products = await ProductService.findProductByNameOrDescript(query);
-
-      // Render the results
-      res.render("shop.ejs", {
-        products: products,
-        page: "shop",
-        isAuthenticated: req.isAuthenticated(),
-      });
-    } catch (error) {
-      console.error(error);
-      res.redirect("./home");
-    }
-  };
-
-  getFilter = async (req, res) => {
-    try {
-      const { query, price, color, size, gender } = req.query;
-
-      const products = await ProductService.findProductByFilter(
-        query,
-        price,
-        color,
-        size,
-        gender
-      );
-
-      // Render the shop page with the filtered products
-      res.render("shop.ejs", {
-        products: products,
-        page: "shop",
-        isAuthenticated: req.isAuthenticated(),
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).render("shop.ejs", {
-        error: "Server error. Please try again later.",
-        isAuthenticated: req.isAuthenticated(),
-      });
-    }
   };
 }
 module.exports = new ProductController();

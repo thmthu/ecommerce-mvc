@@ -113,22 +113,22 @@
     <div class="col-lg-3 col-md-12">
       <!-- Price Start -->
       <div class="border-bottom mb-4 pb-4">
-        <form action="/filter" method="GET">
+        <form action="/shop" method="GET">
           <h5 class="font-weight-semi-bold mb-4">Search and Filter</h5>
           <div class="form-group">
-            <input type="text" class="form-control" name="query" placeholder="Search for products...">
+            <input type="text" class="form-control" name="search" placeholder="Search for products..." value="<%= searchQuery %>">
           </div>
           <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="price-1" name="price" value="0-50"/>
+            <input type="checkbox" class="custom-control-input" id="price-1" name="price" value="0-50" <%= price.includes('0-50') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="price-1">$0 - $50</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="price-2" name="price" value="50-100"/>
+            <input type="checkbox" class="custom-control-input" id="price-2" name="price" value="50-100" <%= price.includes('50-100') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="price-2"
               >$50 - $100</label
             >
@@ -136,7 +136,7 @@
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="price-3" name="price" value="100-150"/>
+            <input type="checkbox" class="custom-control-input" id="price-3" name="price" value="100-150" <%= price.includes('100-150') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="price-3"
               >$100 - $150</label
             >
@@ -144,7 +144,7 @@
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="price-4" name="price" value="150-200"/>
+            <input type="checkbox" class="custom-control-input" id="price-4" name="price" value="150-200" <%= price.includes('150-200') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="price-4"
               >$150 - $200</label
             >
@@ -156,31 +156,31 @@
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="color-1" name="color" value="Black"/>
+            <input type="checkbox" class="custom-control-input" id="color-1" name="color" value="Black" <%= color.includes('Black') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="color-1">Black</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="color-2" name="color" value="White"/>
+            <input type="checkbox" class="custom-control-input" id="color-2" name="color" value="White" <%= color.includes('White') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="color-2">White</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="color-3" name="color" value="Red"/>
+            <input type="checkbox" class="custom-control-input" id="color-3" name="color" value="Red" <%= color.includes('Red') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="color-3">Red</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="color-4" name="color" value="Blue"/>
+            <input type="checkbox" class="custom-control-input" id="color-4" name="color" value="Blue" <%= color.includes('Blue') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="color-4">Blue</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between"
           >
-            <input type="checkbox" class="custom-control-input" id="color-5" name="color" value="Green"/>
+            <input type="checkbox" class="custom-control-input" id="color-5" name="color" value="Green" <%= color.includes('Green') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="color-5">Green</label>
           </div>
       <!-- Color End -->
@@ -190,31 +190,31 @@
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="size-1" name="size" value="XS"/>
+            <input type="checkbox" class="custom-control-input" id="size-1" name="size" value="XS" <%= size.includes('XS') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="size-1">XS</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="size-2" name="size" value="S"/>
+            <input type="checkbox" class="custom-control-input" id="size-2" name="size" value="S" <%= size.includes('S') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="size-2">S</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="size-3" name="size" value="M"/>
+            <input type="checkbox" class="custom-control-input" id="size-3" name="size" value="M" <%= size.includes('M') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="size-3">M</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="size-4" name="size" value="L"/>
+            <input type="checkbox" class="custom-control-input" id="size-4" name="size" value="L" <%= size.includes('L') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="size-4">L</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between"
           >
-            <input type="checkbox" class="custom-control-input" id="size-5" name="size" value="XL"/>
+            <input type="checkbox" class="custom-control-input" id="size-5" name="size" value="XL" <%= size.includes('XL') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="size-5">XL</label>
           </div>
       <!-- Size End -->
@@ -224,13 +224,13 @@
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="gender-1" name="gender" value="MaleClothe"/>
+            <input type="checkbox" class="custom-control-input" id="gender-1" name="gender" value="MaleClothe" <%= gender.includes('MaleClothe') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="gender-1">Male</label>
           </div>
           <div
             class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
           >
-            <input type="checkbox" class="custom-control-input" id="gender-2" name="gender" value="FemaleClothe"/>
+            <input type="checkbox" class="custom-control-input" id="gender-2" name="gender" value="FemaleClothe" <%= gender.includes('FemaleClothe') ? 'checked' : '' %>/>
             <label class="custom-control-label" for="gender-2">Female</label>
           </div>
       <!--Gender End-->
@@ -259,7 +259,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" id="product-list">
                     <%- include('./partials/products-list', {products: products}) %>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <nav>
+                          <ul class="pagination justify-content-end">
+                            <% for (let i = 1; i <= totalPages; i++) { %>
+                              <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="#" onclick="loadPage(<%= i %>)"><%= i %></a>
+                              </li>
+                            <% } %>
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
                     <!-- <div class="col-12 pb-1">
                         <nav aria-label="Page navigation">
                           <ul class="pagination justify-content-center mb-3">
@@ -286,6 +301,7 @@
             <!-- Shop Product End -->
         </div>
     </div>
+    <script src="./js/loadPage.js"></script>
     <!-- Shop End -->
 
 <%- include('./partials/footer') %>
