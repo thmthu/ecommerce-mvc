@@ -9,7 +9,28 @@ $(document).ready(function() {
         url: '../cart-add',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ product: { product_id: productId, quantity: quantity, price: productPrice } })
+        data: JSON.stringify({ product: { product_id: productId, quantity: quantity, price: productPrice, type: 0 } })
       });
     });
   });
+
+  function addToCart(productId, quantity, price) {
+    $.ajax({
+      url: '../cart-add',
+      type: 'POST',
+      data: {
+        product: {
+          product_id: productId,
+          quantity: quantity,
+          price: price,
+          type: 0
+        },
+      },
+      success: function(response) {
+        alert('Product added to cart successfully!');
+      },
+      error: function(err) {
+        console.error('Failed to add product to cart:', err);
+      }
+    });
+  }

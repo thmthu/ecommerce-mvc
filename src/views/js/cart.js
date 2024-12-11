@@ -45,7 +45,7 @@ $(document).ready(function() {
         url: '/cart-update',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({product: { product_id: productId, quantity: quantity, price: productPrice }}),
+        data: JSON.stringify({product: { product_id: productId, quantity: quantity, price: productPrice, type: 1 }}),
         success: function(response) {
           const row = input.closest('tr');
           const price = parseFloat(row.find('td:nth-child(2)').text().replace('$', ''));
@@ -74,7 +74,7 @@ $(document).ready(function() {
       url: '/cart-update',
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({product: { product_id: productId, quantity: quantity, price: productPrice }}),
+      data: JSON.stringify({product: { product_id: productId, quantity: quantity, price: productPrice, type: 1 }}),
       success: function(response) {
         const row = input.closest('tr');
         const price = parseFloat(row.find('td:nth-child(2)').text().replace('$', ''));

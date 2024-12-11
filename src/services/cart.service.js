@@ -17,7 +17,7 @@ class CartService {
   }
   static async updateUserCartQuantity(userId, product) {
     console.log("updateUserCartQuantity: =========", product);
-    const { product_id, quantity, price } = product.product === undefined ? product : product.product;
+    const { product_id, quantity, price, type } = product.product === undefined ? product : product.product;
     console.log(product_id, quantity, price);
     const query = {
       cart_userId: userId,
@@ -27,8 +27,12 @@ class CartService {
     const existingCart = await cart.findOne(query);
 
     if (existingCart) {
-      const updateSet = {
+      const updateSet = type === 1 ? {
         $set: {
+          "cart_products.$.quantity": quantity,
+        },
+      } : {
+        $inc: {
           "cart_products.$.quantity": quantity,
         },
       };

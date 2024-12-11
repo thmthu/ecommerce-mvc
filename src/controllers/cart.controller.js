@@ -13,6 +13,7 @@ class CartController {
     const product = req.body.product;
     product.price = parseFloat(product.price);
     product.quantity = parseInt(product.quantity);
+    product.type = parseInt(product.type);
     const result = await CartService.addToCart(userId, product);
     return res.redirect("/shop");
   };
