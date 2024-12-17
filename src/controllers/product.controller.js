@@ -46,6 +46,7 @@ class ProductController {
     const color = req.query.color || "";
     const size = req.query.size || "";
     const gender = req.query.gender || "";
+    const sortBy = req.query.sortBy || "";
 
     try {
       // Build the query object
@@ -85,8 +86,17 @@ class ProductController {
         query.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
       }
 
+      let sort = {};
+      if (sortBy === "latest") {
+        sort = { createdAt: -1 };
+      } else if (sortBy === "lPrice") {
+        sort = { product_price: 1 }; 
+      } else if (sortBy === "hPrice") {
+        sort = { product_price: -1 };
+      }
+
       const [products, total] = await Promise.all([
-        product.find(query).skip(skip).limit(limit), // Fetch products for the current page
+        product.find(query).sort(sort).skip(skip).limit(limit), // Fetch products for the current page
         product.countDocuments(query), // Get the total count of products
       ]);
 
@@ -108,6 +118,7 @@ class ProductController {
           color,
           size,
           gender,
+          sortBy,
         });
       }
     } catch (err) {

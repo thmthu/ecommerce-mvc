@@ -1,11 +1,9 @@
-function loadPage(page) {
+function loadPage(page, sortBy = '') {
   const searchQuery = document.getElementById('search').value;
-  console.log(searchQuery);
   const price = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(checkbox => checkbox.value);
   const color = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(checkbox => checkbox.value);
   const size = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(checkbox => checkbox.value);
   const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(checkbox => checkbox.value);
-  console.log(page);
 
     $.ajax({
       url: '/shop',
@@ -17,6 +15,7 @@ function loadPage(page) {
         color: color,
         size: size,
         gender: gender,
+        sortBy: sortBy,
       },
       success: function(data) {
         // Update the product list
@@ -73,7 +72,7 @@ function loadPage(page) {
         for (let i = 1; i <= data.totalPages; i++) {
           $('#pagination').append(`
             <li class="page-item ${data.currentPage === i ? 'active' : ''}">
-              <a class="page-link" href="#" onclick="loadPage(${i})">${i}</a>
+              <a class="page-link" href="#" onclick="loadPage(${i}, '${sortBy}')">${i}</a>
             </li>
           `);
         }
@@ -82,4 +81,8 @@ function loadPage(page) {
         console.error('Failed to load page:', err);
       }
     });
+  }
+
+  function sortProducts(sortBy) {
+    loadPage(1, sortBy);
   }
