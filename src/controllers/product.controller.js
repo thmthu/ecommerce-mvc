@@ -49,58 +49,7 @@ class ProductController {
     const sortBy = req.query.sortBy || "";
 
     try {
-      // Build the query object
-      let query = {};
-
-      if (searchQuery) {
-        query.$or = [
-          { product_name: { $regex: searchQuery, $options: "i" } },
-          { product_description: { $regex: searchQuery, $options: "i" } },
-        ];
-      }
-      
-      if (price) {
-        const priceRanges = Array.isArray(price) ? price : [price];
-        const priceFilter = priceRanges.map((range) => {
-          const [min, max] = range.split("-").map(Number);
-          return { product_price: { $gte: min, $lte: max } };
-        });
-  
-        if (query.$or) {
-          query.$and = [{ $or: query.$or }, { $or: priceFilter }];
-          delete query.$or;
-        } else {
-          query.$or = priceFilter;
-        }
-      }
-  
-      if (color) {
-        query.product_color = { $in: Array.isArray(color) ? color : [color] };
-      }
-  
-      if (size) {
-        query.product_size = { $in: Array.isArray(size) ? size : [size] };
-      }
-  
-      if (gender) {
-        query.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
-      }
-
-      let sort = {};
-      if (sortBy === "latest") {
-        sort = { createdAt: -1 };
-      } else if (sortBy === "lPrice") {
-        sort = { product_price: 1 }; 
-      } else if (sortBy === "hPrice") {
-        sort = { product_price: -1 };
-      }
-
-      const [products, total] = await Promise.all([
-        product.find(query).sort(sort).skip(skip).limit(limit), // Fetch products for the current page
-        product.countDocuments(query), // Get the total count of products
-      ]);
-
-      const totalPages = Math.ceil(total / limit);
+      const {products, totalPages} = await ProductService.getShopProducts(limit, skip, searchQuery, price, color, size, gender, sortBy);
 
       if (req.xhr || req.headers.accept.indexOf('json') > -1) {
         // If the request is an AJAX request, return JSON data
