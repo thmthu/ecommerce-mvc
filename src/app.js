@@ -11,6 +11,7 @@ const passport = require("passport");
 const flash = require("connect-flash");
 const config = require("./configs/config.mongo"); // Adjust the path as necessary
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 // Sử dụng cookie-parser
 const { default: helmet } = require("helmet");
@@ -26,11 +27,15 @@ app.use(
     directives: {
       defaultSrc: ["'self'"], // Restrict everything else to self
       scriptSrc: ["*", "'unsafe-inline'"], // Allow scripts from self and code.jquery.com
-      imgSrc: ["*"], // Allow images from all sources
+      imgSrc: ["'self'", "data:", "*"], // Allow images from all sources
       scriptSrcAttr: ["*", "'unsafe-inline'"],
     },
   })
 );
+
+// Serve static files from the "uploads" directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use(cookieParser());
 app.use(compression());
 app.use(express.json());
