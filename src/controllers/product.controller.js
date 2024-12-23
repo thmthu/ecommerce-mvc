@@ -133,6 +133,7 @@ class ProductController {
       4
     );
     return res.render("detail.ejs", {
+      productId: req.params.id,
       product: product,
       relatedProducts: relatedProducts,
       page: "detail",
