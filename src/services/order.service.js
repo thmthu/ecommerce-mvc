@@ -3,12 +3,16 @@ const { order } = require("../models/order.model");
 const { model, Schema, Types } = require("mongoose"); // Ensure Types is imported
 
 class OrderService {
-    static async createUserOrder(userId, price, products) {
+    static async createUserOrder(userId, name, address, phone, email, price, products) {
         console.log("creat", userId, price);
         const orderID = new Types.ObjectId().toString();
         const query = { orderId: orderID, userId: userId },
           updateOrInsert = {
             $set: {
+              userName: name,
+              userAddress: address,
+              userPhone: phone,
+              userEmail: email,
               totalPrice: price,
               order_products: products,
             },

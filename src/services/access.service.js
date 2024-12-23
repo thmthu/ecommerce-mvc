@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const { getInforData } = require("../utils/index");
 const customerModel = require("../models/customer.model");
 const {
-  ConflictRequestError
+  ConflictRequestError,
+  NotFoundRequestError
 } = require("../core/error.response");
 const RoleShop = {
   SHOP: "SHOP",
@@ -41,5 +42,25 @@ class AccessService {
       },
     };
   };
+
+  static getUserById = async (userId) => {
+    const user = await customerModel.findById(userId);
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  };
+
+  static getAvatar = async (userId) => {
+    const user = await customerModel.findById(userId);
+
+    if (!user) {
+      return null;
+    }
+
+    return user.avatar;
+  }
 }
 module.exports = AccessService;

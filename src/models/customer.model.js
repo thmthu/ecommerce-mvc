@@ -11,6 +11,19 @@ const customerSchema = new Schema(
       trim: true,
       maxLength: 150,
     },
+    address: {
+      type: String,
+      trim: true,
+      maxLength: 150,
+    },
+    phone: {
+      type: String,
+      trim: true,
+      maxLength: 15,
+    },
+    avatar: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,

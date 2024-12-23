@@ -1,11 +1,12 @@
-
 $(document).ready(function() {
 
   function updateTotal() {
-    let total = 0;
+    let total = 10;
     $('.total').each(function() {
       total += parseFloat($(this).text().replace('$', ''));
     });
+    const subTotal = total - 10.00;
+    $('.sub-value').text('$' + subTotal.toFixed(2));
     $('.total-value').text('$' + total.toFixed(2));
   }
 

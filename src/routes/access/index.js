@@ -2,8 +2,10 @@
 const express = require("express");
 const passport = require("passport");
 const AccessController = require("../../controllers/access.controller");
+const AccessService = require("../../services/access.service");
 const { validateSignUp, validateSignIn } = require("../../middleware/validate");
 const { customerStrategy } = require("../../auth/authUtils");
+const { ensureAuthenticated } = require("../../middleware/authMiddleware");
 const router = express.Router();
 router.post("/register", validateSignUp, AccessController.signUp);
 passport.use(customerStrategy);
@@ -32,7 +34,8 @@ router.post("/login/password", (req, res, next) => {
         return next(err);
       }
       if (!user) {
-        return res.redirect('/login');
+        req.session.error = info.message;
+        return res.redirect("/login");
       }
       req.logIn(user, (err) => {
         if (err) {
@@ -45,8 +48,11 @@ router.post("/login/password", (req, res, next) => {
   });
 });
 
-router.get("/login", (req, res) => {
-  res.render("login.ejs", { error: req.flash("error") });
+router.get("/login", async (req, res) => {
+  const error = req.session.error ? req.session.error : null;
+  delete req.session.error;
+  const avatar = await AccessService.getAvatar(req.session.userId);
+  res.render("login.ejs", { avatar, error });
 });
 
 router.get("/register", AccessController.getRegister);
@@ -76,5 +82,14 @@ router.post("/logout", function (req, res, next) {
     });
   });
 });
+
+router.get("/profile", ensureAuthenticated, AccessController.getProfile);
+
+// Route for updating profile
+router.post('/update-profile', AccessController.updateProfile);
+
+// Route for changing password
+router.get('/change-password', AccessController.getChangePassword);
+router.post('/change-password', AccessController.changePassword);
 
 module.exports = router;

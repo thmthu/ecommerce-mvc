@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const AccessService = require("../services/access.service");
 
 const signUpValidationSchema = Joi.object({
   username: Joi.string().required().messages({
@@ -17,12 +18,13 @@ const signUpValidationSchema = Joi.object({
   }),
 });
 
-const validateSignUp = (req, res, next) => {
+const validateSignUp = async (req, res, next) => {
   req.body.terms = req.body.terms === 'true' || req.body.terms === 'on';
+  const avatar = await AccessService.getAvatar(req.session.userId);
   const { error } = signUpValidationSchema.validate(req.body, { abortEarly: false });
   if (error) {
     const errorMessages = error.details.map((detail) => detail.message);
-    return res.status(400).render("register", { error: errorMessages });
+    return res.status(400).render("register", { avatar, error: errorMessages });
   }
   next();
 };
@@ -38,12 +40,13 @@ const signInValidationSchema = Joi.object({
   remember: Joi.boolean().optional(),
 });
 
-const validateSignIn = (req, res, next) => {
+const validateSignIn = async (req, res, next) => {
   delete req.body.terms;
+  const avatar = await AccessService.getAvatar(req.session.userId);
   const { error } = signInValidationSchema.validate(req.body, { abortEarly: false });
   if (error) {
     const errorMessages = error.details.map((detail) => detail.message);
-    return res.status(400).render("login", { error: errorMessages});
+    return res.status(400).render("login", { avatar, error: errorMessages});
   }
   next();
 };

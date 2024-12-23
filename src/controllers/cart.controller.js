@@ -1,10 +1,12 @@
 "use strict";
 
 const CartService = require("../services/cart.service");
+const AccessService = require("../services/access.service");
 class CartController {
   getUserCart = async (req, res, next) => {
     const result = await CartService.getUserCart(req.session.userId);
-    return res.render("cart.ejs", { cart: result , page: "cart", 
+    const avatar = await AccessService.getAvatar(req.session.userId);
+    return res.render("cart.ejs", { cart: result , page: "cart", avatar,
       isAuthenticated: req.isAuthenticated()});
   };
   addToCart = async (req, res, next) => {
