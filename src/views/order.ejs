@@ -129,7 +129,10 @@
           <thead class="bg-secondary text-dark">
             <tr>
               <th>Order ID</th>
-              <th>User ID</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Phone number</th>
+              <th>Email</th>
               <th>Total Price</th>
               <th>Created Time</th>
             </tr>
@@ -139,7 +142,10 @@
               <% orders.forEach(order => { %>
                 <tr>
                   <td class="align-middle"><%= order.orderId.toString() %></td>
-                  <td class="align-middle"><%= order.userId.toString() %></td>
+                  <td class="align-middle"><%= order.userName %></td>
+                  <td class="align-middle"><%= order.userAddress %></td>
+                  <td class="align-middle"><%= order.userPhone %></td>
+                  <td class="align-middle"><%= order.userEmail %></td>
                   <td class="align-middle">$<%= order.totalPrice %></td>
                   <td class="align-middle"><%= new Date(order.createdAt).toLocaleString() %></td>
                 </tr>

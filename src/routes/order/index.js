@@ -5,6 +5,7 @@ const {ensureAuthenticated} = require("../../middleware/authMiddleware");
 const router = express.Router();
 
 router.get("/order", ensureAuthenticated, OrderController.getOrder);
+router.post("/checkout", ensureAuthenticated, OrderController.checkout);
 router.post("/create-order", ensureAuthenticated, OrderController.createOrder);
 
 module.exports = router;

@@ -39,14 +39,6 @@ class ProductController {
       isAuthenticated: req.isAuthenticated(),
     });
   };
-  getCheckOut = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.session.userId);
-    return res.render("checkout.ejs", {
-      page: "checkout",
-      avatar,
-      isAuthenticated: req.isAuthenticated(),
-    });
-  };
   getShop = async (req, res) => {
     const currentPage = parseInt(req.query.currentPage) || 1;
     const limit = parseInt(req.query.limit) || 9;

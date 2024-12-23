@@ -88,6 +88,7 @@ class CartService {
   static async getUserCart(userId ) {
     console.log("get user cart", userId);
     const userCart = await cart.findOne({ cart_userId: userId }).lean();
+    if (!userCart) return [];
     const productIds = userCart.cart_products.map(item => item.product_id);
     const products = await product1.find({ _id: { $in: productIds } }).lean();
 
