@@ -7,7 +7,6 @@ const { validateSignUp, validateSignIn } = require("../../middleware/validate");
 const { customerStrategy } = require("../../auth/authUtils");
 const { ensureAuthenticated } = require("../../middleware/authMiddleware");
 const router = express.Router();
-const upload = require('../../middleware/upload'); 
 router.post("/register", validateSignUp, AccessController.signUp);
 passport.use(customerStrategy);
 
@@ -87,7 +86,7 @@ router.post("/logout", function (req, res, next) {
 router.get("/profile", ensureAuthenticated, AccessController.getProfile);
 
 // Route for updating profile
-router.post('/update-profile', upload.single('avatar'), AccessController.updateProfile);
+router.post('/update-profile', AccessController.updateProfile);
 
 // Route for changing password
 router.get('/change-password', AccessController.getChangePassword);

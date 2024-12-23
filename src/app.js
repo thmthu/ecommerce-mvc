@@ -12,6 +12,7 @@ const flash = require("connect-flash");
 const config = require("./configs/config.mongo"); // Adjust the path as necessary
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const fileUpload = require("express-fileupload");
 
 // Sử dụng cookie-parser
 const { default: helmet } = require("helmet");
@@ -33,6 +34,9 @@ app.use(
   })
 );
 
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, "public")));
+
 // Serve static files from the "uploads" directory
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
@@ -48,6 +52,10 @@ app.use(
     credentials: true,
   })
 );
+
+// Use express-fileupload middleware
+app.use(fileUpload());
+
 app.use(
   session({
     secret: "keyboard cat",
