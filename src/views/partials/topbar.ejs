@@ -65,9 +65,12 @@
     </div>
 
     <div class="col-lg-3 col-6 text-right">
-      <a href="<%= page === 'detail' ? '../order' : './order' %>" class="btn border">
-        <i class="fas fa-heart text-primary"></i>
-        <span class="badge">0</span>
+      <a href="<%= page === 'detail' ? '../profile' : './profile' %>" class="btn border">
+        <% if (avatar != null) { %>
+          <img src="/uploads/<%= avatar %>" alt="Avatar" class="rounded-circle" style="width: 30px; height: 30px;">
+        <% } else { %>
+          <i class="fas fa-user text-primary"></i>
+        <% } %>
       </a>
       <a href="<%= page === 'detail' ? '../cart' : './cart' %>" class="btn border">
         <i class="fas fa-shopping-cart text-primary"></i>

@@ -11,6 +11,16 @@ const shopSchema = new Schema(
       trim: true,
       maxLength: 150,
     },
+    address: {
+      type: String,
+      trim: true,
+      maxLength: 150,
+    },
+    phone: {
+      type: String,
+      trim: true,
+      maxLength: 15,
+    },
     email: {
       type: String,
       unique: true,

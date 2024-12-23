@@ -1,12 +1,15 @@
 "use strict";
 const OrderService = require("../services/order.service");
 const CartService = require("../services/cart.service");
+const AccessService = require("../services/access.service");
 class OrderController {
     getOrder = async (req, res) => {
         const result = await OrderService.getAllUserOrders(req.session.userId);
+        const avatar = await AccessService.getAvatar(req.session.userId);
         console.log('result = ', result);
         return res.render("order.ejs", {
         page: "order",
+        avatar,
         isAuthenticated: req.isAuthenticated(),
         orders: result,
         });

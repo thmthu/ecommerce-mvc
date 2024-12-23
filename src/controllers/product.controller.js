@@ -1,10 +1,13 @@
 "use strict";
 const ProductService = require("../services/product.service");
+const AccessService = require("../services/access.service");
 const { product } = require("../models/product.model");
 class ProductController {
-  getCart = (req, res) => {
+  getCart = async (req, res) => {
+    const avatar = await AccessService.getAvatar(req.session.userId);
     return res.render("cart.ejs", {
       page: "cart",
+      avatar,
       isAuthenticated: req.isAuthenticated(),
     });
   };
@@ -13,9 +16,12 @@ class ProductController {
       const products = await ProductService.getRandomProducts(4);
       const latestProducts = await ProductService.getLatestProducts(4);
 
+      const avatar = await AccessService.getAvatar(req.session.userId);
+
       // Render the index page with the random products
       res.render("index.ejs", {
         page: "home",
+        avatar,
         featuredProducts: products,
         latestProducts: latestProducts,
         isAuthenticated: req.isAuthenticated(),
@@ -25,15 +31,19 @@ class ProductController {
       res.redirect("./home");
     }
   };
-  getContact = (req, res) => {
+  getContact = async (req, res) => {
+    const avatar = await AccessService.getAvatar(req.session.userId);
     return res.render("contact.ejs", {
       page: "contact",
+      avatar,
       isAuthenticated: req.isAuthenticated(),
     });
   };
-  getCheckOut = (req, res) => {
+  getCheckOut = async (req, res) => {
+    const avatar = await AccessService.getAvatar(req.session.userId);
     return res.render("checkout.ejs", {
       page: "checkout",
+      avatar,
       isAuthenticated: req.isAuthenticated(),
     });
   };
@@ -55,9 +65,11 @@ class ProductController {
         // If the request is an AJAX request, return JSON data
         return res.json({ products, totalPages, currentPage });
       } else {
+        const avatar = await AccessService.getAvatar(req.session.userId);
         // Otherwise, render the shop view
         res.render("shop.ejs", {
           page: "shop",
+          avatar,
           isAuthenticated: req.isAuthenticated(),
           products,
           totalPages,
@@ -81,10 +93,12 @@ class ProductController {
       product._id,
       4
     );
+    const avatar = await AccessService.getAvatar(req.session.userId);
     return res.render("detail.ejs", {
       product: product,
       relatedProducts: relatedProducts,
       page: "detail",
+      avatar,
       isAuthenticated: req.isAuthenticated(),
     });
   };
