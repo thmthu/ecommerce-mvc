@@ -87,6 +87,7 @@ class ProductController {
     );
     const avatar = await AccessService.getAvatar(req.session.userId);
     return res.render("detail.ejs", {
+      productId: req.params.id,
       product: product,
       relatedProducts: relatedProducts,
       page: "detail",
