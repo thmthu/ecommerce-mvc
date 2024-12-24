@@ -29,8 +29,5 @@ $(document).ready(function() {
       success: function(response) {
         alert('Product added to cart successfully!');
       },
-      error: function(err) {
-        console.error('Failed to add product to cart:', err);
-      }
     });
   }

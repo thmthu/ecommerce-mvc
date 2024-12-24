@@ -91,14 +91,5 @@ $(document).ready(function() {
   $('#cart-summary-form').submit(function() {
     const totalValue = $('.total-value').last().text().replace('$', '');
     $('#totalPrice').val(totalValue);
-
-    $('.quantity-input').each(function() {
-      const productId = $(this).data('product-id');
-      const quantity = $(this).val();
-      const hiddenInput = $(`input[name="products"][value*='"product_id":"${productId}"']`);
-      const productData = JSON.parse(hiddenInput.val());
-      productData.quantity = parseInt(quantity);
-      hiddenInput.val(JSON.stringify(productData));
-    });
   });
 });
