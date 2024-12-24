@@ -2,30 +2,27 @@
 const review = require("../models/review.model.js");
 const { BadRequestError, FORBIDDEN } = require("../core/error.response");
 const { ObjectId } = require("mongodb");
+const { findById } = require("../services/customer.service.js");
 class ReviewService {
-  static async createUserReview(
-    email,
-    userName,
-    productId,
-    comment,
-    star,
-    sessionId
-  ) {
-    if (!sessionId) {
+  static async createUserReview(productId, comment, star, userId) {
+    if (!userId) {
       throw new FORBIDDEN("User need login to review");
     }
-    console.log("serviec", email, userName, productId, comment, star);
-    const userReviewed = await review.findOne({ email: email });
-    console.log("userReviewed", userReviewed);
+    const userInfo = await findById({ userId });
+    const userEmail = userInfo.email;
+    const userReviewed = await review.findOne({
+      email: userEmail,
+      product_id: new ObjectId(productId),
+    });
     if (userReviewed) {
       throw new FORBIDDEN("User has already reviewed this product");
     }
     const newReview = await review.create({
-      email,
+      email: userInfo.email,
       product_id: productId,
       comment,
       star,
-      user_name: userName,
+      user_name: userInfo.name,
     });
     if (!newReview) {
       throw new BadRequestError("Failed to create review");

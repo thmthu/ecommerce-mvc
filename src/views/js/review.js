@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return starsHtml;
   };
-  reviewButton.addEventListener("click", (e) => {
+  const renderReview = (e) => {
     fetch(`/reviews-get-by-id/${productId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -64,14 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => {
         console.error("Error fetching reviews:", error);
       });
-  });
+  };
   testButton.addEventListener("click", (e) => {
     e.preventDefault(); // Prevent default form submission
-
     // Construct the request body in the required format
     const requestBody = {
-      email: document.getElementById("email").value || "",
-      userName: document.getElementById("name").value || "",
       comment: document.getElementById("message").value || "",
       star: selectedStars,
     };
@@ -89,14 +86,38 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       })
       .then((data) => {
-        document.getElementById("email").value = "";
-        document.getElementById("name").value = "";
         document.getElementById("message").value = "";
         updateStars(0);
+        return fetch(`/reviews-get-by-id/${productId}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        reviewsContainer.innerHTML = "";
+        data.metadata.reviews.forEach((review) => {
+          const reviewHtml = `
+            <div class="media mb-4">
+              <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+              <div class="media-body">
+                <h6>${review.user} - <i>${new Date(
+            review.date
+          ).toLocaleDateString()}</i></h6>
+                <div class="text-primary mb-2">
+                  ${generateStarsHtml(review.star)}
+                </div>
+                <p>${review.comment}</p>
+              </div>
+            </div>
+          `;
+          reviewsContainer.insertAdjacentHTML("beforeend", reviewHtml);
+        });
       })
       .catch((error) => {
         console.error("Error submitting review:", error);
         alert(`Error submitting review: ${error.message}`);
       });
   });
+  reviewButton.addEventListener("click", renderReview);
 });

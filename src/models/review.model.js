@@ -9,7 +9,6 @@ const reviewSchema = new Schema(
     product_id: { type: Schema.Types.ObjectId, required: true },
     email: {
       type: String,
-      unique: true,
       trim: true,
     },
     user_name: {
@@ -23,7 +22,6 @@ const reviewSchema = new Schema(
     },
     comment: {
       type: String,
-      unique: true,
       trim: true,
     },
   },

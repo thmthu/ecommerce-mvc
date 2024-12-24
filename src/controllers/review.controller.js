@@ -14,17 +14,15 @@ class ReviewController {
     }
   };
   createReview = async (req, res) => {
-    const { email, userName, productId, comment, star } = req.body;
-    console.log("createReview", email, userName, comment, star);
-    const sessionId = req.session.userId;
+    const { comment, star } = req.body;
+    console.log("createReview", comment, star);
+    const userId = req.session.userId;
     try {
       const result = await ReviewService.createUserReview(
-        email,
-        userName,
         req.params.id,
         comment,
         star,
-        sessionId
+        userId
       );
       return res.json(result);
     } catch (error) {
