@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
   function updateTotal() {
     let total = 10;
     $('.total').each(function() {

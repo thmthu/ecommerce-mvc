@@ -16,11 +16,9 @@ class OrderController {
     }
     checkout = async (req, res) => {
         const price = parseFloat(req.body.price);
-        let products = req.body.products;
+        
+        const products = await CartService.getUserCart(req.session.userId);
 
-        products = JSON.parse(products); // Parse the JSON string to an array of objects
-
-        console.log(products);
         const avatar = await AccessService.getAvatar(req.session.userId);
         return res.render("checkout.ejs", {
             page: "checkout",

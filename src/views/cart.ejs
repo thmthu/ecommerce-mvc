@@ -190,9 +190,6 @@
               <h5 class="font-weight-bold text-muted">Total</h5>
               <h5 class="font-weight-bold total-value">$10.00</h5>
             </div>
-            <% if (cart && cart.length > 0) { %>
-              <input type="hidden" name="products" id="productsInput" value=''>
-            <% } %>
             <input type="hidden" name="price" id="totalPrice" value="0.00">
           </div>
           <div class="card-footer border-secondary bg-transparent">
@@ -206,12 +203,6 @@
   </div>
 </div>
 <script src="./js/cart.js"></script>
-<script>
-  // Concatenate JSON strings into a single JSON array string
-  const cartItems = <%- JSON.stringify(cart) %>;
-  const productsInput = document.getElementById('productsInput');
-  productsInput.value = JSON.stringify(cartItems);
-</script>
 <!-- Cart End -->
 
 <%- include('./partials/footer') %>

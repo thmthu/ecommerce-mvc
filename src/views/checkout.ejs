@@ -162,12 +162,14 @@
           <% if (products && products.length > 0) { %>
             <div class="d-flex justify-content-between">
               <p>Product Name</p>
+              <p>Quantity</p>
               <p>Total</p>
             </div>
             <% products.forEach(product => { %>
               <% if (product.quantity > 0) { %>
                 <div class="d-flex justify-content-between">
                   <p><%= product.name %></p>
+                  <p><%= product.quantity %></p>
                   <p>$<%= product.price * product.quantity %></p>
                 </div>
               <% } %>
