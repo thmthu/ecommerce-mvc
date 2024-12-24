@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const testButton = document.getElementById("fill-and-submit");
   const form = document.getElementById("review-form");
   const starsContainer = document.getElementById("stars-container");
+  const reviewButton = document.getElementById("review-button");
+  const reviewsContainer = document.getElementById("reviews-container");
+  const productId = document.getElementById("productId").value;
 
   let selectedStars = 3; // Default stars
 
@@ -19,7 +22,49 @@ document.addEventListener("DOMContentLoaded", () => {
       star.classList.add(index < stars ? "fas" : "far");
     });
   };
-
+  const generateStarsHtml = (stars) => {
+    let starsHtml = "";
+    for (let i = 1; i <= 5; i++) {
+      if (i <= stars) {
+        starsHtml += '<i class="fas fa-star"></i>';
+      } else if (i === Math.ceil(stars) && stars % 1 !== 0) {
+        starsHtml += '<i class="fas fa-star-half-alt"></i>';
+      } else {
+        starsHtml += '<i class="far fa-star"></i>';
+      }
+    }
+    return starsHtml;
+  };
+  reviewButton.addEventListener("click", (e) => {
+    fetch(`/reviews-get-by-id/${productId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        reviewsContainer.innerHTML = "";
+        data.metadata.reviews.forEach((review) => {
+          const reviewHtmt = ` <div class="media mb-4">
+              <img src="../img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+              <div class="media-body">
+                <h6>${review.user_name} - <i>${new Date(
+            review.date
+          ).toLocaleDateString()}</i></h6>
+                <div class="text-primary mb-2">
+                  ${generateStarsHtml(review.star)}
+                </div>
+                <p>${review.comment}</p>
+              </div>
+            </div>`;
+          reviewsContainer.insertAdjacentHTML("beforeend", reviewHtmt);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching reviews:", error);
+      });
+  });
   testButton.addEventListener("click", (e) => {
     e.preventDefault(); // Prevent default form submission
 
@@ -29,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
       userName: document.getElementById("name").value || "",
       comment: document.getElementById("message").value || "",
       star: selectedStars,
-      sessionId: "s", // Replace with the actual session ID if needed
     };
     fetch(form.action, {
       method: "POST",
@@ -39,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((response) => {
         return response.json().then((data) => {
           if (!response.ok) {
-            throw new Error(`${response.status} ${d.message}`);
+            throw new Error(`${response.status} ${data.message}`);
           }
           return data;
         });

@@ -65,4 +65,11 @@ class NotFoundRequestError extends ErrorResponse {
   }
 }
 
-module.exports = { AuthFailureError, ConflictRequestError, BadRequestError ,NotFoundError, NotFoundRequestError};
+module.exports = {
+  AuthFailureError,
+  ConflictRequestError,
+  BadRequestError,
+  NotFoundError,
+  NotFoundRequestError,
+  FORBIDDEN,
+};

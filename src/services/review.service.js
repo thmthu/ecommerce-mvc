@@ -1,8 +1,7 @@
 "use strict";
 const review = require("../models/review.model.js");
-const { model, Schema, Types } = require("mongoose"); // Ensure Types is imported
 const { BadRequestError, FORBIDDEN } = require("../core/error.response");
-
+const { ObjectId } = require("mongodb");
 class ReviewService {
   static async createUserReview(
     email,
@@ -12,11 +11,12 @@ class ReviewService {
     star,
     sessionId
   ) {
-    // if (!sessionId){
-    //     throw new Error("User need login to review");
-    // }
+    if (!sessionId) {
+      throw new FORBIDDEN("User need login to review");
+    }
     console.log("serviec", email, userName, productId, comment, star);
     const userReviewed = await review.findOne({ email: email });
+    console.log("userReviewed", userReviewed);
     if (userReviewed) {
       throw new FORBIDDEN("User has already reviewed this product");
     }
@@ -38,8 +38,11 @@ class ReviewService {
     };
   }
   static async reviewsByProductId(productId) {
-    const reviews = await review.find({ product_id: productId });
-    if (!reviews) throw new Forbiden("No reviews found");
+    const reviews = await review
+      .find({ product_id: new ObjectId(productId) })
+      .lean();
+    console.log("okkkkkk", reviews);
+    if (!reviews) throw new FORBIDDEN("No reviews found");
     return {
       success: true,
       metadata: {
