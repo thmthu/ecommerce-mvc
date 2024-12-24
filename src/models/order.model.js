@@ -15,6 +15,7 @@ const orderSchema = new Schema(
     totalPrice: { type: Number, required: true },
     createdDate: { type: Date, default: Date.now },
     order_products: { type: Array, required: true, default: true },
+    status: { type: String, required: true, default: "Pending" },
   },
   {
     collection: COLLECTION_NAME,

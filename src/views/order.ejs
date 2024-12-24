@@ -135,6 +135,8 @@
               <th>Email</th>
               <th>Total Price</th>
               <th>Created Time</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody class="align-middle">
@@ -148,6 +150,9 @@
                   <td class="align-middle"><%= order.userEmail %></td>
                   <td class="align-middle">$<%= order.totalPrice %></td>
                   <td class="align-middle"><%= new Date(order.createdAt).toLocaleString() %></td>
+                  <td class="align-middle"><%= order.status %></td>
+                  <td class="align-middle">
+                    <a href="/order/<%= order.orderId.toString() %>" class="btn btn-primary">View</a>
                 </tr>
               <% }); %>
             <% } else { %>

@@ -33,5 +33,9 @@ class OrderService {
         // Extract relevant fields for each order
         return userOrders;
       }
+      static async getOrderById(orderId) {
+        console.log("get order by id", orderId);
+        return await order.findOne({ orderId: orderId }).lean();
+      }
 }
 module.exports = OrderService;

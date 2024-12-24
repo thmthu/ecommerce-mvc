@@ -29,11 +29,25 @@ class OrderController {
         });
     }
     createOrder = async (req, res) => {
-        const {price, products, fullName, email, phoneNumber, address} = req.body;
+        const {price, fullName, email, phoneNumber, address} = req.body;
+        const products = await CartService.getUserCart(req.session.userId);
         const userId = req.session.userId;
         const result = await OrderService.createUserOrder(userId, fullName, address, phoneNumber, email, price, products);  
         await CartService.clearUserCart(req.session.userId);
         res.redirect("/home");
     }
+    getDetail = async (req, res) => {
+        const order = await OrderService.getOrderById(req.params.id);
+        const avatar = await AccessService.getAvatar(req.session.userId);
+        console.log(order);
+        return res.render("order-detail.ejs", {
+          orderId: req.params.id,
+          cart: order.order_products,
+          totalPrice: order.totalPrice,
+          page: "detail",
+          avatar,
+          isAuthenticated: req.isAuthenticated(),
+        });
+    };
 }
 module.exports = new OrderController();
