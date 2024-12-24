@@ -55,7 +55,7 @@ class ProductController {
 
       if (req.xhr || req.headers.accept.indexOf('json') > -1) {
         // If the request is an AJAX request, return JSON data
-        return res.json({ products, totalPages, currentPage });
+        return res.json({ products, totalPages, currentPage, sortBy });
       } else {
         const avatar = await AccessService.getAvatar(req.session.userId);
         // Otherwise, render the shop view
