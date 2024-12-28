@@ -8,9 +8,9 @@ class ReviewController {
       if (!result) {
         return res.status(404).json({ message: "Not Found" });
       }
-      return res.json(result);
+      return res.status(200).json(result);
     } catch (error) {
-      return res.status(500);
+      return res.status(error.status).json({ message: error.message });
     }
   };
   createReview = async (req, res) => {
@@ -24,7 +24,7 @@ class ReviewController {
         star,
         userId
       );
-      return res.json(result);
+      return res.status(200).json(result);
     } catch (error) {
       console.log("controkker", error.message);
       return res.status(error.status).json({ message: error.message });

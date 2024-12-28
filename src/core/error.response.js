@@ -1,13 +1,5 @@
 "use strict";
-const StatusCode = {
-  FORBIDDEN: 403,
-  CONFLICT: 409,
-};
 
-const ReasonStatusCode = {
-  FORBIDDEN: "Bad request error",
-  CONFLICT: "Conflict error",
-};
 const { StatusCodes, ReasonPhrases } = require("../utils/httpStatusCode");
 class ErrorResponse extends Error {
   constructor(message, status) {
@@ -16,50 +8,38 @@ class ErrorResponse extends Error {
   }
 }
 class ConflictRequestError extends ErrorResponse {
-  constructor(
-    message = ReasonStatusCode.CONFLICT,
-    status = StatusCode.CONFLICT
-  ) {
+  constructor(message = ReasonPhrases.CONFLICT, status = StatusCodes.CONFLICT) {
     super(message, status);
   }
 }
 class BadRequestError extends ErrorResponse {
   constructor(
-    message = ReasonStatusCode.CONFLICT,
-    status = StatusCode.CONFLICT
+    message = ReasonPhrases.BAD_REQUEST,
+    status = StatusCodes.BAD_REQUEST
   ) {
     super(message, status);
   }
 }
 class FORBIDDEN extends ErrorResponse {
   constructor(
-    message = ReasonStatusCode.FORBIDDEN,
-    status = StatusCode.FORBIDDEN
+    message = ReasonPhrases.FORBIDDEN,
+    status = StatusCodes.FORBIDDEN
   ) {
     super(message, status);
   }
 }
 class AuthFailureError extends ErrorResponse {
   constructor(
-    message = ReasonPhrases.UNAUTHORIZED,
-    status = StatusCodes.UNAUTHORIZED
+    message = ReasonPhrases.AuthFailureError,
+    status = StatusCodes.AuthFailureError
   ) {
     super(message, status);
   }
 }
 class NotFoundError extends ErrorResponse {
   constructor(
-    message = ReasonPhrases.UNAUTHORIZED,
-    statusCode = StatusCodes.UNAUTHORIZED
-  ) {
-    super(message, statusCode);
-  }
-}
-
-class NotFoundRequestError extends ErrorResponse {
-  constructor(
-    message = ReasonStatusCode.NOT_FOUND,
-    status = StatusCode.NOT_FOUND
+    message = ReasonPhrases.NOT_FOUND,
+    status = StatusCodes.NOT_FOUND
   ) {
     super(message, status);
   }
@@ -70,6 +50,5 @@ module.exports = {
   ConflictRequestError,
   BadRequestError,
   NotFoundError,
-  NotFoundRequestError,
   FORBIDDEN,
 };

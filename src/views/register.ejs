@@ -128,83 +128,52 @@
                     </div>
 
                     <form
-                      action="/register"
-                      method="POST"
-                      id="registerForm"
-                      class="row g-3"
-                      novalidate
-                    >
-                      <!-- Form fields -->
-                      <div class="col-12">
-                        <label for="yourUsername" class="form-label">Username</label>
-                        <div class="input-group">
-                          <span class="input-group-text" id="inputGroupPrepend">@</span>
-                          <input
-                            type="text" 
-                            name="username"
-                            class="form-control"
-                            id="yourUsername"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div class="col-12">
-                        <label for="yourEmail" class="form-label">Your Email</label>
+                    id="registerForm"
+                    class="row g-3"
+                    novalidate
+                  >
+                    <!-- Form fields -->
+                    <div class="col-12">
+                      <label for="yourUsername" class="form-label">Username</label>
+                      <div class="input-group">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
                         <input
-                          type="email"
-                          name="email"
+                          type="text" 
+                          name="username"
                           class="form-control"
-                          id="yourEmail"
+                          id="yourUsername"
                           required
                         />
                       </div>
-
-                      <div class="col-12">
-                        <label for="yourPassword" class="form-label">Password</label>
-                        <input
-                          type="password"
-                          name="password"
-                          class="form-control"
-                          id="yourPassword"
-                          required
-                        />
-                      </div>
-
-                      <div class="col-12">
-                        <div class="form-check">
-                          <input
-                            class="form-check-input"
-                            name="terms"
-                            type="checkbox"
-                            value="true"
-                            id="acceptTerms"
-                            required
-                          />
-                          <label class="form-check-label" for="acceptTerms">
-                            I agree and accept the <a href="#">terms and conditions</a>
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <button type="submit" class="btn btn-primary w-100">Create Account</button>
-                      </div>
-                      <% if (typeof error !== 'undefined') { %>
-                        <div class="col-12">
-                          <div class="alert alert-danger mt-2">
-                            <% if (Array.isArray(error)) { %>
-                              <ul>
-                                <% error.forEach(error1 => { %>
-                                  <li><%= error1 %></li>
-                                <% }) %>
-                              </ul>
-                            <% } else { %>
-                              <p><%= error %></p>
-                            <% } %>
-                          </div>
-                        </div>
-                      <% } %>
-                    </form>
+                    </div>
+                  
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label">Your Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        id="yourEmail"
+                        required
+                      />
+                    </div>
+                  
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        id="yourPassword"
+                        required
+                      />
+                    </div>
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary w-100" id="submit-register">Create Account</button>
+                    </div>
+                    <div class="col-12" id="error-register">                          
+                    </div>
+                  </form>
                   </div>
                 </div>
 
@@ -242,35 +211,10 @@
 
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script src="js/registerError.js" defer></script>
+
 
     <!-- Custom JS for handling form validation -->
-    <script>
-      document.getElementById('registerForm').addEventListener('submit', function(event) {
-        const form = event.target;
-        const password = form.password.value;
-        const email = form.email.value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        // Remove existing error messages
-        const existingErrors = form.querySelectorAll('.alert-danger');
-        existingErrors.forEach(error => error.remove());
-
-        if (password.length < 8) {
-          event.preventDefault();
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'alert alert-danger mt-2';
-          errorDiv.innerText = 'Password must be at least 8 characters long';
-          form.appendChild(errorDiv);
-        }
-
-        if (!emailRegex.test(email)) {
-          event.preventDefault();
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'alert alert-danger mt-2';
-          errorDiv.innerText = 'Invalid email format';
-          form.appendChild(errorDiv);
-        }
-      });
-    </script>
+    
   </body>
 </html>

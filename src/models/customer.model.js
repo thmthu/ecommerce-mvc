@@ -10,16 +10,7 @@ const customerSchema = new Schema(
       type: String,
       trim: true,
       maxLength: 150,
-    },
-    address: {
-      type: String,
-      trim: true,
-      maxLength: 150,
-    },
-    phone: {
-      type: String,
-      trim: true,
-      maxLength: 15,
+      unique: true,
     },
     avatar: {
       type: String,
@@ -38,14 +29,18 @@ const customerSchema = new Schema(
       enum: ["active", "inactive"],
       default: "inactive",
     },
-    verify: {
-      type: Schema.Types.Boolean,
-      default: false,
-    },
-    roles: {
-      type: Array,
-      default: [],
-    },
+    lastLogin: {
+			type: Date,
+			default: Date.now,
+		},
+		isVerified: {
+			type: Boolean,
+			default: false,
+		},
+		resetPasswordToken: String,
+		resetPasswordExpiresAt: Date,
+		verificationToken: String,
+		verificationTokenExpiresAt: Date,
   },
   {
     timestamps: true,
