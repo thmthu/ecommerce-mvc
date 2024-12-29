@@ -1,6 +1,7 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const { getInforData } = require("../utils/index");
+const { findById } = require("./customer.service");
 const customerModel = require("../models/customer.model");
 const {
   ConflictRequestError,
@@ -42,19 +43,10 @@ class AccessService {
       throw new Error("Failed to create new shop");
     }
     await sendVerificationEmail(email, verificationToken);
-    req.logIn(newCustomer, (err) => {
-      if (err) {
-        return next(err);
-      }
-      req.session.userId = newCustomer._id; // Store user ID in session
-      return res.status(201).json({
-        success: true,
-        message: "Verification email sent. Please check your inbox.",
-        redirect: "/home", // Indicate where to redirect after signup
-      });
-    });
+    console.log("Verification email sent1 ");
     return {
       success: true,
+      newCustomer: newCustomer,
       metadata: {
         shop: getInforData({
           fields: ["id", "name", "email"],
@@ -63,7 +55,35 @@ class AccessService {
       },
     };
   };
-  static verifyEmail = async (email, verificationToken) => {
+  static resendVerifycation = async (userId) => {
+    const myUser = await findById({ userId });
+    const email = myUser.email;
+    if (!email) {
+      throw new NotFoundError(`User not found`);
+    }
+    const verificationToken = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+    await sendVerificationEmail(email, verificationToken);
+    const user = await customerModel.findOne({ email });
+    if (!user) {
+      throw new NotFoundError(`User ${email} not found`);
+    }
+    user.verificationToken = verificationToken;
+    user.isVerified = false;
+    await user.save();
+    return {
+      success: true,
+    };
+  };
+  static verifyEmail = async (userId, verificationToken) => {
+    const myUser = await findById({ userId });
+    const email = myUser.email;
+    console.log(email);
+    if (!email) {
+      throw new NotFoundError(`User ${email} not found`);
+    }
+    console.log("service verified email", email);
     const user = await customerModel.findOne({ email });
     console.log("=======before check user");
     if (!user) {

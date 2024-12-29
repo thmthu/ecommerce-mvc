@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Account created successfully:", data);
         form.reset(); // Clear the form fields
         errorContainer.innerHTML = ""; // Clear any previous error messages
-        window.location.href = "/home"; // Redirect to home page
+        window.location.href = "/email-verify"; // Redirect to home page
       })
       .catch((error) => {
         errorContainer.innerHTML += `<div class="alert alert-danger mt-1">${error}</div>`;

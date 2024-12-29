@@ -3,10 +3,15 @@
 const AccessService = require("../services/access.service");
 const bcrypt = require("bcrypt");
 const path = require("path");
+const passport = require("passport");
 class AccessController {
   getRegister = async (req, res) => {
     const avatar = await AccessService.getAvatar(req.session.userId);
     return res.render("register.ejs", { avatar });
+  };
+  getVerificationpage = async (req, res) => {
+    const avatar = await AccessService.getAvatar(req.session.userId);
+    res.render("verifycation-signup", { avatar });
   };
   logOut = function (req, res, next) {
     console.log("Session ID (req.sessionID):", req.sessionID);
@@ -70,23 +75,50 @@ class AccessController {
         password,
       });
       if (result.success) {
-        return res.status(201).redirect("/login");
+        console.log("ok signUp");
+        req.logIn(result.newCustomer, (err) => {
+          if (err) {
+            console.log("Verification email sent 2 ");
+            return next(err);
+          }
+          console.log("Verification email sent 3 ");
+          req.session.userId = result.newCustomer._id; // Store user ID in session
+          return res.status(201).json({
+            success: true,
+            message: "Verification email sent. Please check your inbox.",
+            redirect: "/email-verify", // Indicate where to redirect after signup
+          });
+        });
       } else {
         const avatar = await AccessService.getAvatar(req.session.userId);
+        console.log("!ok signUp");
+
         return res
           .status(400)
           .render("register", { avatar, error: result.message });
       }
     } catch (error) {
+      console.log("!ok catch signUp", error);
       const avatar = await AccessService.getAvatar(req.session.userId);
+      return res.status(401).json({ error: error.message });
+    }
+  };
+  resendVerifycation = async (req, res) => {
+    try {
+      await AccessService.resendVerifycation(req.session.userId);
+      return res
+        .status(200)
+        .json({ message: "Verification email sent successfully" });
+    } catch (error) {
+      console.log("verify controller:", error, error.status, error.message);
       return res.status(error.status).json({ error: error.message });
     }
   };
   verifyEmail = async (req, res, next) => {
-    const { email, verificationToken } = req.body;
-    console.log("verify", email, verificationToken);
+    const { verificationToken } = req.body;
+    console.log("verify", verificationToken, req.session.userId);
     try {
-      await AccessService.verifyEmail(email, verificationToken);
+      await AccessService.verifyEmail(req.session.userId, verificationToken);
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {
       console.log("verify controller:", error, error.status, error.message);

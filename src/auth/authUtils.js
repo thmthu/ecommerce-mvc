@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const { findByEmail } = require("../services/customer.service"); // Adjust the path as needed
 ///Looi
 const customerStrategy = new LocalStrategy(
-  { usernameField: "email" },
+  { usernameField: "email", passwordField: "password" },
+
   async function verify(email, password, cb) {
     try {
       const foundCustomer = await findByEmail({ email });
@@ -27,7 +28,5 @@ const customerStrategy = new LocalStrategy(
     }
   }
 );
-
-
 
 module.exports = { customerStrategy };

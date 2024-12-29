@@ -32,6 +32,9 @@ router.post("/update-profile", AccessController.updateProfile);
 // Route for changing password
 router.get("/change-password", AccessController.getChangePassword);
 router.post("/change-password", AccessController.changePassword);
+
+router.get("/email-verify", AccessController.getVerificationpage);
 router.post("/email-verify", AccessController.verifyEmail);
+router.post("/email-resendVerify", AccessController.resendVerifycation)
 
 module.exports = router;
