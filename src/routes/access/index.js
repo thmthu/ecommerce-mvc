@@ -2,24 +2,43 @@
 const express = require("express");
 const passport = require("passport");
 const AccessController = require("../../controllers/access.controller");
-const AccessService = require("../../services/access.service");
 const { validateSignUp, validateSignIn } = require("../../middleware/validate");
-const { customerStrategy } = require("../../auth/authUtils");
+const { customerStrategy } = require("../../auth/strategy/customerStrategy");
+const { googleStrategy } = require("../../auth/strategy/googleStrategy");
+
 const { ensureAuthenticated } = require("../../middleware/authMiddleware");
+const customerModel = require("../../models/customer.model");
+const { ObjectId } = require("mongodb");
 const router = express.Router();
 passport.use(customerStrategy);
+passport.use(googleStrategy);
 
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.redirect("/home");
+  }
+);
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
     cb(null, { id: user.id });
   });
 });
-passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, user);
-  });
-});
 
+passport.deserializeUser(async (user, done) => {
+  try {
+    const myUser = await customerModel.findById(new ObjectId(user.id));
+    done(null, myUser);
+  } catch (err) {
+    done(err);
+  }
+});
 router.get("/register", AccessController.getRegister);
 router.post("/register", validateSignUp, AccessController.signUp);
 router.post("/login/password", AccessController.login);
@@ -35,6 +54,6 @@ router.post("/change-password", AccessController.changePassword);
 
 router.get("/email-verify", AccessController.getVerificationpage);
 router.post("/email-verify", AccessController.verifyEmail);
-router.post("/email-resendVerify", AccessController.resendVerifycation)
+router.post("/email-resendVerify", AccessController.resendVerifycation);
 
 module.exports = router;
