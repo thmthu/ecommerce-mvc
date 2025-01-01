@@ -18,7 +18,7 @@ const customerStrategy = new LocalStrategy(
       const match = await bcrypt.compare(password, foundCustomer.password);
       if (!match) {
         console.log("Incorrect email or password.");
-        return cb(null, false, { message: "Incorrect email or password." });
+        return cb(null, false, { message: "Incorrect password." });
       }
       console.log("role", foundCustomer.role);
       if (foundCustomer.status == "Inactive") {

@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registerForm");
   const errorContainer = document.getElementById("error-register");
   errorContainer.innerHTML = "";
-  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
-
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const username = document.getElementById("yourUsername").value;

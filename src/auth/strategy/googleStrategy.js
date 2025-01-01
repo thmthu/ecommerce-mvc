@@ -3,7 +3,7 @@ const customerModel = require("../../models/customer.model");
 const FederatedCredentials = require("../../models/federatedCredentials.model");
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
 const { ObjectId } = require("mongodb");
-require("dotenv").config(); 
+require("dotenv").config();
 const googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,

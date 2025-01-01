@@ -91,7 +91,7 @@
               method="POST"
               style="display: inline"
             >
-              <input type="hidden" name="_csrf"/>
+              <input type="hidden" name="_csrf" />
               <!-- Include CSRF token if needed -->
               <button
                 type="submit"
@@ -138,8 +138,7 @@
                 </div>
 
                 <form
-                  action="/login/password"
-                  method="POST"
+                  id="loginForm"
                   class="row g-3 needs-validation"
                   novalidate
                 >
@@ -150,7 +149,7 @@
                         type="text"
                         name="email"
                         class="form-control"
-                        id="email"
+                        id="loginEmail"
                         required
                       />
                     </div>
@@ -162,7 +161,7 @@
                       type="password"
                       name="password"
                       class="form-control"
-                      id="yourPassword"
+                      id="loginPassword"
                       required
                     />
                   </div>
@@ -182,25 +181,15 @@
                     </div>
                   </div>
                   <div class="col-12">
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button
+                      type="submit"
+                      class="btn btn-primary w-100"
+                      id="loginSubmit"
+                    >
                       Login
                     </button>
                   </div>
-                  <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
-                  <div class="col-12">
-                    <div class="alert alert-danger mt-2">
-                      <% if (Array.isArray(error)) { %>
-                      <ul>
-                        <% error.forEach(error1 => { %>
-                        <li><%= error1 %></li>
-                        <% }) %>
-                      </ul>
-                      <% } else { %>
-                      <p><%= error %></p>
-                      <% } %>
-                    </div>
-                  </div>
-                  <% } %>
+                  <div class="col-12" id="error-register"></div>
                   <div class="col-12">
                     <p class="small mb-0">
                       Don't have account?
@@ -226,5 +215,6 @@
   </div>
 </main>
 <!-- End #main -->
+<script src="js/login.js" defer></script>
 
 <%- include('./partials/footer') %>
