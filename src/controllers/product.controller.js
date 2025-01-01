@@ -4,7 +4,8 @@ const AccessService = require("../services/access.service");
 const { product } = require("../models/product.model");
 class ProductController {
   getCart = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const userId = req.user == undefined ? null : req.user.id;
+    const avatar = await AccessService.getAvatar(userId);
     return res.render("cart.ejs", {
       page: "cart",
       avatar,
@@ -15,10 +16,8 @@ class ProductController {
     try {
       const products = await ProductService.getRandomProducts(4);
       const latestProducts = await ProductService.getLatestProducts(4);
-
-      const avatar = await AccessService.getAvatar(req.session.userId);
-
-      // Render the index page with the random products
+      const userId = req.user == undefined ? null : req.user.id;
+      const avatar = await AccessService.getAvatar(userId);
       res.render("index.ejs", {
         page: "home",
         avatar,
@@ -32,7 +31,8 @@ class ProductController {
     }
   };
   getContact = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const userId = req.user == undefined ? null : req.user.id;
+    const avatar = await AccessService.getAvatar(userId);
     return res.render("contact.ejs", {
       page: "contact",
       avatar,
@@ -53,11 +53,12 @@ class ProductController {
     try {
       const {products, totalPages} = await ProductService.getShopProducts(limit, skip, searchQuery, price, color, size, gender, sortBy);
 
-      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+      if (req.xhr || req.headers.accept.indexOf("json") > -1) {
         // If the request is an AJAX request, return JSON data
         return res.json({ products, totalPages, currentPage, sortBy });
       } else {
-        const avatar = await AccessService.getAvatar(req.session.userId);
+        const userId = req.user == undefined ? null : req.user.id;
+        const avatar = await AccessService.getAvatar(userId);
         // Otherwise, render the shop view
         res.render("shop.ejs", {
           page: "shop",
@@ -75,7 +76,7 @@ class ProductController {
         });
       }
     } catch (err) {
-      res.status(500).json({ error: "Failed to fetch products" });
+      res.status(500).json({ error: "Failed to fetch products", err: err });
     }
   };
   getDetail = async (req, res) => {
@@ -85,7 +86,8 @@ class ProductController {
       product._id,
       4
     );
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const userId = req.user == undefined ? null : req.user.id;
+    const avatar = await AccessService.getAvatar(userId);
     return res.render("detail.ejs", {
       productId: req.params.id,
       product: product,

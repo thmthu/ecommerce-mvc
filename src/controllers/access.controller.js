@@ -6,11 +6,12 @@ const path = require("path");
 const passport = require("passport");
 class AccessController {
   getRegister = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const userId = req.user == undefined ? null : req.user.id;
+    const avatar = await AccessService.getAvatar(userId);
     return res.render("register.ejs", { avatar });
   };
   getVerificationpage = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const avatar = await AccessService.getAvatar(req.user.id);
     res.render("verifycation-signup", { avatar });
   };
   logOut = function (req, res, next) {
@@ -38,30 +39,36 @@ class AccessController {
   getLogin = async (req, res) => {
     const error = req.session.error ? req.session.error : null;
     delete req.session.error;
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const avatar = await AccessService.getAvatar(null);
     res.render("login.ejs", { avatar, error });
   };
-  login = (req, res, next) => {
+  login = async (req, res, next) => {
     req.session.regenerate((err) => {
       if (err) {
         console.log("Error regenerating session:", err);
         return next(err);
       }
 
-      passport.authenticate("local", (err, user, info) => {
+      passport.authenticate("local", async (err, user, info) => {
         if (err) {
           return next(err);
         }
         if (!user) {
-          req.session.error = info.message;
-          return res.redirect("/login");
+          return res.status(401).json({
+            success: false,
+            message: info.message || "Authentication failed.",
+          });
         }
         req.logIn(user, (err) => {
           if (err) {
             return next(err);
           }
-          req.session.userId = user._id; // Store user ID in session
-          return res.redirect("/home");
+
+          return res.status(201).json({
+            success: true,
+            message: "SignIn successfully.",
+            redirect: "/home", // Chuyển hướng đến /home sau khi login xong
+          });
         });
       })(req, res, next);
     });
@@ -76,13 +83,20 @@ class AccessController {
       });
       if (result.success) {
         console.log("ok signUp");
+        console.log("sign up ", req);
         req.logIn(result.newCustomer, (err) => {
           if (err) {
             console.log("Verification email sent 2 ");
             return next(err);
           }
-          console.log("Verification email sent 3 ");
-          req.session.userId = result.newCustomer._id; // Store user ID in session
+          console.log("~Verification email sent 3 ", result.newCustomer);
+          console.log("~User .id logged in", req.user.id);
+          console.log("~User ._id logged in", req.user._id);
+          console.log(
+            "~User ._id to string logged in",
+            req.user._id.toString()
+          );
+
           return res.status(201).json({
             success: true,
             message: "Verification email sent. Please check your inbox.",
@@ -90,7 +104,7 @@ class AccessController {
           });
         });
       } else {
-        const avatar = await AccessService.getAvatar(req.session.userId);
+        const avatar = await AccessService.getAvatar(req.user.id);
         console.log("!ok signUp");
 
         return res
@@ -99,13 +113,13 @@ class AccessController {
       }
     } catch (error) {
       console.log("!ok catch signUp", error);
-      const avatar = await AccessService.getAvatar(req.session.userId);
+      const avatar = await AccessService.getAvatar(req.user.id);
       return res.status(401).json({ error: error.message });
     }
   };
   resendVerifycation = async (req, res) => {
     try {
-      await AccessService.resendVerifycation(req.session.userId);
+      await AccessService.resendVerifycation(req.user.id);
       return res
         .status(200)
         .json({ message: "Verification email sent successfully" });
@@ -116,9 +130,9 @@ class AccessController {
   };
   verifyEmail = async (req, res, next) => {
     const { verificationToken } = req.body;
-    console.log("verify", verificationToken, req.session.userId);
+    console.log("verify", verificationToken, req.user.id);
     try {
-      await AccessService.verifyEmail(req.session.userId, verificationToken);
+      await AccessService.verifyEmail(req.user.id, verificationToken);
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {
       console.log("verify controller:", error, error.status, error.message);
@@ -127,8 +141,8 @@ class AccessController {
   };
   getProfile = async (req, res) => {
     try {
-      const user = await AccessService.getUserById(req.session.userId);
-      const avatar = await AccessService.getAvatar(req.session.userId);
+      const user = await AccessService.getUserById(req.user.id);
+      const avatar = await AccessService.getAvatar(req.user.id);
       return res.render("profile.ejs", {
         page: "profile",
         avatar,
@@ -142,7 +156,7 @@ class AccessController {
 
   updateProfile = async (req, res) => {
     try {
-      const userId = req.session.userId; // Assuming user is authenticated and user ID is available in req.user
+      const userId = req.user.id; // Assuming user is authenticated and user ID is available in req.user
       const { name, address, phone } = req.body;
       let avatar = null;
 
@@ -181,7 +195,7 @@ class AccessController {
   };
 
   getChangePassword = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.session.userId);
+    const avatar = await AccessService.getAvatar(req.user.id);
     return res.render("change-password.ejs", {
       page: "change-password",
       avatar,
@@ -192,12 +206,12 @@ class AccessController {
 
   changePassword = async (req, res) => {
     try {
-      const userId = req.session.userId; // Assuming user is authenticated and user ID is available in req.user
+      const userId = req.user.id; // Assuming user is authenticated and user ID is available in req.user
       const { oldPassword, password, confirmPassword } = req.body;
 
       // Find the user by ID
       const user = await AccessService.getUserById(userId);
-      const avatar = await AccessService.getAvatar(req.session.userId);
+      const avatar = await AccessService.getAvatar(userId);
 
       // Verify old password
       if (!(await bcrypt.compare(oldPassword, user.password))) {

@@ -43,7 +43,7 @@ const signInValidationSchema = Joi.object({
 
 const validateSignIn = async (req, res, next) => {
   delete req.body.terms;
-  const avatar = await AccessService.getAvatar(req.session.userId);
+  const avatar = await AccessService.getAvatar(req.user.id);
   const { error } = signInValidationSchema.validate(req.body, {
     abortEarly: false,
   });
