@@ -2,12 +2,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registerForm");
   const errorContainer = document.getElementById("error-register");
   errorContainer.innerHTML = "";
+  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const username = document.getElementById("yourUsername").value;
     const email = document.getElementById("yourEmail").value;
-    const password = document.getElementById("yourPassword").value; // Prevent default form submission
+    const password = document.getElementById("yourPassword").value;
+    const confirmPasswordInput = document.getElementById(
+      "yourConfirmPassword"
+    ).value;
+    // Prevent default form submission
     if (!username) {
       errorContainer.innerHTML = `<div class="mt-1 alert alert-danger">Username is require</div>`;
       return;
@@ -18,6 +23,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (!password) {
       errorContainer.innerHTML = `<div class="mt-1 alert alert-danger">Password is require</div>`;
+      return;
+    }
+    if (!passwordRegex.test(password)) {
+      console.log("error patter");
+      errorContainer.innerHTML = `<div class="mt-1 alert alert-danger">Password must be at least 8 characters long and include at least one special character and one number</div>`;
+      return;
+    }
+    if (!confirmPasswordInput || confirmPasswordInput !== password) {
+      errorContainer.innerHTML = `<div class="mt-1 alert alert-danger">Confirm password does not match</div>`;
       return;
     }
     // Construct the request body in the required format
