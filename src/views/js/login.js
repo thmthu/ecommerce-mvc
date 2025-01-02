@@ -1,3 +1,7 @@
+function redirectToGoogleAuth() {
+  window.location.href = "/auth/google";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const errorContainer = document.getElementById("error-register");
