@@ -61,7 +61,7 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 14 * 24 * 60 * 60 * 1000, httpOnly: true }, // Match TTL in milliseconds
+    cookie: { maxAge: 14 * 24 * 60 * 60 * 1000, secure: true }, // Match TTL in milliseconds
     store: MongoStore.create({
       mongoUrl: dbUrl,
       collectionName: "sessions", // The name of the collection where sessions will be stored

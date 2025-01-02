@@ -14,13 +14,15 @@ passport.use(customerStrategy);
 passport.use(googleStrategy);
 
 router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-router.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate(
+    "google", 
+    { scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email"]
+    },
+    { failureRedirect: "/login" }
+  ),
   (req, res) => {
     res.redirect("/home");
   }

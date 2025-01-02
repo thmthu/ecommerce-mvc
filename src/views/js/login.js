@@ -1,5 +1,5 @@
 function redirectToGoogleAuth() {
-  window.location.href = "/auth/google";
+  window.location.href = "https://localhost:8000/auth/google/callback";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       password: passwordInput,
     };
     console.log(requestBody);
-    fetch("http://localhost:8000/login/password", {
+    fetch("https://localhost:8000/login/password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),

@@ -1,4 +1,4 @@
-@url_dev=http://localhost:8000/cart-add
+@url_dev=https://localhost:8000/cart-add
 POST {{url_dev}}
 Content-Type: application/json
 x-api-key: a10c775af76c17b9712c984e07f8490fb2391b3d94f4ec3268efb1959ac356ef5dbae2d6dd5b9ca48b433438efd68466e074e55282d696b1ed32f108756a7e53
