@@ -9,8 +9,7 @@ const customerSchema = new Schema(
     name: {
       type: String,
       trim: true,
-      maxLength: 150,
-      unique: true,
+      maxLength: 150
     },
     avatar: {
       type: String,

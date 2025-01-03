@@ -1,5 +1,5 @@
 function redirectToGoogleAuth() {
-  window.location.href = "https://localhost:8000/auth/google/callback";
+  window.location.href = "https://localhost:8000/auth/google";
 }
 
 document.addEventListener("DOMContentLoaded", () => {

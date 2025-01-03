@@ -10,6 +10,7 @@ const googleStrategy = new GoogleStrategy(
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: `https://localhost:8000/auth/google/callback`,
     passReqToCallback: true,
+    proxy: true
   },
   async function (request, accessToken, refreshToken, profile, done) {
     try {
@@ -19,12 +20,18 @@ const googleStrategy = new GoogleStrategy(
         subject: profile.id,
       });
       if (!federatedCredential) {
-        const newUser = await customerModel.create({
+        var newUser = await customerModel.findOne({
           name: profile.displayName,
           email: profile.emails[0].value,
-          password: "123456",
-        });
-
+          password: "123456"
+        })
+        if (!newUser) {
+          newUser = await customerModel.create({
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            password: "123456",
+          })
+        };
         await FederatedCredentials.create({
           provider: "google",
           subject: profile.id,
