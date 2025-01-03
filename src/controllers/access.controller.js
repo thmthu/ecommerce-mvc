@@ -9,7 +9,7 @@ class AccessController {
   getRegister = async (req, res) => {
     const userId = req.user == undefined ? null : req.user.id;
     const avatar = await AccessService.getAvatar(userId);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("register.ejs", { avatar, numProducts });
   };
   getVerificationpage = async (req, res) => {
@@ -43,7 +43,7 @@ class AccessController {
     const error = req.session.error ? req.session.error : null;
     delete req.session.error;
     const avatar = await AccessService.getAvatar(null);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(null);
     res.render("login.ejs", { avatar, numProducts, error });
   };
   login = async (req, res, next) => {
@@ -118,7 +118,7 @@ class AccessController {
       }
     } catch (error) {
       console.log("!ok catch signUp", error);
-      const avatar = await AccessService.getAvatar(req.user.id);
+      const avatar = await AccessService.getAvatar(null);
       return res.status(401).json({ error: error.message });
     }
   };

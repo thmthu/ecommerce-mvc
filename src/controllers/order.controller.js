@@ -51,6 +51,7 @@ class OrderController {
 
     for (const product of products) {
       await ProductService.decreaseProductQuantity(product.product_id, product.quantity);
+      await ProductService.increaseProductQuantitySold(product.product_id, product.quantity);
     }
 
     await CartService.clearUserCart(req.user.id);

@@ -108,6 +108,12 @@ class ProductFactory {
     product1.product_quantity -= quantity;
     return await product1.save();
   }
+  static async increaseProductQuantitySold(id, quantity) {
+    const product1 = await product.findById(id);
+    if (!product1) throw new BadRequestError("Product not found");
+    product1.product_quantity_sold += quantity;
+    return await product1.save();
+  }
 }
 
 class Product {
