@@ -12,10 +12,16 @@ class AccessController {
     const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("register.ejs", { avatar, numProducts });
   };
+  getResetPasswordPage = async (req, res) => {
+    res.render("reset-password", { avatar: null, numProducts: 0 });
+  };
   getVerificationpage = async (req, res) => {
     const avatar = await AccessService.getAvatar(req.user.id);
     const numProducts = await CartService.getCartProductsSize(req.user.id);
     res.render("verifycation-signup", { avatar, numProducts, isAuthenticated: req.isAuthenticated() });
+  };
+  getForgotPasswordPage = async (req, res) => {
+    res.render("forgot-password", { avatar: null, numProducts: 0 });
   };
   logOut = function (req, res, next) {
     console.log("Session ID (req.sessionID):", req.sessionID);
@@ -93,13 +99,6 @@ class AccessController {
             console.log("Verification email sent 2 ");
             return next(err);
           }
-          console.log("~Verification email sent 3 ", result.newCustomer);
-          console.log("~User .id logged in", req.user.id);
-          console.log("~User ._id logged in", req.user._id);
-          console.log(
-            "~User ._id to string logged in",
-            req.user._id.toString()
-          );
 
           return res.status(201).json({
             success: true,
@@ -261,6 +260,53 @@ class AccessController {
         error: "Failed to change password",
         isAuthenticated: req.isAuthenticated(),
       });
+    }
+  };
+  fogortPassword = async (req, res) => {
+    try {
+      console.log("Fogort Password 1");
+      const result = await AccessService.forgotPassword(req.body.email);
+      if (result.success) {
+        return res
+          .status(201)
+          .json({ message: "Password reset link sent to your email" });
+      } else {
+        return res.status(400).json({ error: "Unable to process the request" });
+      }
+    } catch (error) {
+      console.log("Fogort Password 3");
+
+      console.log(
+        "forgot password controller:",
+        error.status,
+        "messa",
+        error.message
+      );
+      return res
+        .status(error.status || 500)
+        .json({ error: error.message || "error at controller" });
+    }
+  };
+
+  resetPassword = async (req, res) => {
+    try {
+      const token = req.params.token;
+      const { password } = req.body;
+      console.log("reset password", password, token);
+      const user = await AccessService.resetPassword({ token, password });
+      if (user) {
+        res.status(200).json({ message: "Password reset successfully" });
+      } else {
+        res.status(401).json({ error: "Invalid password reset token" });
+      }
+    } catch (error) {
+      console.log(
+        "reset password controller:",
+        error,
+        error.status,
+        error.message
+      );
+      res.status(error.status).json({ error: error.message });
     }
   };
 }

@@ -14,9 +14,9 @@ passport.use(customerStrategy);
 passport.use(googleStrategy);
 
 router.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email']
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
   })
 );
 
@@ -57,5 +57,10 @@ router.post("/change-password", AccessController.changePassword);
 router.get("/email-verify", AccessController.getVerificationpage);
 router.post("/email-verify", AccessController.verifyEmail);
 router.post("/email-resendVerify", AccessController.resendVerifycation);
+
+router.get("/forgot-password", AccessController.getForgotPasswordPage);
+router.post("/forgot-password", AccessController.fogortPassword);
+router.get("/reset-password/:token", AccessController.getResetPasswordPage);
+router.post("/reset-password/:token", AccessController.resetPassword);
 
 module.exports = router;
