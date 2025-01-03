@@ -7,10 +7,12 @@ class OrderController {
   getOrder = async (req, res) => {
     const result = await OrderService.getAllUserOrders(req.user.id);
     const avatar = await AccessService.getAvatar(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
     console.log("result = ", result);
     return res.render("order.ejs", {
       page: "order",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
       orders: result,
       hashId,
@@ -22,9 +24,11 @@ class OrderController {
     const products = await CartService.getUserCart(req.user.id);
 
     const avatar = await AccessService.getAvatar(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
     return res.render("checkout.ejs", {
       page: "checkout",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
       price,
       products,
@@ -49,6 +53,7 @@ class OrderController {
   getDetail = async (req, res) => {
     const order = await OrderService.getOrderById(req.params.id);
     const avatar = await AccessService.getAvatar(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
     console.log(order);
     return res.render("order-detail.ejs", {
       orderId: req.params.id,
@@ -56,6 +61,7 @@ class OrderController {
       totalPrice: order.totalPrice,
       page: "detail",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
     });
   };

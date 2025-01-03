@@ -6,10 +6,12 @@ class CartController {
   getUserCart = async (req, res, next) => {
     const result = await CartService.getUserCart(req.user.id);
     const avatar = await AccessService.getAvatar(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
     return res.render("cart.ejs", {
       cart: result,
       page: "cart",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
     });
   };
@@ -39,7 +41,8 @@ class CartController {
     const productId = req.body.productId;
 
     const result = await CartService.removeProduct(userId, productId);
-    return res.json({ message: "Product removed from cart", result });
+    const numProducts = await CartService.getCartProductsSize(userId);
+    return res.json({ message: "Product removed from cart", result, numProducts });
   };
 }
 module.exports = new CartController();

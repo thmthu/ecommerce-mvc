@@ -23,6 +23,7 @@ $(document).ready(function() {
       success: function(response) {
         row.remove();
         updateTotal();
+        $('#cart-num').text(response.numProducts);
       },
       error: function(error) {
         alert('Error removing product from cart.');

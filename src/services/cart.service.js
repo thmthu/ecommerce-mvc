@@ -104,5 +104,15 @@ class CartService {
     });
     return userCart.cart_products;
   }
+  static async getCartProductsSize(userId) {
+    if (!userId || userId == undefined) {
+      return 0;
+    }
+    const userCart = await cart.findOne({ cart_userId: userId });
+    if (!userCart) {
+      return 0;
+    }
+    return userCart.cart_products.length;
+  }
 }
 module.exports = CartService;

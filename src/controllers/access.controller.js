@@ -1,6 +1,7 @@
 "use strict";
 
 const AccessService = require("../services/access.service");
+const CartService = require("../services/cart.service");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const passport = require("passport");
@@ -8,11 +9,13 @@ class AccessController {
   getRegister = async (req, res) => {
     const userId = req.user == undefined ? null : req.user.id;
     const avatar = await AccessService.getAvatar(userId);
-    return res.render("register.ejs", { avatar });
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    return res.render("register.ejs", { avatar, numProducts });
   };
   getVerificationpage = async (req, res) => {
     const avatar = await AccessService.getAvatar(req.user.id);
-    res.render("verifycation-signup", { avatar });
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    res.render("verifycation-signup", { avatar, numProducts });
   };
   logOut = function (req, res, next) {
     console.log("Session ID (req.sessionID):", req.sessionID);
@@ -40,7 +43,8 @@ class AccessController {
     const error = req.session.error ? req.session.error : null;
     delete req.session.error;
     const avatar = await AccessService.getAvatar(null);
-    res.render("login.ejs", { avatar, error });
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    res.render("login.ejs", { avatar, numProducts, error });
   };
   login = async (req, res, next) => {
     req.session.regenerate((err) => {
@@ -106,10 +110,11 @@ class AccessController {
       } else {
         const avatar = await AccessService.getAvatar(req.user.id);
         console.log("!ok signUp");
+        const numProducts = await CartService.getCartProductsSize(req.user.id);
 
         return res
           .status(400)
-          .render("register", { avatar, error: result.message });
+          .render("register", { avatar, numProducts, error: result.message });
       }
     } catch (error) {
       console.log("!ok catch signUp", error);
@@ -143,9 +148,11 @@ class AccessController {
     try {
       const user = await AccessService.getUserById(req.user.id);
       const avatar = await AccessService.getAvatar(req.user.id);
+      const numProducts = await CartService.getCartProductsSize(req.user.id);
       return res.render("profile.ejs", {
         page: "profile",
         avatar,
+        numProducts,
         user: user,
         isAuthenticated: req.isAuthenticated(),
       });
@@ -196,9 +203,11 @@ class AccessController {
 
   getChangePassword = async (req, res) => {
     const avatar = await AccessService.getAvatar(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(req.user.id);
     return res.render("change-password.ejs", {
       page: "change-password",
       avatar,
+      numProducts,
       error: null,
       isAuthenticated: req.isAuthenticated(),
     });
@@ -212,12 +221,14 @@ class AccessController {
       // Find the user by ID
       const user = await AccessService.getUserById(userId);
       const avatar = await AccessService.getAvatar(userId);
+      const numProducts = await CartService.getCartProductsSize(userId);
 
       // Verify old password
       if (!(await bcrypt.compare(oldPassword, user.password))) {
         return res.status(400).render("change-password.ejs", {
           page: "change-password",
           avatar,
+          numProducts,
           error: "Old password is incorrect",
           isAuthenticated: req.isAuthenticated(),
         });
@@ -228,6 +239,7 @@ class AccessController {
         return res.status(400).render("change-password.ejs", {
           page: "change-password",
           avatar,
+          numProducts,
           error: "New passwords do not match",
           isAuthenticated: req.isAuthenticated(),
         });
@@ -245,6 +257,7 @@ class AccessController {
       res.status(500).render("change-password.ejs", {
         page: "change-password",
         avatar,
+        numProducts,
         error: "Failed to change password",
         isAuthenticated: req.isAuthenticated(),
       });

@@ -1,14 +1,17 @@
 "use strict";
 const ProductService = require("../services/product.service");
 const AccessService = require("../services/access.service");
+const CartService = require("../services/cart.service");
 const { product } = require("../models/product.model");
 class ProductController {
   getCart = async (req, res) => {
     const userId = req.user == undefined ? null : req.user.id;
     const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("cart.ejs", {
       page: "cart",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
     });
   };
@@ -18,9 +21,13 @@ class ProductController {
       const latestProducts = await ProductService.getLatestProducts(4);
       const userId = req.user == undefined ? null : req.user.id;
       const avatar = await AccessService.getAvatar(userId);
+      const numProducts = await CartService.getCartProductsSize(userId);
+      console.log("userId: ", userId);
+      console.log("numProducts: ", numProducts);
       res.render("index.ejs", {
         page: "home",
         avatar,
+        numProducts,
         featuredProducts: products,
         latestProducts: latestProducts,
         isAuthenticated: req.isAuthenticated(),
@@ -33,9 +40,11 @@ class ProductController {
   getContact = async (req, res) => {
     const userId = req.user == undefined ? null : req.user.id;
     const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("contact.ejs", {
       page: "contact",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
     });
   };
@@ -52,10 +61,11 @@ class ProductController {
 
     try {
       const {products, totalPages} = await ProductService.getShopProducts(limit, skip, searchQuery, price, color, size, gender, sortBy);
+      const numProducts = await CartService.getCartProductsSize(req.user.id);
 
       if (req.xhr || req.headers.accept.indexOf("json") > -1) {
         // If the request is an AJAX request, return JSON data
-        return res.json({ products, totalPages, currentPage, sortBy });
+        return res.json({ products, totalPages, currentPage, sortBy, numProducts });
       } else {
         const userId = req.user == undefined ? null : req.user.id;
         const avatar = await AccessService.getAvatar(userId);
@@ -63,6 +73,7 @@ class ProductController {
         res.render("shop.ejs", {
           page: "shop",
           avatar,
+          numProducts,
           isAuthenticated: req.isAuthenticated(),
           products,
           totalPages,
@@ -88,12 +99,14 @@ class ProductController {
     );
     const userId = req.user == undefined ? null : req.user.id;
     const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("detail.ejs", {
       productId: req.params.id,
       product: product,
       relatedProducts: relatedProducts,
       page: "detail",
       avatar,
+      numProducts,
       isAuthenticated: req.isAuthenticated(),
     });
   };

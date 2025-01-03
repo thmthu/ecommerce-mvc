@@ -9,7 +9,11 @@ $(document).ready(function() {
         url: '../cart-add',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ product: { product_id: productId, quantity: quantity, price: productPrice, type: 0 } })
+        data: JSON.stringify({ product: { product_id: productId, quantity: quantity, price: productPrice, type: 0 } }),
+        success: function(response) {
+          alert('Product added to cart successfully!');
+          $('#cart-num').text(response.numProducts);
+        },
       });
     });
   });
@@ -28,6 +32,7 @@ $(document).ready(function() {
       },
       success: function(response) {
         alert('Product added to cart successfully!');
+        $('#cart-num').text(response.numProducts);
       },
     });
   }
