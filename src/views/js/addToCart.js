@@ -4,6 +4,11 @@ $(document).ready(function() {
       const productId = $(this).data('product-id');
       const productPrice = $(this).data('product-price');
       const quantity = parseInt($('#quantity-input').val());
+
+      if (quantity <= 0) {
+        alert('Quantity must be greater than 0');
+        return;
+      }
   
       $.ajax({
         url: '../cart-add',

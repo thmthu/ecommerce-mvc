@@ -99,7 +99,8 @@ class CartService {
       return {
         ...cartItem,
         name: productDetails.product_name,
-        image: productDetails.product_thumb
+        image: productDetails.product_thumb,
+        quantity: Math.min(cartItem.quantity, productDetails.product_quantity)
       };
     });
     return userCart.cart_products;

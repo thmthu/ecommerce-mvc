@@ -2,6 +2,7 @@
 const OrderService = require("../services/order.service");
 const CartService = require("../services/cart.service");
 const AccessService = require("../services/access.service");
+const ProductService = require("../services/product.service");
 const { hashId } = require("../utils/hash");
 class OrderController {
   getOrder = async (req, res) => {
@@ -47,6 +48,11 @@ class OrderController {
       price,
       products
     );
+
+    for (const product of products) {
+      await ProductService.decreaseProductQuantity(product.product_id, product.quantity);
+    }
+
     await CartService.clearUserCart(req.user.id);
     res.redirect("/home");
   };
