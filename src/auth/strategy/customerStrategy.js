@@ -20,6 +20,12 @@ const customerStrategy = new LocalStrategy(
         console.log("Incorrect email or password.");
         return cb(null, false, { message: "Incorrect password." });
       }
+
+      if (foundCustomer.role !== "customer") {
+        console.log("Customer account only.");
+        return cb(null, false, { message: "Customer account only." });
+      }
+
       console.log("role", foundCustomer.role);
       if (foundCustomer.status == "Inactive") {
         return cb(null, false, { message: "Your account is being banned." });
