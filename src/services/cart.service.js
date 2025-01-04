@@ -1,7 +1,7 @@
 "use strict";
 const { cart } = require("../models/cart.model");
 const { model, Schema, Types } = require("mongoose"); // Ensure Types is imported
-const { product1 } = require("../models/product.model")
+const { product1 } = require("../models/product.model");
 
 class CartService {
   static async createUserCart(userId, product) {
@@ -17,7 +17,8 @@ class CartService {
   }
   static async updateUserCartQuantity(userId, product) {
     console.log("updateUserCartQuantity: =========", product);
-    const { product_id, quantity, price, type } = product.product === undefined ? product : product.product;
+    const { product_id, quantity, price, type } =
+      product.product === undefined ? product : product.product;
     console.log(product_id, quantity, price);
     const query = {
       cart_userId: userId,
@@ -27,21 +28,28 @@ class CartService {
     const existingCart = await cart.findOne(query);
 
     if (existingCart) {
-      const updateSet = type === 1 ? {
-        $set: {
-          "cart_products.$.quantity": quantity,
-        },
-      } : {
-        $inc: {
-          "cart_products.$.quantity": quantity,
-        },
-      };
+      const updateSet =
+        type === 1
+          ? {
+              $set: {
+                "cart_products.$.quantity": quantity,
+              },
+            }
+          : {
+              $inc: {
+                "cart_products.$.quantity": quantity,
+              },
+            };
       const options = { upsert: true, new: true };
       return await cart.findOneAndUpdate(query, updateSet, options);
     } else {
       const updateSet = {
         $push: {
-          cart_products: { product_id: product_id, quantity: quantity, price: price},
+          cart_products: {
+            product_id: product_id,
+            quantity: quantity,
+            price: price,
+          },
         },
       };
       const options = { upsert: true, new: true };
@@ -52,7 +60,7 @@ class CartService {
       );
     }
   }
-  static async addToCart(userId, product ) {
+  static async addToCart(userId, product) {
     console.log("add to cart", userId, product);
     //Nếu cart chưa có thì tạo và chèn product đó vào
     const userCart = await cart.findOne({ cart_userId: userId });
@@ -63,7 +71,7 @@ class CartService {
     }
     return await CartService.updateUserCartQuantity(userId, product);
   }
-  static async removeProduct(userId, productId ) {
+  static async removeProduct(userId, productId) {
     console.log("remove product", userId, productId);
     const query = { cart_userId: userId },
       updateSet = {
@@ -85,22 +93,24 @@ class CartService {
     return await cart.updateOne(query, updateSet);
   }
 
-  static async getUserCart(userId ) {
+  static async getUserCart(userId) {
     console.log("get user cart", userId);
     const userCart = await cart.findOne({ cart_userId: userId }).lean();
     if (!userCart) return [];
-    const productIds = userCart.cart_products.map(item => item.product_id);
+    const productIds = userCart.cart_products.map((item) => item.product_id);
     const products = await product1.find({ _id: { $in: productIds } }).lean();
 
     // Merge product details with cart items
-    userCart.cart_products = userCart.cart_products.map(cartItem => {
-      const productDetails = products.find(p => p._id.toString() === cartItem.product_id.toString());
+    userCart.cart_products = userCart.cart_products.map((cartItem) => {
+      const productDetails = products.find(
+        (p) => p._id.toString() === cartItem.product_id.toString()
+      );
       console.log(productDetails);
       return {
         ...cartItem,
         name: productDetails.product_name,
         image: productDetails.product_thumb,
-        quantity: Math.min(cartItem.quantity, productDetails.product_quantity)
+        quantity: Math.min(cartItem.quantity, productDetails.product_quantity),
       };
     });
     return userCart.cart_products;

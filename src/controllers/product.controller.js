@@ -58,16 +58,33 @@ class ProductController {
     const size = req.query.size || "";
     const gender = req.query.gender || "";
     const sortBy = req.query.sortBy || "";
-
+    console.log("==============", req.user);
+    const userId = req.user == undefined || null ? null : req.user.id;
+    console.log(userId);
     try {
-      const {products, totalPages} = await ProductService.getShopProducts(limit, skip, searchQuery, price, color, size, gender, sortBy);
-      const numProducts = await CartService.getCartProductsSize(req.user.id);
+      const { products, totalPages } = await ProductService.getShopProducts(
+        limit,
+        skip,
+        searchQuery,
+        price,
+        color,
+        size,
+        gender,
+        sortBy
+      );
+
+      const numProducts = await CartService.getCartProductsSize(userId);
 
       if (req.xhr || req.headers.accept.indexOf("json") > -1) {
         // If the request is an AJAX request, return JSON data
-        return res.json({ products, totalPages, currentPage, sortBy, numProducts });
+        return res.json({
+          products,
+          totalPages,
+          currentPage,
+          sortBy,
+          numProducts,
+        });
       } else {
-        const userId = req.user == undefined ? null : req.user.id;
         const avatar = await AccessService.getAvatar(userId);
         // Otherwise, render the shop view
         res.render("shop.ejs", {
@@ -87,7 +104,9 @@ class ProductController {
         });
       }
     } catch (err) {
-      res.status(500).json({ error: "Failed to fetch products", err: err });
+      res
+        .status(500)
+        .json({ error: "Failed to fetch products", err: err.message });
     }
   };
   getDetail = async (req, res) => {
