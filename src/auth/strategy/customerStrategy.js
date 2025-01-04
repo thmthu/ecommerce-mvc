@@ -21,7 +21,7 @@ const customerStrategy = new LocalStrategy(
         return cb(null, false, { message: "Incorrect password." });
       }
 
-      if (foundCustomer.role !== "customer") {
+      if (foundCustomer.role !== "Customer") {
         console.log("Customer account only.");
         return cb(null, false, { message: "Customer account only." });
       }
