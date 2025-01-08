@@ -43,9 +43,6 @@ function loadPage(page, sortBy = '') {
                       <del>$${Math.round(product.product_price * 1.1)}</del>
                     </h6>
                   </div>
-                  <div class="d-flex justify-content-center">
-                    <h6 class="ml-2">Quantity: <%= product.product_quantity %></h6>
-                  </div>
                 </div>
                 <div
                   class="card-footer d-flex justify-content-between bg-light border"
