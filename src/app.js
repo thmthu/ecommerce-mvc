@@ -30,6 +30,7 @@ app.use(
       scriptSrc: ["*", "'unsafe-inline'"], // Allow scripts from self and code.jquery.com
       imgSrc: ["'self'", "data:", "*"], // Allow images from all sources
       scriptSrcAttr: ["*", "'unsafe-inline'"],
+      connectSrc: ["*", "'https://localhost:8000'"],
     },
   })
 );
