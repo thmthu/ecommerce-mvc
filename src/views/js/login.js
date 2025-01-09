@@ -1,12 +1,12 @@
 function redirectToGoogleAuth() {
-  window.location.href = "https://localhost:8000/auth/google";
+  window.location.href = `${domain}/auth/google`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
   const errorContainer = document.getElementById("error-register");
   errorContainer.innerHTML = "";
-
+  console.log("===========domain", domain);
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const emailInput = document.getElementById("loginEmail").value;
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       password: passwordInput,
     };
     console.log(requestBody);
-    fetch("https://localhost:8000/login/password", {
+    fetch(`${domain}/login/password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),

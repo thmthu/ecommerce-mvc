@@ -5,6 +5,8 @@ const CartService = require("../services/cart.service");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const passport = require("passport");
+require("dotenv").config();
+
 class AccessController {
   getRegister = async (req, res) => {
     const userId = req.user == undefined ? null : req.user.id;
@@ -18,7 +20,11 @@ class AccessController {
   getVerificationpage = async (req, res) => {
     const avatar = await AccessService.getAvatar(req.user.id);
     const numProducts = await CartService.getCartProductsSize(req.user.id);
-    res.render("verifycation-signup", { avatar, numProducts, isAuthenticated: req.isAuthenticated() });
+    res.render("verifycation-signup", {
+      avatar,
+      numProducts,
+      isAuthenticated: req.isAuthenticated(),
+    });
   };
   getForgotPasswordPage = async (req, res) => {
     res.render("forgot-password", { avatar: null, numProducts: 0 });
@@ -50,7 +56,12 @@ class AccessController {
     delete req.session.error;
     const avatar = await AccessService.getAvatar(null);
     const numProducts = await CartService.getCartProductsSize(null);
-    res.render("login.ejs", { avatar, numProducts, error });
+    res.render("login.ejs", {
+      avatar,
+      numProducts,
+      error,
+      domain: process.env.DOMAIN,
+    });
   };
   login = async (req, res, next) => {
     req.session.regenerate((err) => {
@@ -92,18 +103,16 @@ class AccessController {
         password,
       });
       if (result.success) {
-        console.log("ok signUp");
-        console.log("sign up ", req);
         req.logIn(result.newCustomer, (err) => {
           if (err) {
-            console.log("Verification email sent 2 ");
             return next(err);
           }
-
+          const id = req.user.id ? req.user.id : "21010101";
+          console.log("user id from use", id);
           return res.status(201).json({
             success: true,
             message: "Verification email sent. Please check your inbox.",
-            redirect: "/email-verify", // Indicate where to redirect after signup
+            redirect: "/email-verify",
           });
         });
       } else {
