@@ -21,7 +21,6 @@ const {
 } = require("../mailtrap/email");
 class AccessService {
   static signUp = async ({ name, email, password }) => {
-    console.log("signUp", name, email, password);
     const emailAvailable = await customerModel.findOne({ email }).lean();
     if (emailAvailable) {
       throw new ConflictRequestError("Email is not available", 500);
@@ -30,7 +29,6 @@ class AccessService {
     if (userNameAvailable) {
       throw new ConflictRequestError("User name is not available", 500);
     }
-    console.log("userNameAvailable", userNameAvailable);
     const verificationToken = Math.floor(
       100000 + Math.random() * 900000
     ).toString();

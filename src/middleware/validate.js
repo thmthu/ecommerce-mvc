@@ -16,15 +16,11 @@ const signUpValidationSchema = Joi.object({
 });
 
 const validateSignUp = async (req, res, next) => {
-  console.log("validateSignUp");
   const { error } = signUpValidationSchema.validate(req.body, {
     abortEarly: false,
   });
-  console.log("validateSignUp error 1");
   if (error) {
-    console.log("validateSignUp error 2");
     const errorMessages = error.details.map((detail) => detail.message);
-    console.log("validateSignUp error 2", errorMessages);
     return res.status(400).json({ error: errorMessages });
   }
   next();
