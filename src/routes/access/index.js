@@ -18,7 +18,7 @@ const vnpay = new VNPay({
   secureSecret: process.env.VNPAY_SECURE_SECRET,
   tmnCode: process.env.VNPAY_TMN_CODE,
 });
-router.post("", async (req, res) => {
+router.post("/vnpay", async (req, res) => {
   // const bankList = await vnpay.getBankList();
   // // const productTypeList = Object.entries(ProductCode).map(([key, value]) => ({ key, value }));
   // const contentPaymentDefault = `Thanh toan don hang ${new Date().toISOString()}`;
@@ -59,14 +59,16 @@ router.post("", async (req, res) => {
       req.connection.remoteAddress ||
       "127.0.0.1",
     vnp_OrderInfo: " mbnh jjg fg uy bn ",
-    vnp_ReturnUrl: "https://irrelevant-oliy-random121-e6a2fa8c.koyeb.app/login",
+    vnp_ReturnUrl: "https://irrelevant-oliy-random121-e6a2fa8c.koyeb.app/home",
     vnp_TxnRef: new Date().getTime().toString(),
     vnp_BankCode: "",
     vnp_Locale: "vi",
     vnp_OrderType: "ao",
   };
+  console.log(process.env.VNPAY_SECURE_SECRET, process.env.VNPAY_TMN_CODE);
+  console.log("data at vnpay", data);
   const url = vnpay.buildPaymentUrl(data);
-
+  console.log("url", url);
   return res.redirect(url);
 });
 
