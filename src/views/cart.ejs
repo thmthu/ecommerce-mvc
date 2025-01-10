@@ -83,19 +83,30 @@
             <a href="./contact" class="nav-item nav-link">Contact</a>
           </div>
           <div class="navbar-nav ml-auto py-0">
-            <% if (typeof isAuthenticated !== 'undefined') { %>
-              <% if (isAuthenticated) { %>
-              <form id="logout-form" action="/logout" method="POST" style="display: inline;">
-                <input type="hidden" name="_csrf"> <!-- Include CSRF token if needed -->
-                <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; border: none; background: none;">Logout</button>
-              </form>
-              <% } else { %>
-                <a href="./login" class="nav-item nav-link">Login</a>
-                <a href="./register" class="nav-item nav-link">Register</a>
-              <% } %>
+            <% if (typeof isAuthenticated !== 'undefined') { %> <% if
+            (isAuthenticated) { %>
+            <form
+              id="logout-form"
+              action="/logout"
+              method="POST"
+              style="display: inline"
+            >
+              <input type="hidden" name="_csrf" />
+              <!-- Include CSRF token if needed -->
+              <button
+                type="submit"
+                class="nav-item nav-link btn btn-link"
+                style="padding: 0; border: none; background: none"
+              >
+                Logout
+              </button>
+            </form>
             <% } else { %>
-              <a href="./login" class="nav-item nav-link">Login</a>
-              <a href="./register" class="nav-item nav-link">Register</a>
+            <a href="./login" class="nav-item nav-link">Login</a>
+            <a href="./register" class="nav-item nav-link">Register</a>
+            <% } %> <% } else { %>
+            <a href="./login" class="nav-item nav-link">Login</a>
+            <a href="./register" class="nav-item nav-link">Register</a>
             <% } %>
           </div>
         </div>
@@ -136,43 +147,61 @@
           </tr>
         </thead>
         <tbody class="align-middle">
-          <% if (cart && cart.length > 0) { %>
-            <% cart.forEach(item => { %>
-              <tr>
-                <td class="align-middle">
-                  <img src="<%= item.image %>" alt="" style="width: 50px" />
-                  <%= item.name %>
-                </td>
-                <td class="align-middle">$<%= item.price %></td>
-                <td class="align-middle">
-                  <div class="input-group quantity">
-                    <button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="<%= item.product_id %>" data-product-price="<%= item.price %>">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <input type="text" class="form-control text-center quantity-input" value="<%= item.quantity %>" readonly>
-                    <button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="<%= item.product_id %>" data-product-price="<%= item.price %>">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                  </div>
-                </td>
-                <td class="align-middle total">$<%= (item.price * item.quantity).toFixed(2) %></td>
-                <td class="align-middle">
-                  <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="<%= item.product_id %>">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </td>
-              </tr>
-            <% }); %>
-          <% } else { %>
-            <tr>
-              <td colspan="5">Your cart is empty.</td>
-            </tr>
+          <% if (cart && cart.length > 0) { %> <% cart.forEach(item => { %>
+          <tr>
+            <td class="align-middle">
+              <img src="<%= item.image %>" alt="" style="width: 50px" />
+              <%= item.name %>
+            </td>
+            <td class="align-middle">$<%= item.price %></td>
+            <td class="align-middle">
+              <div class="input-group quantity">
+                <button
+                  class="btn btn-outline-secondary btn-minus"
+                  type="button"
+                  data-product-id="<%= item.product_id %>"
+                  data-product-price="<%= item.price %>"
+                >
+                  <i class="fas fa-minus"></i>
+                </button>
+                <input
+                  type="text"
+                  class="form-control text-center quantity-input"
+                  value="<%= item.quantity %>"
+                  readonly
+                />
+                <button
+                  class="btn btn-outline-secondary btn-plus"
+                  type="button"
+                  data-product-id="<%= item.product_id %>"
+                  data-product-price="<%= item.price %>"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </td>
+            <td class="align-middle total">
+              $<%= (item.price * item.quantity).toFixed(2) %>
+            </td>
+            <td class="align-middle">
+              <button
+                class="btn btn-sm btn-danger remove-from-cart"
+                data-product-id="<%= item.product_id %>"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </td>
+          </tr>
+          <% }); %> <% } else { %>
+          <tr>
+            <td colspan="5">Your cart is empty.</td>
+          </tr>
           <% } %>
         </tbody>
       </table>
     </div>
     <div class="col-lg-4">
-      <form id="cart-summary-form" action="/checkout" method="POST">
+      <form id="cart-summary-form" action="/" method="POST">
         <div class="card border-secondary mb-5">
           <div class="card-header bg-secondary border-0">
             <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
@@ -190,7 +219,7 @@
               <h5 class="font-weight-bold text-muted">Total</h5>
               <h5 class="font-weight-bold total-value">$10.00</h5>
             </div>
-            <input type="hidden" name="price" id="totalPrice" value="0.00">
+            <input type="hidden" name="price" id="totalPrice" value="0.00" />
           </div>
           <div class="card-footer border-secondary bg-transparent">
             <button type="submit" class="btn btn-block btn-primary my-3 py-3">
