@@ -130,7 +130,8 @@ $(document).ready(function () {
       contentType: "application/json",
       data: JSON.stringify(requestData),
       success: function (response) {
-        console.log("Payment request sent successfully:", response);
+        console.log("Payment request sent successfully:", response.url);
+        window.location.href = response.url;
         // Handle the response as needed
       },
       error: function (error) {
