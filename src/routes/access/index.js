@@ -12,11 +12,29 @@ const { ObjectId } = require("mongodb");
 const router = express.Router();
 
 require("dotenv").config();
-const { VNPay } = require("vnpay");
+const { VNPay, ignoreLogger } = require("vnpay");
 
 const vnpay = new VNPay({
   secureSecret: process.env.VNPAY_SECURE_SECRET,
   tmnCode: process.env.VNPAY_TMN_CODE,
+  vnpayHost: "https://sandbox.vnpayment.vn",
+  testMode: true, // tùy chọn, ghi đè vnpayHost thành sandbox nếu là true
+  hashAlgorithm: "SHA512", // tùy chọn
+
+  /**
+   * Sử dụng enableLog để bật/tắt logger
+   * Nếu enableLog là false, loggerFn sẽ không được sử dụng trong bất kỳ phương thức nào
+   */
+  enableLog: true, // optional
+
+  /**
+   * Hàm `loggerFn` sẽ được gọi để ghi log
+   * Mặc định, loggerFn sẽ ghi log ra console
+   * Bạn có thể ghi đè loggerFn để ghi log ra nơi khác
+   *
+   * `ignoreLogger` là một hàm không làm gì cả
+   */
+  loggerFn: ignoreLogger, // optional
 });
 router.post("/vnpay", async (req, res) => {
   // const bankList = await vnpay.getBankList();
@@ -50,6 +68,16 @@ router.post("/vnpay", async (req, res) => {
    * Note: In the VNPay documentation, it's stated that you must multiply the amount by 100.
    * However, when using the `vnpay` package, this is done automatically.
    */
+  console.log(
+    "1 ",
+    req.headers.forwarded,
+    "2 ",
+    req.ip,
+    "3 ",
+    req.socket.remoteAddress,
+    "4 ",
+    req.connection.remoteAddress
+  );
   const data = {
     vnp_Amount: 100000,
     vnp_IpAddr:
