@@ -2,7 +2,7 @@
 
 const AccessService = require("../services/access.service");
 const CartService = require("../services/cart.service");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 const passport = require("passport");
 require("dotenv").config();
