@@ -1,9 +1,3 @@
-const updateStars = (stars) => {
-  [...starsContainer.children].forEach((star, index) => {
-    star.classList.remove("fas", "far");
-    star.classList.add(index < stars ? "fas" : "far");
-  });
-};
 const generateStarsHtml = (stars) => {
   let starsHtml = "";
   for (let i = 1; i <= 5; i++) {
@@ -127,6 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let selectedStars = 3; // Default stars
 
+  const updateStars = (stars) => {
+    [...starsContainer.children].forEach((star, index) => {
+      star.classList.remove("fas", "far");
+      star.classList.add(index < stars ? "fas" : "far");
+    });
+  };
+  
   // Handle star click
   starsContainer.addEventListener("click", (e) => {
     if (e.target.classList.contains("fa-star")) {
