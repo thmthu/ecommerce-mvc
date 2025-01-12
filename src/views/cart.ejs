@@ -124,7 +124,7 @@
             <% cart.forEach(item => { %>
               <tr>
                 <td class="align-middle">
-                  <img src="<%= item.image %>" alt="" style="width: 50px" />
+                  <img src="<%= getCloudinaryUrl(item.image[0]) %>" alt="" style="width: 50px" />
                   <%= item.name %>
                 </td>
                 <td class="align-middle">$<%= item.price %></td>

@@ -13,10 +13,10 @@ const config = require("./configs/config.mongo"); // Adjust the path as necessar
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const fileUpload = require("express-fileupload");
-const express = require('express');
 const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const { getCloudinaryUrl } = require('./utils/cloudinary');
 
 cloudinary.config({
   cloud_name: 'ds2hx283s', // Your Cloud Name
@@ -32,6 +32,10 @@ const storage = new CloudinaryStorage({
     public_id: (req, file) => file.originalname.split('.')[0], // Optional: Use original file name
   },
 });
+
+// Sử dụng cookie-parser
+const { default: helmet } = require("helmet");
+const app = express();
 
 const upload = multer({ storage });
 
@@ -51,9 +55,8 @@ app.post('/upload-multiple', upload.array('images', 5), (req, res) => {
   }
 });
 
-// Sử dụng cookie-parser
-const { default: helmet } = require("helmet");
-const app = express();
+app.locals.getCloudinaryUrl = getCloudinaryUrl;
+
 const dbUrl = config.db.url;
 app.use((req, res, next) => {
   res.set("Cache-Control", "no-cache");
@@ -67,6 +70,7 @@ app.use(
       scriptSrc: ["*", "'unsafe-inline'"], // Allow scripts from self and code.jquery.com
       imgSrc: ["'self'", "data:", "*"], // Allow images from all sources
       scriptSrcAttr: ["*", "'unsafe-inline'"],
+      connectSrc: ["'self'", "http://localhost:8000"],
     },
   })
 );
