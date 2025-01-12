@@ -102,7 +102,7 @@ class OrderController {
         req.connection.remoteAddress ||
         "127.0.0.1",
       vnp_OrderInfo: "Transaction for ecommerce shop",
-      vnp_ReturnUrl: `${process.env.DOMAIN}/payment`,
+      vnp_ReturnUrl: `${process.env.DOMAIN}/order`,
       vnp_TxnRef: new Date().getTime().toString(),
       vnp_BankCode: "",
       vnp_Locale: "vi",
