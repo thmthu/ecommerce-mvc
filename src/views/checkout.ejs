@@ -154,7 +154,7 @@
       <button
         type="submit"
         class="btn btn-block btn-primary my-3 py-3"
-        id="buyButton"
+        id="paymentButton"
       >
         Buy this
       </button>
@@ -200,13 +200,7 @@
             <h5 class="font-weight-bold">Total</h5>
             <h5 class="font-weight-bold">$<%= price %></h5>
           </div>
-          <button
-            type="submit"
-            class="btn btn-block btn-primary my-3 py-3"
-            id="paymenyButton"
-          >
-            Payment
-          </button>
+  
         </div>
       </div>
     </div>
@@ -215,8 +209,10 @@
 <!-- Checkout End -->
 <script>
   const price = "<%= price %>";
-  const userPayment = "<%= userPayment %>";
   const address = "<%= address %>";
+  const phoneNumber = "<%= phoneNumber %>";
+  const email = "<%= email %>";
+  const fullName = "<%= fullName %>";
 
 </script>
 <script src="js/checkout.js" defer></script>

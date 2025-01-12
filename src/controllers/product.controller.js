@@ -17,6 +17,7 @@ class ProductController {
   };
   getHome = async (req, res) => {
     try {
+      console.log("my query", req.query);
       const products = await ProductService.getRandomProducts(4);
       const latestProducts = await ProductService.getLatestProducts(4);
       const userId = req.user == undefined ? null : req.user.id;
