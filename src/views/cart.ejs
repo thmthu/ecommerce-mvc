@@ -115,22 +115,6 @@
 </div>
 <!-- Navbar End -->
 
-<!-- Page Header Start -->
-<div class="container-fluid bg-secondary mb-5">
-  <div
-    class="d-flex flex-column align-items-center justify-content-center"
-    style="min-height: 300px"
-  >
-    <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
-    <div class="d-inline-flex">
-      <p class="m-0"><a href="">Home</a></p>
-      <p class="m-0 px-2">-</p>
-      <p class="m-0">Shopping Cart</p>
-    </div>
-  </div>
-</div>
-<!-- Page Header End -->
-
 <!-- Cart Start -->
 <div class="container-fluid pt-5">
   <div class="row px-xl-5">
@@ -146,55 +130,37 @@
           </tr>
         </thead>
         <tbody class="align-middle">
-          <% if (cart && cart.length > 0) { %> <% cart.forEach(item => { %>
-          <tr>
-            <td class="align-middle">
-              <img src="<%= item.image %>" alt="" style="width: 50px" />
-              <%= item.name %>
-            </td>
-            <td class="align-middle">$<%= item.price %></td>
-            <td class="align-middle">
-              <div class="input-group quantity">
-                <button
-                  class="btn btn-outline-secondary btn-minus"
-                  type="button"
-                  data-product-id="<%= item.product_id %>"
-                  data-product-price="<%= item.price %>"
-                >
-                  <i class="fas fa-minus"></i>
-                </button>
-                <input
-                  type="text"
-                  class="form-control text-center quantity-input"
-                  value="<%= item.quantity %>"
-                  readonly
-                />
-                <button
-                  class="btn btn-outline-secondary btn-plus"
-                  type="button"
-                  data-product-id="<%= item.product_id %>"
-                  data-product-price="<%= item.price %>"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-              </div>
-            </td>
-            <td class="align-middle total">
-              $<%= (item.price * item.quantity).toFixed(2) %>
-            </td>
-            <td class="align-middle">
-              <button
-                class="btn btn-sm btn-danger remove-from-cart"
-                data-product-id="<%= item.product_id %>"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </td>
-          </tr>
-          <% }); %> <% } else { %>
-          <tr>
-            <td colspan="5">Your cart is empty.</td>
-          </tr>
+          <% if (cart && cart.length > 0) { %>
+            <% cart.forEach(item => { %>
+              <tr>
+                <td class="align-middle">
+                  <img src="<%= getCloudinaryUrl(item.image[0]) %>" alt="" style="width: 50px" />
+                  <%= item.name %>
+                </td>
+                <td class="align-middle">$<%= item.price %></td>
+                <td class="align-middle">
+                  <div class="input-group quantity">
+                    <button class="btn btn-outline-secondary btn-minus" type="button" data-product-id="<%= item.product_id %>" data-product-price="<%= item.price %>">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="text" class="form-control text-center quantity-input" value="<%= item.quantity %>" readonly>
+                    <button class="btn btn-outline-secondary btn-plus" type="button" data-product-id="<%= item.product_id %>" data-product-price="<%= item.price %>">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="align-middle total">$<%= (item.price * item.quantity).toFixed(2) %></td>
+                <td class="align-middle">
+                  <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="<%= item.product_id %>">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </td>
+              </tr>
+            <% }); %>
+          <% } else { %>
+            <tr>
+              <td colspan="5">Your cart is empty.</td>
+            </tr>
           <% } %>
         </tbody>
       </table>

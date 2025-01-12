@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <img src="../img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
               <div class="media-body">
                 <h6>${review.user_name} - <i>${new Date(
-            review.date
+            review.createdAt
           ).toLocaleDateString()}</i></h6>
                 <div class="text-primary mb-2">
                   ${generateStarsHtml(review.star)}

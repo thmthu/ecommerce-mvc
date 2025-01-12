@@ -160,25 +160,39 @@
                   
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        id="yourPassword"
-                        required
-                      />
+                      <div class="input-group">
+                        <input
+                          type="password"
+                          name="password"
+                          class="form-control"
+                          id="yourPassword"
+                          required
+                        />
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-12">
                       <label for="yourConfirmPassword" class="form-label">Confirm password</label>
-                      <input
-                        type="password"
-                        name="password"
-                        class="form-control"
-                        id="yourConfirmPassword"
-                        required
-                      />
+                      <div class="input-group">
+                        <input
+                          type="password"
+                          name="password"
+                          class="form-control"
+                          id="yourConfirmPassword"
+                          required
+                        />
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 pt-2">
                       <button type="submit" class="btn btn-primary w-100" id="submit-register">Create Account</button>
                     </div>
                     <div class="col-12" id="error-register">                          
@@ -222,6 +236,8 @@
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
     <script src="js/registerError.js" defer></script>
+    <script src="js/togglePasswordRegister.js"></script>
+    <script src="js/togglePasswordConfirm.js"></script>
 
 
     <!-- Custom JS for handling form validation -->

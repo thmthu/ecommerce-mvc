@@ -157,13 +157,20 @@
 
                   <div class="col-12">
                     <label for="password" class="form-label">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      class="form-control"
-                      id="loginPassword"
-                      required
-                    />
+                    <div class="input-group">
+                      <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        id="loginPassword"
+                        required
+                      />
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                          <i class="fas fa-eye"></i>
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="col-12">
@@ -268,4 +275,5 @@
   const domain = "<%= domain %>";
 </script>
 <script src="js/login.js" defer></script>
+<script src="js/togglePasswordLogin.js"></script>
 <%- include('./partials/footer') %>
