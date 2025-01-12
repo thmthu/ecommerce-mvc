@@ -9,7 +9,11 @@ const { googleStrategy } = require("../../auth/strategy/googleStrategy");
 const { ensureAuthenticated } = require("../../middleware/authMiddleware");
 const customerModel = require("../../models/customer.model");
 const { ObjectId } = require("mongodb");
+
 const router = express.Router();
+
+require("dotenv").config();
+
 passport.use(customerStrategy);
 passport.use(googleStrategy);
 
