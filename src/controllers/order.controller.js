@@ -7,6 +7,8 @@ const customerModel = require("../models/customer.model");
 const { ObjectId } = require("mongodb");
 const vnpay = require("../configs/configVnpay");
 const { hashId } = require("../utils/hash");
+require("dotenv").config();
+
 class OrderController {
   getOrder = async (req, res) => {
     const result = await OrderService.getAllUserOrders(req.user.id);
@@ -101,7 +103,7 @@ class OrderController {
         req.connection.remoteAddress ||
         "127.0.0.1",
       vnp_OrderInfo: "Transaction for ecommerce shop",
-      vnp_ReturnUrl: "http://localhost:8000/payment",
+      vnp_ReturnUrl: `${process.env.DOMAIN}/payment`,
       vnp_TxnRef: new Date().getTime().toString(),
       vnp_BankCode: "",
       vnp_Locale: "vi",
