@@ -73,7 +73,6 @@ class OrderController {
         product.quantity
       );
     }
-    console.log("updatedUser = ", updatedUser.payment);
     await CartService.clearUserCart(req.user.id);
     res.redirect("/checkout");
   };
