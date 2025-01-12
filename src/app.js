@@ -13,6 +13,43 @@ const config = require("./configs/config.mongo"); // Adjust the path as necessar
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const fileUpload = require("express-fileupload");
+const express = require('express');
+const multer = require('multer');
+const { v2: cloudinary } = require('cloudinary');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+  cloud_name: 'ds2hx283s', // Your Cloud Name
+  api_key: 669931649964179,       // Your API Key
+  api_secret: 'Nb3ur2Ezmk588EpxdeGY-UTCsVc', // Your API Secret
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads', // Folder name in Cloudinary
+    format: async (req, file) => 'jpeg', // Optional: auto-format to JPEG
+    public_id: (req, file) => file.originalname.split('.')[0], // Optional: Use original file name
+  },
+});
+
+const upload = multer({ storage });
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  try {
+    res.status(200).json({ message: 'File uploaded successfully!', file: req.file });
+  } catch (error) {
+    res.status(500).json({ error: 'File upload failed.', details: error.message });
+  }
+});
+
+app.post('/upload-multiple', upload.array('images', 5), (req, res) => {
+  try {
+    res.status(200).json({ message: 'Files uploaded successfully!', files: req.files });
+  } catch (error) {
+    res.status(500).json({ error: 'File upload failed.', details: error.message });
+  }
+});
 
 // Sử dụng cookie-parser
 const { default: helmet } = require("helmet");
