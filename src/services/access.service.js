@@ -39,7 +39,7 @@ class AccessService {
       email,
       password: passwordHash,
       verificationToken,
-      role: "Admin",
+      role: "Customer",
       verificationTokenExpiresAt: Date.now() + 3 * 60 * 1000, // 24 hours
     });
     if (!newCustomer) {
