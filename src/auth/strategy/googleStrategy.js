@@ -11,6 +11,7 @@ const googleStrategy = new GoogleStrategy(
     callbackURL: `${process.env.DOMAIN}/auth/google/callback`,
     passReqToCallback: true,
     proxy: true,
+    prompt: "select_account",
   },
   async function (request, accessToken, refreshToken, profile, done) {
     try {
