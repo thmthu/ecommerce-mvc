@@ -17,11 +17,14 @@ const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const { getCloudinaryUrl } = require('./utils/cloudinary');
+const { MongoClient } = require("mongodb");
+const fs = require("fs");
+const { searchInAlgolia } = require("./utils/searchInAlgolia");
 
 cloudinary.config({
-  cloud_name: 'ds2hx283s', // Your Cloud Name
-  api_key: 669931649964179,       // Your API Key
-  api_secret: 'Nb3ur2Ezmk588EpxdeGY-UTCsVc', // Your API Secret
+  cloud_name: process.env.CLOUDINARY_NAME, // Your Cloud Name
+  api_key: process.env.CLOUDINARY_API_KEY,       // Your API Key
+  api_secret: process.env.CLOUDINARY_API_SECRET, // Your API Secret
 });
 
 const storage = new CloudinaryStorage({
@@ -56,6 +59,53 @@ app.post('/upload-multiple', upload.array('images', 5), (req, res) => {
 });
 
 app.locals.getCloudinaryUrl = getCloudinaryUrl;
+
+const exportFilePath = "./exported_data.json"; // Path to save exported data
+
+async function exportAllCollectionsToSingleFile() {
+  const client = new MongoClient("mongodb+srv://mitu:hihi@cluster0.tloz2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+
+  try {
+    // Connect to the database
+    await client.connect();
+    console.log("Connected to MongoDB");
+
+    const db = client.db("test");
+
+    // Get the list of all collections in the database
+    const collections = await db.listCollections().toArray();
+
+    console.log(db);
+
+    // Object to hold all collections' data
+    const combinedData = {};
+
+    // Iterate over each collection
+    for (let collectionInfo of collections) {
+      const collectionName = collectionInfo.name;
+      console.log(`Exporting collection: ${collectionName}`);
+
+      const collection = db.collection(collectionName);
+
+      // Fetch all data from the collection
+      const data = await collection.find({}).toArray();
+
+      // Add the collection's data to the combined object
+      combinedData[collectionName] = data;
+    }
+
+    // Write the combined data to a single JSON file
+    fs.writeFileSync(exportFilePath, JSON.stringify(combinedData, null, 2));
+    console.log(`Exported all collections to ${exportFilePath}`);
+  } catch (err) {
+    console.error("Error during export:", err);
+  } finally {
+    await client.close();
+    console.log("Connection closed");
+  }
+}
+
+app.locals.searchInAlgolia = searchInAlgolia;
 
 const dbUrl = config.db.url;
 app.use((req, res, next) => {

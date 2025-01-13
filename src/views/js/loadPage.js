@@ -1,9 +1,11 @@
+const getCloudinaryUrl = (publicId) => `https://res.cloudinary.com/ds2hx283s/uploads/${publicId}`;
+
 function loadPage(page, sortBy = '') {
   const searchQuery = document.getElementById('search').value;
   const price = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(checkbox => checkbox.value);
   const color = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(checkbox => checkbox.value);
   const size = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(checkbox => checkbox.value);
-  const gender = Array.from(document.querySelectorAll('input[name="gender"]:checked')).map(checkbox => checkbox.value);
+  const status = Array.from(document.querySelectorAll('input[name="status"]:checked')).map(checkbox => checkbox.value);
 
     $.ajax({
       url: '/shop',
@@ -14,7 +16,7 @@ function loadPage(page, sortBy = '') {
         price: price,
         color: color,
         size: size,
-        gender: gender,
+        status: status,
         sortBy: sortBy,
       },
       success: function(data) {

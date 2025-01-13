@@ -82,12 +82,13 @@ class ProductFactory {
       query.product_type = { $in: Array.isArray(gender) ? gender : [gender] };
     }
 
+
     let sort = {};
-    if (sortBy === "latest") {
+    if (sortBy === "createdAt") {
       sort = { createdAt: -1 };
-    } else if (sortBy === "lPrice") {
+    } else if (sortBy === "product_price1") {
       sort = { product_price: 1 }; 
-    } else if (sortBy === "hPrice") {
+    } else if (sortBy === "product_price2") {
       sort = { product_price: -1 };
     }
 
