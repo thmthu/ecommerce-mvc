@@ -16,7 +16,12 @@ $(document).ready(function() {
         contentType: 'application/json',
         data: JSON.stringify({ product: { product_id: productId, quantity: quantity, price: productPrice, type: 0 } }),
         success: function(response) {
-          alert('Product added to cart successfully!');
+          if (response.result.message === 'Product out of stock') {
+            alert("Product out of stock!")
+          }
+          else {
+            alert('Product added to cart successfully!');
+          }
           $('#cart-num').text(response.numProducts);
         },
       });
@@ -36,7 +41,12 @@ $(document).ready(function() {
         },
       },
       success: function(response) {
-        alert('Product added to cart successfully!');
+        if (response.result.message === 'Product out of stock') {
+          alert("Product out of stock!")
+        }
+        else {
+          alert('Product added to cart successfully!');
+        }
         $('#cart-num').text(response.numProducts);
       },
     });
