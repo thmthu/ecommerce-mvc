@@ -5,7 +5,7 @@ const path = require("path");
 
 // MongoDB Atlas connection string
 const mongoURI =
-  "mongodb+srv://thuvedep:hihi@cluster0.nn3bq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "YOUR_MONGO_CONNECTION";
 
 // Function to create schemas and models
 function createModels() {
