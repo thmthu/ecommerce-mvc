@@ -12,7 +12,9 @@
     "ignore": [
       "./src/views/assets/**"
     ],
-    "presets": ["@babel/preset-env"],
+    "presets": [
+      "@babel/preset-env"
+    ],
     "compact": true
   },
   "keywords": [],

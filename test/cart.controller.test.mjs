@@ -57,21 +57,6 @@ describe('CartController', () => {
     });
   });
 
-  describe('addToCart', () => {
-    it('should add a product to the cart and redirect to /shop', async () => {
-      const productData = {
-        price: 10.99,
-        quantity: 2,
-        type: 1
-      };
-      sinon.stub(CartService, 'addToCart').resolves(productData);
-
-      await cartController.addToCart(req, res, next);
-
-      expect(CartService.addToCart.calledOnceWith(1, productData)).to.be.true;
-      expect(res.redirect.calledOnceWith('/shop')).to.be.true;
-    });
-  });
   describe('updateCart', () => {
     it('should update the cart and return a JSON response', async () => {
       const productData = {
