@@ -4,9 +4,10 @@ const CartService = require("../services/cart.service");
 const AccessService = require("../services/access.service");
 class CartController {
   getUserCart = async (req, res, next) => {
-    const result = await CartService.getUserCart(req.user.id);
-    const avatar = await AccessService.getAvatar(req.user.id);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const userId = req.user == undefined ? null : req.user.id;
+    const result = await CartService.getUserCart(userId);
+    const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("cart.ejs", {
       cart: result,
       page: "cart",
@@ -17,7 +18,7 @@ class CartController {
   };
   addToCart = async (req, res, next) => {
     console.log(req.body);
-    if (!req.user || req.user === undefined) {
+    if (!req.user || req.user == undefined) {
       return res.json({ message: "Please login to add to cart" });
     }
     const userId = req.user.id;
