@@ -17,13 +17,17 @@ class CartController {
   };
   addToCart = async (req, res, next) => {
     console.log(req.body);
+    if (!req.user || req.user === undefined) {
+      return res.json({ message: "Please login to add to cart" });
+    }
     const userId = req.user.id;
     const product = req.body.product;
     product.price = parseFloat(product.price);
     product.quantity = parseInt(product.quantity);
     product.type = parseInt(product.type);
     const result = await CartService.addToCart(userId, product);
-    return res.redirect("/shop");
+    const numProducts = await CartService.getCartProductsSize(userId);
+    return res.json({ message: "Product added to cart", result, numProducts });
   };
   updateCart = async (req, res, next) => {
     const userId = req.user.id;

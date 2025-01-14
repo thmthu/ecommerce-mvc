@@ -242,6 +242,17 @@ class AccessController {
         });
       }
 
+      // Check if password is null
+      if (!password || password === "") {
+        return res.status(400).render("change-password.ejs", {
+          page: "change-password",
+          avatar,
+          numProducts,
+          error: "Password cannot be empty",
+          isAuthenticated: req.isAuthenticated(),
+        });
+      }
+
       // Validate new passwords
       if (password !== confirmPassword) {
         return res.status(400).render("change-password.ejs", {
@@ -249,6 +260,17 @@ class AccessController {
           avatar,
           numProducts,
           error: "New passwords do not match",
+          isAuthenticated: req.isAuthenticated(),
+        });
+      }
+
+      // Check password complexity
+      if (password.length < 8) {
+        return res.status(400).render("change-password.ejs", {
+          page: "change-password",
+          avatar,
+          numProducts,
+          error: "Password must be at least 8 characters",
           isAuthenticated: req.isAuthenticated(),
         });
       }

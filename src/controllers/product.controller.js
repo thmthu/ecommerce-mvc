@@ -57,24 +57,36 @@ class ProductController {
     const price = req.query.price || "";
     const color = req.query.color || "";
     const size = req.query.size || "";
-    const gender = req.query.gender || "";
+    const status = req.query.status || "";
+    const cate = req.query.cate || "";
+    const manu = req.query.manu || "";
     const sortBy = req.query.sortBy || "";
     console.log("==============", req.user);
     const userId = req.user == undefined || null ? null : req.user.id;
     console.log(userId);
     try {
-      const { products, totalPages } = await ProductService.getShopProducts(
-        limit,
-        skip,
-        searchQuery,
-        price,
-        color,
-        size,
-        gender,
-        sortBy
-      );
+      let options = {};
+      options.sortBy = sortBy === "createdAt" ? "createdAt" : "product_price";
+      options.sortOrder = sortBy === "product_price1" ? "asc" : "desc";
+      options.skip = skip;
+      options.limit = limit;
+      options.filters = {
+        product_price: price,
+        product_color: color,
+        product_size: size,
+        product_status: status,
+        product_type: cate,
+        product_attributes: {
+          brand: manu,
+        }
+      };
+      const searchInAlgolia = req.app.locals.searchInAlgolia;
+
+      const { products, totalPages } = await searchInAlgolia(searchQuery, options);
 
       const numProducts = await CartService.getCartProductsSize(userId);
+
+      console.log(products);
 
       if (req.xhr || req.headers.accept.indexOf("json") > -1) {
         // If the request is an AJAX request, return JSON data
@@ -100,7 +112,9 @@ class ProductController {
           price,
           color,
           size,
-          gender,
+          cate,
+          manu,
+          status,
           sortBy,
         });
       }

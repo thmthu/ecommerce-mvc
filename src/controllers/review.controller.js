@@ -20,7 +20,10 @@ class ReviewController {
   createReview = async (req, res) => {
     const { comment, star } = req.body;
     console.log("createReview", comment, star);
-    const userId = req.user.id;
+    if (!req.user || req.user === undefined) {
+      return res.status(401).json({ message: "Please login to add review" });
+    }
+    const userId = req.user ? req.user.id : null;
     try {
       const result = await ReviewService.createUserReview(
         req.params.id,

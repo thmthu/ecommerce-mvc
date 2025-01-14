@@ -2,6 +2,7 @@
 const { cart } = require("../models/cart.model");
 const { model, Schema, Types } = require("mongoose"); // Ensure Types is imported
 const { product1 } = require("../models/product.model");
+const ProductService = require("./product.service");
 
 class CartService {
   static async createUserCart(userId, product) {
@@ -62,6 +63,15 @@ class CartService {
   }
   static async addToCart(userId, product) {
     console.log("add to cart", userId, product);
+    if (product.quantity <= 0) {
+      return { message: "Quantity must be greater than 0" };
+    }
+    const product2 = await ProductService.getProductById(product.product_id);
+    console.log(product.product_id);
+    console.log(product2);
+    if (product2.product_quantity < product.quantity) {
+      return { message: "Product out of stock" };
+    }
     //Nếu cart chưa có thì tạo và chèn product đó vào
     const userCart = await cart.findOne({ cart_userId: userId });
     if (!userCart) return await CartService.createUserCart(userId, product);
