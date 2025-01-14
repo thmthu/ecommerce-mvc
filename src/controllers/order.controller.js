@@ -11,9 +11,10 @@ require("dotenv").config();
 
 class OrderController {
   getOrder = async (req, res) => {
-    const result = await OrderService.getAllUserOrders(req.user.id);
-    const avatar = await AccessService.getAvatar(req.user.id);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const userId = req.user == undefined ? null : req.user.id;
+    const result = await OrderService.getAllUserOrders(userId);
+    const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     console.log("result = ", result);
     return res.render("order.ejs", {
       page: "order",
@@ -26,10 +27,11 @@ class OrderController {
   };
   checkout = async (req, res) => {
     const price = parseFloat(req.body.price);
-    const products = await CartService.getUserCart(req.user.id);
-    const user = await AccessService.getUserById(req.user.id);
-    const avatar = await AccessService.getAvatar(req.user.id);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const userId = req.user == undefined ? null : req.user.id;
+    const products = await CartService.getUserCart(userId);
+    const user = await AccessService.getUserById(userId);
+    const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     const address = user.address ? user.address : "";
     const phoneNumber = user.phone ? user.phone : "";
     const email = user.email;
@@ -77,9 +79,10 @@ class OrderController {
     res.redirect("/checkout");
   };
   getDetail = async (req, res) => {
+    const userId = req.user == undefined ? null : req.user.id;
     const order = await OrderService.getOrderById(req.params.id);
-    const avatar = await AccessService.getAvatar(req.user.id);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     console.log(order);
     return res.render("order-detail.ejs", {
       orderId: req.params.id,

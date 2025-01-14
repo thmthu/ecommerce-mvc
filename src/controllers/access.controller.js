@@ -20,7 +20,7 @@ class AccessController {
   getVerificationpage = async (req, res) => {
     const userId = req.user == undefined ? null : req.user.id;
     const avatar = await AccessService.getAvatar(userId);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const numProducts = await CartService.getCartProductsSize(userId);
     res.render("verifycation-signup", {
       avatar,
       numProducts,
@@ -117,9 +117,10 @@ class AccessController {
           });
         });
       } else {
-        const avatar = await AccessService.getAvatar(req.user.id);
+        const userId = req.user == undefined ? null : req.user.id;
+        const avatar = await AccessService.getAvatar(userId);
         console.log("!ok signUp");
-        const numProducts = await CartService.getCartProductsSize(req.user.id);
+        const numProducts = await CartService.getCartProductsSize(userId);
 
         return res
           .status(400)
@@ -133,7 +134,8 @@ class AccessController {
   };
   resendVerifycation = async (req, res) => {
     try {
-      await AccessService.resendVerifycation(req.user.id);
+      const userId = req.user == undefined ? null : req.user.id;
+      await AccessService.resendVerifycation(userId);
       return res
         .status(200)
         .json({ message: "Verification email sent successfully" });
@@ -144,9 +146,10 @@ class AccessController {
   };
   verifyEmail = async (req, res, next) => {
     const { verificationToken } = req.body;
-    console.log("verify", verificationToken, req.user.id);
+    const userId = req.user == undefined ? null : req.user.id;
+    console.log("verify", verificationToken, userId);
     try {
-      await AccessService.verifyEmail(req.user.id, verificationToken);
+      await AccessService.verifyEmail(userId, verificationToken);
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {
       console.log("verify controller:", error, error.status, error.message);
@@ -155,9 +158,10 @@ class AccessController {
   };
   getProfile = async (req, res) => {
     try {
-      const user = await AccessService.getUserById(req.user.id);
-      const avatar = await AccessService.getAvatar(req.user.id);
-      const numProducts = await CartService.getCartProductsSize(req.user.id);
+      const userId = req.user == undefined ? null : req.user.id;
+      const user = await AccessService.getUserById(userId);
+      const avatar = await AccessService.getAvatar(userId);
+      const numProducts = await CartService.getCartProductsSize(userId);
       return res.render("profile.ejs", {
         page: "profile",
         avatar,
@@ -199,19 +203,20 @@ class AccessController {
       if (name) {
         const userExist = await AccessService.getUserByName(name);
         if (userExist) {
-          const user = await AccessService.getUserById(req.user.id);
-          const avatar = await AccessService.getAvatar(req.user.id);
-          const numProducts = await CartService.getCartProductsSize(
-            req.user.id
-          );
-          return res.render("profile.ejs", {
-            page: "profile",
-            avatar,
-            numProducts,
-            user: user,
-            isAuthenticated: req.isAuthenticated(),
-            error: "Name already exist",
-          });
+          if (userExist.id !== userId) {
+            const userId = req.user == undefined ? null : req.user.id;
+            const user = await AccessService.getUserById(userId);
+            const avatar = await AccessService.getAvatar(userId);
+            const numProducts = await CartService.getCartProductsSize(userId);
+            return res.render("profile.ejs", {
+              page: "profile",
+              avatar,
+              numProducts,
+              user: user,
+              isAuthenticated: req.isAuthenticated(),
+              error: "Name already exist",
+            });
+          }
         }
       }
       if (name) user.name = name;
@@ -230,8 +235,9 @@ class AccessController {
   };
 
   getChangePassword = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.user.id);
-    const numProducts = await CartService.getCartProductsSize(req.user.id);
+    const userId = req.user == undefined ? null : req.user.id;
+    const avatar = await AccessService.getAvatar(userId);
+    const numProducts = await CartService.getCartProductsSize(userId);
     return res.render("change-password.ejs", {
       page: "change-password",
       avatar,
