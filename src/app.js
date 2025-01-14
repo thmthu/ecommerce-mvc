@@ -105,8 +105,6 @@ async function exportAllCollectionsToSingleFile() {
   }
 }
 
-exportAllCollectionsToSingleFile();
-
 app.locals.searchInAlgolia = searchInAlgolia;
 
 const dbUrl = config.db.url;
