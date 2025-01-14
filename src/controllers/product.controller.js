@@ -58,6 +58,8 @@ class ProductController {
     const color = req.query.color || "";
     const size = req.query.size || "";
     const status = req.query.status || "";
+    const cate = req.query.cate || "";
+    const manu = req.query.manu || "";
     const sortBy = req.query.sortBy || "";
     console.log("==============", req.user);
     const userId = req.user == undefined || null ? null : req.user.id;
@@ -73,6 +75,10 @@ class ProductController {
         product_color: color,
         product_size: size,
         product_status: status,
+        product_type: cate,
+        product_attributes: {
+          brand: manu,
+        }
       };
       const searchInAlgolia = req.app.locals.searchInAlgolia;
 
@@ -106,6 +112,8 @@ class ProductController {
           price,
           color,
           size,
+          cate,
+          manu,
           status,
           sortBy,
         });

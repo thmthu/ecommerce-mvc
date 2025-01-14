@@ -285,6 +285,78 @@
           </div>
           <!--Status End-->
 
+          <!--Category Start-->
+          <h5 class="font-weight-semi-bold mb-4 mt-4">Filter by category</h5>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="cate-1"
+            name="cate" value="MaleClothe" <%= cate.includes('MaleClothe') ?
+            'checked' : '' %>/>
+            <label class="custom-control-label" for="cate-1">MaleClothe</label>
+          </div>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="cate-2"
+            name="cate" value="FemaleClothe" <%=
+            cate.includes('FemaleClothe') ? 'checked' : '' %>/>
+            <label class="custom-control-label" for="cate-2">FemaleClothe</label>
+          </div>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="cate-3"
+            name="cate" value="KidClothe" <%=
+            cate.includes('KidClothe') ? 'checked' : '' %>/>
+            <label class="custom-control-label" for="cate-3">KidClothe</label>
+          </div>
+          <!--Category End-->
+
+          <!--Manufacturer Start-->
+          <h5 class="font-weight-semi-bold mb-4 mt-4">Filter by manufacturer</h5>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="manu-1"
+            name="manu" value="Mitu" <%= manu.includes('Mitu') ?
+            'checked' : '' %>/>
+            <label class="custom-control-label" for="manu-1">Mitu</label>
+          </div>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="manu-2"
+            name="manu" value="Brando" <%=
+            manu.includes('Brando') ? 'checked' : '' %>/>
+            <label class="custom-control-label" for="manu-2">Brando</label>
+          </div>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="manu-3"
+            name="manu" value="StylePro" <%=
+            manu.includes('StylePro') ? 'checked' : '' %>/>
+            <label class="custom-control-label" for="manu-3">StylePro</label>
+          </div>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="manu-4"
+            name="manu" value="FashionHub" <%=
+            manu.includes('FashionHub') ? 'checked' : '' %>/>
+            <label class="custom-control-label" for="manu-4">FashionHub</label>
+          </div>
+          <div
+            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+          >
+            <input type="checkbox" class="custom-control-input" id="manu-5"
+            name="manu" value="Trendsetter" <%=
+            manu.includes('Trendsetter') ? 'checked' : '' %>/>
+            <label class="custom-control-label" for="manu-5">Trendsetter</label>
+          </div>
+          <!--Manufacturer End-->
+
           <button type="submit" class="btn btn-primary mt-4">
             Apply Filters
           </button>

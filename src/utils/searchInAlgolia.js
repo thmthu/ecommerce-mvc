@@ -33,6 +33,15 @@ async function searchInAlgolia(query, options) {
           // Skip empty filters
           return true;
         }
+        if (key === 'product_attributes') {
+          if (value.brand === "") {
+            return true;
+          }
+          if (Array.isArray(value.brand)) {
+            return value.brand.includes(hit[key].brand);
+          }
+          return hit[key].brand === value.brand;
+        }
         if (Array.isArray(value)) {
           // Handle array filters (e.g., category: ['books', 'ebooks'])
           return value.includes(hit[key]);

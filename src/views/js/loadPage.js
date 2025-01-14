@@ -6,6 +6,8 @@ function loadPage(page, sortBy = '') {
   const color = Array.from(document.querySelectorAll('input[name="color"]:checked')).map(checkbox => checkbox.value);
   const size = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(checkbox => checkbox.value);
   const status = Array.from(document.querySelectorAll('input[name="status"]:checked')).map(checkbox => checkbox.value);
+  const cate = Array.from(document.querySelectorAll('input[name="cate"]:checked')).map(checkbox => checkbox.value);
+  const manu = Array.from(document.querySelectorAll('input[name="manu"]:checked')).map(checkbox => checkbox.value);
 
     $.ajax({
       url: '/shop',
@@ -17,6 +19,8 @@ function loadPage(page, sortBy = '') {
         color: color,
         size: size,
         status: status,
+        cate: cate,
+        manu: manu,
         sortBy: sortBy,
       },
       success: function(data) {
