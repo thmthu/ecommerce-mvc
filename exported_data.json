@@ -13,7 +13,35 @@
     }
   ],
   "Reviews": [],
-  "Carts": [],
+  "sessions": [
+  ],
+  "Carts": [
+    {
+      "_id": "678566b010a0651f77bc589a",
+      "cart_userId": "6785664ee8e8931ab9ea6eb1",
+      "__v": 0,
+      "cart_count_products": 0,
+      "cart_products": [
+        {
+          "product_id": "67851ac611c51473b6d82e92",
+          "quantity": 1,
+          "price": 11,
+          "type": 0
+        }
+      ],
+      "createdAt": "2025-01-13T19:17:04.614Z",
+      "updatedAt": "2025-01-13T19:17:04.614Z"
+    },
+    {
+      "_id": "6785ccf910a0651f77bc589e",
+      "cart_userId": "6785c4c1e8e8931ab9ea7043",
+      "__v": 0,
+      "cart_count_products": 0,
+      "cart_products": [],
+      "createdAt": "2025-01-14T02:33:31.029Z",
+      "updatedAt": "2025-01-14T05:25:34.248Z"
+    }
+  ],
   "Products": [
     {
       "_id": "678519d211c51473b6d82e7e",
@@ -46,15 +74,15 @@
       "product_price": 12,
       "product_color": "Black",
       "product_size": "S",
-      "product_quantity": 100,
-      "product_quantity_sold": 0,
+      "product_quantity": 99,
+      "product_quantity_sold": 1,
       "product_status": "On stock",
       "product_type": "KidClothe",
       "product_attributes": {
         "brand": "FashionHub"
       },
       "createdAt": "2025-01-13T13:50:27.599Z",
-      "updatedAt": "2025-01-13T13:50:27.599Z",
+      "updatedAt": "2025-01-14T05:23:52.498Z",
       "__v": 0
     },
     {
@@ -75,7 +103,7 @@
         "brand": "Brando"
       },
       "createdAt": "2025-01-13T13:51:54.280Z",
-      "updatedAt": "2025-01-13T13:51:54.280Z",
+      "updatedAt": "2025-01-14T02:25:22.581Z",
       "__v": 0
     },
     {
@@ -109,15 +137,15 @@
       "product_price": 11,
       "product_color": "Black",
       "product_size": "XL",
-      "product_quantity": 100,
-      "product_quantity_sold": 0,
+      "product_quantity": 99,
+      "product_quantity_sold": 1,
       "product_status": "On stock",
       "product_type": "MaleClothe",
       "product_attributes": {
         "brand": "Trendsetter"
       },
       "createdAt": "2025-01-13T13:53:10.452Z",
-      "updatedAt": "2025-01-13T13:53:10.452Z",
+      "updatedAt": "2025-01-14T05:23:53.291Z",
       "__v": 0
     },
     {
@@ -159,7 +187,7 @@
         "brand": "StylePro"
       },
       "createdAt": "2025-01-13T13:54:48.539Z",
-      "updatedAt": "2025-01-13T13:54:48.539Z",
+      "updatedAt": "2025-01-14T02:25:22.766Z",
       "__v": 0
     },
     {
@@ -180,7 +208,7 @@
         "brand": "Mitu"
       },
       "createdAt": "2025-01-13T13:55:25.261Z",
-      "updatedAt": "2025-01-13T13:55:25.261Z",
+      "updatedAt": "2025-01-14T02:22:03.231Z",
       "__v": 0
     },
     {
@@ -193,15 +221,15 @@
       "product_price": 13,
       "product_color": "White",
       "product_size": "M",
-      "product_quantity": 100,
-      "product_quantity_sold": 0,
+      "product_quantity": 98,
+      "product_quantity_sold": 2,
       "product_status": "On stock",
       "product_type": "FemaleClothe",
       "product_attributes": {
         "brand": "StylePro"
       },
       "createdAt": "2025-01-13T13:55:58.132Z",
-      "updatedAt": "2025-01-13T13:55:58.132Z",
+      "updatedAt": "2025-01-14T05:25:33.051Z",
       "__v": 0
     },
     {
@@ -216,15 +244,15 @@
       "product_price": 12,
       "product_color": "White",
       "product_size": "L",
-      "product_quantity": 100,
-      "product_quantity_sold": 0,
+      "product_quantity": 97,
+      "product_quantity_sold": 3,
       "product_status": "On stock",
       "product_type": "MaleClothe",
       "product_attributes": {
         "brand": "FashionHub"
       },
       "createdAt": "2025-01-13T13:57:41.971Z",
-      "updatedAt": "2025-01-13T13:57:41.971Z",
+      "updatedAt": "2025-01-14T05:25:33.848Z",
       "__v": 0
     }
   ],
@@ -275,18 +303,6 @@
       "manufacturer_name": "Trendsetter"
     }
   ],
-  "sessions": [
-    {
-      "_id": "K-PBSMHVFFrYU4njmCnDgQvAVc1bLflq",
-      "expires": "2025-01-27T14:26:23.242Z",
-      "session": "{\"cookie\":{\"originalMaxAge\":1209600000,\"expires\":\"2025-01-27T13:33:11.140Z\",\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":\"6785161211c51473b6d82e64\"}},\"userId\":\"6785161211c51473b6d82e64\"}"
-    },
-    {
-      "_id": "K2MQ8CKWg6aJA5lylhOD9Iukln_lsc75",
-      "expires": "2025-01-27T13:59:47.048Z",
-      "session": "{\"cookie\":{\"originalMaxAge\":1209600000,\"expires\":\"2025-01-27T13:45:18.593Z\",\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":\"678516fda3ad0b2d05f014fa\"}}}"
-    }
-  ],
   "Customers": [
     {
       "_id": "6785161211c51473b6d82e64",
@@ -315,8 +331,127 @@
       "createdAt": "2025-01-13T13:37:01.585Z",
       "updatedAt": "2025-01-13T13:37:01.585Z",
       "__v": 0
+    },
+    {
+      "_id": "6785664ee8e8931ab9ea6eb1",
+      "name": "haduykien",
+      "email": "walkerjoin.no5@gmail.com",
+      "password": "$2a$10$KzEKbDAxohhK7GUv/MU9u.GpyXlZHY6oF9p3Qx9gu9RN1KiNEh0Bi",
+      "status": "Active",
+      "isVerified": false,
+      "role": "Customer",
+      "verificationToken": "428326",
+      "verificationTokenExpiresAt": "2025-01-13T19:18:26.005Z",
+      "lastLogin": "2025-01-13T19:15:26.008Z",
+      "createdAt": "2025-01-13T19:15:26.012Z",
+      "updatedAt": "2025-01-13T19:18:18.691Z",
+      "__v": 0,
+      "address": "hcmcity",
+      "avatar": "avatar-1736795898485.jpg",
+      "phone": "0123456879"
+    },
+    {
+      "_id": "6785c4c1e8e8931ab9ea7043",
+      "name": "Nguyen Nhat Tan",
+      "email": "nhattan107y@gmail.com",
+      "password": "$2a$10$MTCiUp5i7iPtiIsyxoPVr.dYdQN18imxoBEjUNNIfgxT/6Mqr8LWq",
+      "status": "Active",
+      "isVerified": false,
+      "role": "Customer",
+      "verificationToken": "836313",
+      "verificationTokenExpiresAt": "2025-01-14T02:01:25.306Z",
+      "lastLogin": "2025-01-14T01:58:25.306Z",
+      "createdAt": "2025-01-14T01:58:25.307Z",
+      "updatedAt": "2025-01-14T05:25:34.048Z",
+      "__v": 0,
+      "address": "HCMC",
+      "phone": "0865728371"
     }
   ],
   "kid_clothes": [],
-  "Orders": []
+  "Orders": [
+    {
+      "_id": "6785f4e710a0651f77bc589f",
+      "userId": "6785c4c1e8e8931ab9ea7043",
+      "orderId": "6785f4e70a978f8eacbafd03",
+      "__v": 0,
+      "createdAt": "2025-01-14T05:23:51.690Z",
+      "createdDate": "2025-01-14T05:23:51.691Z",
+      "order_products": [
+        {
+          "product_id": "67851a2311c51473b6d82e83",
+          "quantity": 1,
+          "price": 12,
+          "name": "Kid Loenen",
+          "image": [
+            "black_kid_loenen.jpg"
+          ]
+        },
+        {
+          "product_id": "67851ac611c51473b6d82e92",
+          "quantity": 1,
+          "price": 11,
+          "name": "Male T-shirt 2",
+          "image": [
+            "black_male_T_shirt_2.jpg"
+          ]
+        },
+        {
+          "product_id": "67851bd511c51473b6d82eab",
+          "quantity": 1,
+          "price": 12,
+          "name": "Male T-Shirt 3",
+          "image": [
+            "white_male_T_shirt.jpg",
+            "white_male_T_shirt_2.jpg",
+            "white_male_T_shirt_3.jpg"
+          ]
+        }
+      ],
+      "status": "Pending",
+      "totalPrice": 45,
+      "updatedAt": "2025-01-14T05:23:51.690Z",
+      "userAddress": "HCMC",
+      "userEmail": "nhattan107y@gmail.com",
+      "userName": "Nguyen Nhat Tan",
+      "userPhone": "0865728371"
+    },
+    {
+      "_id": "6785f54c10a0651f77bc58a0",
+      "userId": "6785c4c1e8e8931ab9ea7043",
+      "orderId": "6785f54c0a978f8eacbafdf5",
+      "__v": 0,
+      "createdAt": "2025-01-14T05:25:32.246Z",
+      "createdDate": "2025-01-14T05:25:32.246Z",
+      "order_products": [
+        {
+          "product_id": "67851b6e11c51473b6d82ea6",
+          "quantity": 2,
+          "price": 13,
+          "name": "Female T-Shirt 2",
+          "image": [
+            "white_female_T_shirt.jpg"
+          ]
+        },
+        {
+          "product_id": "67851bd511c51473b6d82eab",
+          "quantity": 2,
+          "price": 12,
+          "name": "Male T-Shirt 3",
+          "image": [
+            "white_male_T_shirt.jpg",
+            "white_male_T_shirt_2.jpg",
+            "white_male_T_shirt_3.jpg"
+          ]
+        }
+      ],
+      "status": "Pending",
+      "totalPrice": 60,
+      "updatedAt": "2025-01-14T05:25:32.246Z",
+      "userAddress": "HCMC",
+      "userEmail": "nhattan107y@gmail.com",
+      "userName": "Nguyen Nhat Tan",
+      "userPhone": "0865728371"
+    }
+  ]
 }

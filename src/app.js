@@ -63,7 +63,7 @@ app.locals.getCloudinaryUrl = getCloudinaryUrl;
 const exportFilePath = "./exported_data.json"; // Path to save exported data
 
 async function exportAllCollectionsToSingleFile() {
-  const client = new MongoClient("mongodb+srv://mitu:hihi@cluster0.tloz2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+  const client = new MongoClient(process.env.PRO_DB_URL);
 
   try {
     // Connect to the database

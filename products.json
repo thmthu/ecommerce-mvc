@@ -30,15 +30,15 @@
     "product_price": 12,
     "product_color": "Black",
     "product_size": "S",
-    "product_quantity": 100,
-    "product_quantity_sold": 0,
+    "product_quantity": 99,
+    "product_quantity_sold": 1,
     "product_status": "On stock",
     "product_type": "KidClothe",
     "product_attributes": {
       "brand": "FashionHub"
     },
     "createdAt": "2025-01-13T13:50:27.599Z",
-    "updatedAt": "2025-01-13T13:50:27.599Z",
+    "updatedAt": "2025-01-14T05:23:52.498Z",
     "__v": 0
   },
   {
@@ -59,7 +59,7 @@
       "brand": "Brando"
     },
     "createdAt": "2025-01-13T13:51:54.280Z",
-    "updatedAt": "2025-01-13T13:51:54.280Z",
+    "updatedAt": "2025-01-14T02:25:22.581Z",
     "__v": 0
   },
   {
@@ -93,15 +93,15 @@
     "product_price": 11,
     "product_color": "Black",
     "product_size": "XL",
-    "product_quantity": 100,
-    "product_quantity_sold": 0,
+    "product_quantity": 99,
+    "product_quantity_sold": 1,
     "product_status": "On stock",
     "product_type": "MaleClothe",
     "product_attributes": {
       "brand": "Trendsetter"
     },
     "createdAt": "2025-01-13T13:53:10.452Z",
-    "updatedAt": "2025-01-13T13:53:10.452Z",
+    "updatedAt": "2025-01-14T05:23:53.291Z",
     "__v": 0
   },
   {
@@ -143,7 +143,7 @@
       "brand": "StylePro"
     },
     "createdAt": "2025-01-13T13:54:48.539Z",
-    "updatedAt": "2025-01-13T13:54:48.539Z",
+    "updatedAt": "2025-01-14T02:25:22.766Z",
     "__v": 0
   },
   {
@@ -164,7 +164,7 @@
       "brand": "Mitu"
     },
     "createdAt": "2025-01-13T13:55:25.261Z",
-    "updatedAt": "2025-01-13T13:55:25.261Z",
+    "updatedAt": "2025-01-14T02:22:03.231Z",
     "__v": 0
   },
   {
@@ -177,15 +177,15 @@
     "product_price": 13,
     "product_color": "White",
     "product_size": "M",
-    "product_quantity": 100,
-    "product_quantity_sold": 0,
+    "product_quantity": 98,
+    "product_quantity_sold": 2,
     "product_status": "On stock",
     "product_type": "FemaleClothe",
     "product_attributes": {
       "brand": "StylePro"
     },
     "createdAt": "2025-01-13T13:55:58.132Z",
-    "updatedAt": "2025-01-13T13:55:58.132Z",
+    "updatedAt": "2025-01-14T05:25:33.051Z",
     "__v": 0
   },
   {
@@ -200,15 +200,15 @@
     "product_price": 12,
     "product_color": "White",
     "product_size": "L",
-    "product_quantity": 100,
-    "product_quantity_sold": 0,
+    "product_quantity": 97,
+    "product_quantity_sold": 3,
     "product_status": "On stock",
     "product_type": "MaleClothe",
     "product_attributes": {
       "brand": "FashionHub"
     },
     "createdAt": "2025-01-13T13:57:41.971Z",
-    "updatedAt": "2025-01-13T13:57:41.971Z",
+    "updatedAt": "2025-01-14T05:25:33.848Z",
     "__v": 0
   }
 ]
