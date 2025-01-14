@@ -18,7 +18,8 @@ class AccessController {
     res.render("reset-password", { avatar: null, numProducts: 0 });
   };
   getVerificationpage = async (req, res) => {
-    const avatar = await AccessService.getAvatar(req.user.id);
+    const userId = req.user == undefined ? null : req.user.id;
+    const avatar = await AccessService.getAvatar(userId);
     const numProducts = await CartService.getCartProductsSize(req.user.id);
     res.render("verifycation-signup", {
       avatar,
@@ -200,7 +201,9 @@ class AccessController {
         if (userExist) {
           const user = await AccessService.getUserById(req.user.id);
           const avatar = await AccessService.getAvatar(req.user.id);
-          const numProducts = await CartService.getCartProductsSize(req.user.id);
+          const numProducts = await CartService.getCartProductsSize(
+            req.user.id
+          );
           return res.render("profile.ejs", {
             page: "profile",
             avatar,
