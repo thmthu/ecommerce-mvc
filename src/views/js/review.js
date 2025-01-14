@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h6>${review.user_name} - <i>${new Date(
             review.createdAt
           ).toLocaleDateString()}</i></h6>
-                <div class="text-primary mb-2">6
+                <div class="text-primary mb-2">
                   ${generateStarsHtml(review.star)}
                 </div>
                 <p>${review.comment}</p>
