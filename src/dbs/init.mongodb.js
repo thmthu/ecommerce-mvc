@@ -1,8 +1,7 @@
 "use strict";
-
+require("dotenv").config();
 const mongoose = require("mongoose");
-const connectString =
-  "mongodb+srv://mitu:hihi@cluster0.tloz2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const connectString = process.env.PRO_DB_URL;
 class Database {
   constructor() {
     this.connect();
