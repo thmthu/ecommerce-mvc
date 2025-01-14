@@ -16,6 +16,10 @@ $(document).ready(function() {
         contentType: 'application/json',
         data: JSON.stringify({ product: { product_id: productId, quantity: quantity, price: productPrice, type: 0 } }),
         success: function(response) {
+          if (!response.result || response.result === undefined) {
+            alert('Please login to add to cart');
+          }
+          else
           if (response.result.message === 'Product out of stock') {
             alert("Product out of stock!")
           }
@@ -41,6 +45,10 @@ $(document).ready(function() {
         },
       },
       success: function(response) {
+        if (!response.result || response.result === undefined) {
+          alert('Please login to add to cart');
+        }
+        else
         if (response.result.message === 'Product out of stock') {
           alert("Product out of stock!")
         }

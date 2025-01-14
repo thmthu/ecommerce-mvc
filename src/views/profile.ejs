@@ -150,6 +150,11 @@
                 value="<%= user.name %>"
               />
             </div>
+            <% if (typeof error !== 'undefined' && error) { %>
+              <div class="alert alert-danger">
+                <%= error %>
+              </div>
+            <% } %>
             <div class="form-group">
               <label for="address">Address</label>
               <input
@@ -179,7 +184,7 @@
             >Change Password</a
           >
           <a href="/email-verify" class="btn btn-secondary"
-            >Email verifycation</a
+            >Email verification</a
           >
         </div>
       </div>

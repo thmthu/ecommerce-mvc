@@ -210,5 +210,12 @@ class AccessService {
       message: "Email is verified",
     };
   };
+  static getUserByName = async (name) => {
+    const user = await customerModel.findOne({ name });
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
 }
 module.exports = AccessService;
